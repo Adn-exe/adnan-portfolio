@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADNAN // AI & NEURAL ARCHITECTURE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+          },
+          colors: {
+            primary: '#010208',
+            accent: '#38BDF8',
+            'accent-purple': '#A855F7',
+            surface: '#0A0C14',
+          },
+          animation: {
+            'pulse-slow': 'pulse 12s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 8s ease-in-out infinite',
+            'reveal': 'reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'scanline': 'scanline 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'fadeIn': 'fadeIn 0.6s ease-out forwards',
+            'slideUp': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'spin-slow': 'spin 12s linear infinite',
+            'gradient': 'gradient 8s linear infinite',
+            'glitch': 'glitch 0.3s ease-in-out',
+            'breathe': 'breathe 3s ease-in-out infinite',
+            'shimmer': 'shimmer 2s linear infinite',
+            'particle-float': 'particleFloat 4s ease-in-out infinite',
+            'connection-pulse': 'connectionPulse 2s ease-in-out infinite',
+            'core-pulse': 'corePulse 2s ease-in-out infinite',
+            'scatter': 'scatter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+              '50%': { transform: 'translateY(-30px) rotate(2deg)' },
+            },
+            reveal: {
+              '0%': { opacity: '0', transform: 'translateY(100%) skewY(5deg)' },
+              '100%': { opacity: '1', transform: 'translateY(0) skewY(0deg)' },
+            },
+            scanline: {
+              '0%': { transform: 'translateY(-100%)' },
+              '100%': { transform: 'translateY(200%)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(60px) scale(0.98)' },
+              '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+            },
+            gradient: {
+              '0%, 100%': { 'background-position': '0% 50%' },
+              '50%': { 'background-position': '100% 50%' },
+            },
+            noise: {
+              '0%, 100%': { transform: 'translate(0, 0)' },
+              '10%': { transform: 'translate(-5%, -10%)' },
+              '20%': { transform: 'translate(-15%, 5%)' },
+              '30%': { transform: 'translate(7%, -25%)' },
+              '40%': { transform: 'translate(-5%, 25%)' },
+              '50%': { transform: 'translate(-15%, 10%)' },
+              '60%': { transform: 'translate(15%, 0%)' },
+              '70%': { transform: 'translate(0%, 15%)' },
+              '80%': { transform: 'translate(3%, 35%)' },
+              '90%': { transform: 'translate(-10%, 10%)' },
+            },
+            glitch: {
+              '0%': { transform: 'translate(0)', filter: 'hue-rotate(0deg)' },
+              '20%': { transform: 'translate(-2px, 2px)', filter: 'hue-rotate(90deg)' },
+              '40%': { transform: 'translate(-2px, -2px)', filter: 'hue-rotate(180deg)' },
+              '60%': { transform: 'translate(2px, 2px)', filter: 'hue-rotate(270deg)' },
+              '80%': { transform: 'translate(2px, -2px)', filter: 'hue-rotate(360deg)' },
+              '100%': { transform: 'translate(0)', filter: 'hue-rotate(0deg)' },
+            },
+            breathe: {
+              '0%, 100%': { transform: 'scale(1)', opacity: '0.6' },
+              '50%': { transform: 'scale(1.05)', opacity: '1' },
+            },
+            shimmer: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(100%)' },
+            },
+            particleFloat: {
+              '0%, 100%': { transform: 'translateY(0) translateX(0)' },
+              '25%': { transform: 'translateY(-10px) translateX(5px)' },
+              '50%': { transform: 'translateY(0) translateX(10px)' },
+              '75%': { transform: 'translateY(10px) translateX(5px)' },
+            },
+            connectionPulse: {
+              '0%, 100%': { opacity: '0.2', strokeWidth: '1' },
+              '50%': { opacity: '0.8', strokeWidth: '2' },
+            },
+            corePulse: {
+              '0%, 100%': { transform: 'scale(1)', opacity: '0.4' },
+              '50%': { transform: 'scale(1.2)', opacity: '0.8' },
+            },
+            scatter: {
+              '0%': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
+              '100%': { transform: 'translate(var(--scatter-x, 100px), var(--scatter-y, 100px)) scale(0)', opacity: '0' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #010208;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #38BDF8, #A855F7);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #F8FAFC;
+    }
+
+    body {
+      background-color: #010208;
+      color: #F8FAFC;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .glass {
+      background: rgba(10, 12, 20, 0.3);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .reveal-base {
+      opacity: 0;
+      transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+
+    .reveal-fade-up {
+      transform: translateY(100px);
+    }
+
+    .reveal-fade-down {
+      transform: translateY(-100px);
+    }
+
+    .reveal-fade-left {
+      transform: translateX(-100px);
+    }
+
+    .reveal-fade-right {
+      transform: translateX(100px);
+    }
+
+    .reveal-zoom-in {
+      transform: scale(0.9);
+    }
+
+    .reveal-zoom-out {
+      transform: scale(1.1);
+    }
+
+    .reveal-base.visible {
+      opacity: 1;
+      transform: translate(0) scale(1);
+    }
+
+    .text-glow-cyan {
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    }
+
+    .text-gradient {
+      background: linear-gradient(to right, #38BDF8, #A855F7, #38BDF8);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient 5s linear infinite;
+    }
+
+    .bg-noise {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+    }
+
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Fluid Filter for Background Metaballs */
+    .fluid-filter {
+      filter: url('#fluid');
+    }
+
+    .premium-spacing {
+      word-spacing: 0.15rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SVG Filter for Fluid Effects -->
+  <svg style="position: absolute; width: 0; height: 0;" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+      <filter id="fluid">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="60" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="fluid" />
+        <feComposite in="SourceGraphic" in2="fluid" operator="atop" />
+      </filter>
+    </defs>
+  </svg>
+  <div class="fixed inset-0 bg-noise z-[200]"></div>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>

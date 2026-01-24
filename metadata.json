@@ -1,0 +1,8 @@
+{
+  "name": "Adnan Portfolio",
+  "description": "A premium, tech-inspired developer portfolio featuring smooth animations, an interactive tech background, and an AI-powered career assistant.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
