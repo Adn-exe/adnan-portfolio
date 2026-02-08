@@ -24,26 +24,25 @@ const Globe: React.FC = () => {
         if (!canvasRef.current) return;
 
         const globe = createGlobe(canvasRef.current, {
-            devicePixelRatio: 2,
+            devicePixelRatio: 1, // Reduced for performance
             width: width * 2,
             height: width * 2,
             phi: 0,
             theta: 0.3,
             dark: 1,
             diffuse: 1.2,
-            mapSamples: 16000,
+            mapSamples: 8000, // Reduced from 16000 for better performance
             mapBrightness: 6,
             baseColor: [0.3, 0.3, 0.3],
             markerColor: [0.1, 0.8, 1],
-            glowColor: [0.5, 0.5, 1], // Holographic Blue/Purple glow
+            glowColor: [0.5, 0.5, 1],
             opacity: 0.8,
             markers: [
-                // approximate locations
-                { location: [37.7595, -122.4367], size: 0.03 }, // SF
-                { location: [40.7128, -74.0060], size: 0.03 }, // NY
-                { location: [51.5074, -0.1278], size: 0.03 }, // London
-                { location: [12.9716, 77.5946], size: 0.1 }, // Bangalore (Highlight)
-                { location: [35.6762, 139.6503], size: 0.03 }, // Tokyo
+                { location: [37.7595, -122.4367], size: 0.03 },
+                { location: [40.7128, -74.0060], size: 0.03 },
+                { location: [51.5074, -0.1278], size: 0.03 },
+                { location: [12.9716, 77.5946], size: 0.08 },
+                { location: [35.6762, 139.6503], size: 0.03 },
             ],
             onRender: (state) => {
                 // This prevents rotation while dragging

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from 'framer-motion';
 import TechBackground from './components/TechBackground';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -9,7 +9,6 @@ import Loader from './components/Loader';
 import { TechIcon } from './components/Icons';
 import SmoothScroll from './components/SmoothScroll';
 import CustomCursor from './components/CustomCursor';
-import NoiseOverlay from './components/NoiseOverlay';
 import Magnetic from './components/Magnetic';
 import ScrollVelocityText from './components/ScrollVelocityText';
 import ScrollReveal from './components/ScrollReveal';
@@ -23,25 +22,16 @@ const App: React.FC = () => {
   const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
   const { playHover, playClick } = useAudio();
 
-  const { scrollY, scrollYProgress } = useScroll(); // Added scrollY
+  const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
 
-  // Prismatic Scroll Effect
-  const scrollVelocity = useVelocity(scrollY);
-  const skewVelocity = useSpring(scrollVelocity, {
-    stiffness: 100,
-    damping: 30
-  });
-  const skewY = useTransform(skewVelocity, [-1000, 1000], [-2, 2]);
 
-  const digitalThreadHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
 
-  // Parallax for headings
-  const aboutHeadingParallax = useTransform(scrollYProgress, [0.1, 0.3], [100, -100]);
+  // Removed heavy scroll transforms for performance
 
   const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -108,26 +98,18 @@ const App: React.FC = () => {
   return (
     <SmoothScroll>
       <div className="min-h-screen relative selection:bg-accent/30 selection:text-white bg-primary overflow-x-hidden animate-fadeIn cursor-none">
-        <CustomCursor />
-        <NoiseOverlay />
-
-        {/* Horizontal Progress Bar */}
+        {/* Scroll Progress Bar */}
         <motion.div
-          className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-accent-purple to-accent z-[200] origin-left"
+          className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent via-white to-accent z-[100] origin-left shadow-[0_0_15px_rgba(0,209,255,0.5)]"
           style={{ scaleX }}
         />
 
-        {/* Digital Thread - Vertical Scroll Guide */}
-        <div className="fixed left-6 md:left-12 top-0 bottom-0 w-[1px] bg-white/5 z-0 hidden md:block" />
-        <motion.div
-          className="fixed left-6 md:left-12 top-0 w-[1px] bg-gradient-to-b from-accent/0 via-accent/50 to-accent z-0 hidden md:block shadow-[0_0_10px_#38BDF8]"
-          style={{ height: digitalThreadHeight }}
-        />
+        <CustomCursor />
 
         <TechBackground />
         <Navbar />
 
-        <motion.main className="relative z-10" style={{ skewY, willChange: 'transform' }}>
+        <main className="relative z-10">
           <Hero />
 
           {/* Atmospheric Gradient Blend */}
@@ -138,28 +120,28 @@ const App: React.FC = () => {
           {/* Statistics Section */}
           <section className="py-32 border-y border-white/5 bg-surface/5 backdrop-blur-sm overflow-hidden relative z-20">
             <div className="container mx-auto px-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+              <ScrollReveal isContainer className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {[
-                  { val: 'AI/ML', label: 'Primary Focus', delay: 0 },
-                  { val: 'PYTHON', label: 'Specialization', delay: 0.1 },
-                  { val: 'Builder', label: 'Hands-on DNA', delay: 0.2 },
-                  { val: 'BLOG', label: 'WRITER', delay: 0.3 }
+                  { val: '3+', label: 'Projects Built' },
+                  { val: 'AI/ML', label: 'Core Focus' },
+                  { val: 'Creator', label: 'Mindset' },
+                  { val: 'Open', label: 'To Collaborate' }
                 ].map((s, i) => (
                   <ScrollReveal
                     key={i}
-                    delay={s.delay * 1000}
                     className="text-center group"
                     animation="fade-up"
+                    distance={20}
                   >
-                    <div className="text-4xl md:text-5xl font-display font-black text-white mb-2 tracking-tighter uppercase tabular-nums group-hover:text-accent transition-colors duration-500">
+                    <div className="text-4xl md:text-5xl font-display font-black text-white mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
                       {s.val}
                     </div>
-                    <div className="text-[10px] uppercase tracking-[0.5em] text-accent-purple font-black opacity-40 group-hover:opacity-100 transition-opacity">
+                    <div className="text-[11px] uppercase tracking-[0.3em] text-accent font-semibold group-hover:text-white transition-colors">
                       {s.label}
                     </div>
                   </ScrollReveal>
                 ))}
-              </div>
+              </ScrollReveal>
             </div>
           </section>
 
@@ -167,55 +149,66 @@ const App: React.FC = () => {
           <section id="about" className="py-48 px-6 relative overflow-hidden z-10">
             <div className="container mx-auto max-w-7xl">
               <div className="space-y-24">
-                <ScrollReveal>
-                  <motion.div style={{ y: aboutHeadingParallax }}>
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="w-16 h-[1px] bg-gradient-to-r from-accent to-accent-purple opacity-40"></div>
-                      <span className="text-accent-purple font-mono text-[11px] tracking-[0.4em] uppercase font-bold opacity-60">01 — About</span>
-                    </div>
-                    <h2 className="text-7xl md:text-9xl font-display font-black leading-[0.8] tracking-tighter uppercase italic">
-                      <span className="text-gradient">ABOUT ME</span>
-                    </h2>
-                  </motion.div>
+                <ScrollReveal isContainer className="space-y-24">
+                  <div className="space-y-8">
+                    <ScrollReveal animation="fade-right">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
+                        <span className="text-white font-medium text-sm tracking-widest uppercase">About Me</span>
+                      </div>
+                    </ScrollReveal>
+
+                    <ScrollReveal animation="fade-up" delay={0.2}>
+                      <h2 className="text-6xl md:text-8xl font-display font-black leading-[0.9] tracking-tighter mb-12">
+                        <span className="text-white">Who I</span> <span className="text-gradient">Am</span>
+                      </h2>
+                    </ScrollReveal>
+                  </div>
                 </ScrollReveal>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
                   <div className="lg:col-span-8 space-y-16">
-                    <ScrollReveal delay={200} className="relative space-y-12 text-slate-400">
-                      <p className="text-xl md:text-2xl font-light leading-relaxed tracking-wide border-l-2 border-accent/20 pl-8 premium-spacing group hover:border-accent transition-colors duration-700">
-                        As an <span className="text-white font-black italic">AI/ML Student</span>, I'm driven by curiosity about how intelligent systems actually work. I go beyond just implementing algorithms — I focus on understanding the <span className="text-accent font-black">core principles</span> that make models learn, adapt, and solve complex problems.
-                      </p>
+                    <ScrollReveal isContainer staggerChildren={0.2} className="relative space-y-12 text-slate-400">
+                      <ScrollReveal animation="fade-right" distance={20}>
+                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-accent/30 pl-8 group hover:border-accent transition-colors duration-700">
+                          As an <span className="text-white font-semibold">AI/ML Student</span>, I'm passionate about understanding how intelligent systems work. I go beyond implementing algorithms — I focus on grasping the <span className="text-accent font-semibold">fundamentals</span> that make models learn and solve complex problems.
+                        </p>
+                      </ScrollReveal>
 
-                      <p className="text-xl md:text-2xl font-light leading-relaxed tracking-wide border-l-2 border-accent-purple/20 pl-8 premium-spacing group hover:border-accent-purple transition-colors duration-700">
-                        I approach engineering with <span className="text-white font-black italic">structured thinking</span>. By breaking down complex challenges into clear, testable solutions, I bridge the gap between deep technical knowledge and practical <span className="text-accent-purple font-black">system design</span>.
-                      </p>
+                      <ScrollReveal animation="fade-right" distance={20}>
+                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-accent/20 pl-8 group hover:border-accent transition-colors duration-700">
+                          I approach challenges with <span className="text-white font-semibold">structured thinking</span>, breaking down complex problems into clear, testable solutions. My goal is to bridge deep technical knowledge with <span className="text-white font-semibold">practical applications</span>.
+                        </p>
+                      </ScrollReveal>
 
-                      <p className="text-xl md:text-2xl font-light leading-relaxed tracking-wide border-l-2 border-white/10 pl-8 premium-spacing group hover:border-white transition-colors duration-700">
-                        My goal is to combine strong fundamentals with <span className="text-white font-black italic">hands-on building</span>. I'm looking for collaborative environments where I can work on real problems and grow through <span className="text-white font-medium underline decoration-accent/30 underline-offset-8">mentorship and experience</span>.
-                      </p>
+                      <ScrollReveal animation="fade-right" distance={20}>
+                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-white/20 pl-8 group hover:border-white/40 transition-colors duration-700">
+                          I'm looking for collaborative environments where I can work on real problems and grow through <span className="text-white font-medium">mentorship and hands-on experience</span>.
+                        </p>
+                      </ScrollReveal>
                     </ScrollReveal>
 
-                    <ScrollReveal delay={400} className="flex flex-wrap gap-16 pt-16 border-t border-white/5">
-                      <div className="flex flex-col gap-2">
-                        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest font-bold">Focus</span>
-                        <span className="text-[12px] font-display font-black text-white uppercase tracking-widest flex items-center gap-3">
-                          <div className="w-2 h-2 rounded-full bg-accent animate-ping"></div>
-                          AI & Machine Learning
-                        </span>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest font-bold">Status</span>
-                        <span className="text-[12px] font-display font-black text-accent uppercase tracking-widest italic">Learning & Building</span>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest font-bold">Location</span>
-                        <span className="text-[12px] font-display font-black text-white uppercase tracking-widest">Open to Remote</span>
-                      </div>
+                    <ScrollReveal isContainer className="flex flex-wrap gap-16 pt-16 border-t border-white/10">
+                      {[
+                        { label: 'Focus', val: 'AI & Machine Learning', icon: true },
+                        { label: 'Status', val: 'Learning & Building', color: true },
+                        { label: 'Location', val: 'Open to Remote' }
+                      ].map((item, i) => (
+                        <ScrollReveal key={i} animation="fade-up" distance={10}>
+                          <div className="flex flex-col gap-2">
+                            <span className="text-[10px] font-medium text-slate-500 uppercase tracking-widest">{item.label}</span>
+                            <span className={`text-sm font-display font-bold ${item.color ? 'text-accent' : 'text-white'} flex items-center gap-3`}>
+                              {item.icon && <div className="w-2 h-2 rounded-full bg-accent"></div>}
+                              {item.val}
+                            </span>
+                          </div>
+                        </ScrollReveal>
+                      ))}
                     </ScrollReveal>
                   </div>
 
                   <div className="lg:col-span-4 relative hidden lg:block sticky top-32">
-                    <ScrollReveal delay={600} animation="zoom-in">
+                    <ScrollReveal delay={0.6} animation="zoom-in">
                       <div className="aspect-square relative flex items-center justify-center perspective-[2000px]">
                         {/* Interactive 3D Photo Frame - Rounded Full */}
                         <div
@@ -260,36 +253,45 @@ const App: React.FC = () => {
 
           <Skills />
 
-          {/* Enhanced Contact Section */}
           <section id="contact" className="py-32 px-6 relative z-20 overflow-hidden">
             <div className="container mx-auto max-w-6xl">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
 
-                <div className="space-y-16">
-                  <ScrollReveal className="space-y-8">
-                    <div className="flex items-center gap-4">
-                      <div className="w-3 h-3 rounded-full bg-accent-purple shadow-[0_0_15px_#A855F7] animate-pulse"></div>
-                      <span className="text-accent-purple font-mono text-[10px] tracking-[0.4em] uppercase font-bold">04 — Contact</span>
-                    </div>
-                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white leading-none tracking-tighter uppercase italic whitespace-nowrap">
-                      Let's <span className="text-gradient">Connect.</span>
-                    </h2>
-                    <p className="text-slate-500 text-xl font-light leading-relaxed max-w-sm">
-                      Open to collaborations on <span className="text-white font-bold">AI/ML projects</span> or software engineering opportunities.
-                    </p>
-                  </ScrollReveal>
-
-                  <div className="flex flex-col gap-12">
-                    {/* Replaced Icon Links with Holographic Globe Area */}
-                    <div className="relative h-64 lg:h-80 w-full rounded-[3rem] bg-white/5 border border-white/10 overflow-hidden group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent-purple/5 opacity-50"></div>
-                      <Globe />
-                      <div className="absolute bottom-6 left-0 right-0 text-center pointer-events-none">
-                        <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/40">Global Connectivity_Active</span>
+                <ScrollReveal isContainer className="space-y-16">
+                  <div className="space-y-8">
+                    <ScrollReveal animation="fade-right">
+                      <div className="flex items-center gap-4">
+                        <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_10px_rgba(0,209,255,0.6)]"></div>
+                        <span className="text-accent font-medium text-sm tracking-widest uppercase">Get In Touch</span>
                       </div>
-                    </div>
+                    </ScrollReveal>
+                    <ScrollReveal animation="fade-up" delay={0.2}>
+                      <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white leading-none tracking-tighter">
+                        Let's <span className="text-gradient">Connect</span>
+                      </h2>
+                    </ScrollReveal>
+                    <ScrollReveal animation="fade-up" delay={0.3}>
+                      <p className="text-slate-500 text-xl font-light leading-relaxed max-w-sm">
+                        Open to collaborations on <span className="text-white font-medium">AI/ML projects</span> or exciting opportunities.
+                      </p>
+                    </ScrollReveal>
+                  </div>
 
-                    <ScrollReveal delay={200} className="pt-12 border-t border-white/5">
+                  <ScrollReveal isContainer staggerChildren={0.2} className="flex flex-col gap-12">
+                    {/* Interactive Globe Area */}
+                    <ScrollReveal animation="zoom-in" delay={0.4}>
+                      <div className="relative h-64 lg:h-80 w-full rounded-[3rem] bg-white/5 border border-white/10 overflow-hidden group hover:border-accent/30 transition-colors duration-700">
+                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent-purple/5 opacity-50"></div>
+                        <div className="absolute inset-0 flex items-center justify-center scale-75 lg:scale-100">
+                          <Globe />
+                        </div>
+                        <div className="absolute bottom-6 left-0 right-0 text-center pointer-events-none">
+                          <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/40">Global Connectivity_Active</span>
+                        </div>
+                      </div>
+                    </ScrollReveal>
+
+                    <ScrollReveal animation="fade-up" delay={0.6} className="pt-12 border-t border-white/5">
                       <span className="text-[10px] font-mono text-slate-600 uppercase tracking-widest block mb-4 font-bold">Email:</span>
                       <a
                         href="mailto:mohdadnan916786@gmail.com"
@@ -298,29 +300,33 @@ const App: React.FC = () => {
                         onMouseEnter={playHover}
                         onClick={playClick}
                       >
-                        mohdadnan916786<span className="text-accent-purple font-light italic">@</span>gmail.com
+                        mohdadnan916786<span className="text-white font-light italic">@</span>gmail.com
                       </a>
                     </ScrollReveal>
 
                     {/* Social Links Moved Below */}
-                    <div className="flex items-center gap-8 mt-4">
-                      <Magnetic>
-                        <a href="https://www.linkedin.com/in/mohammed-adnan-956763297/" target="_blank" className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group" onMouseEnter={playHover}>
-                          <TechIcon name="linkedin" className="w-5 h-5 text-accent-purple group-hover:scale-110 transition-transform" />
-                          <span className="text-xs font-mono uppercase tracking-widest font-bold">LinkedIn</span>
-                        </a>
-                      </Magnetic>
-                      <Magnetic>
-                        <a href="https://github.com/Adn-exe" target="_blank" className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group" onMouseEnter={playHover}>
-                          <TechIcon name="github" className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
-                          <span className="text-xs font-mono uppercase tracking-widest font-bold">GitHub</span>
-                        </a>
-                      </Magnetic>
-                    </div>
-                  </div>
-                </div>
+                    <ScrollReveal isContainer className="flex items-center gap-8 mt-4">
+                      <ScrollReveal animation="fade-right" delay={0.8}>
+                        <Magnetic>
+                          <a href="https://www.linkedin.com/in/mohammed-adnan-956763297/" target="_blank" className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group" onMouseEnter={playHover}>
+                            <TechIcon name="linkedin" className="w-5 h-5 text-accent-purple group-hover:scale-110 transition-transform" />
+                            <span className="text-xs font-mono uppercase tracking-widest font-bold">LinkedIn</span>
+                          </a>
+                        </Magnetic>
+                      </ScrollReveal>
+                      <ScrollReveal animation="fade-right" delay={0.9}>
+                        <Magnetic>
+                          <a href="https://github.com/Adn-exe" target="_blank" className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group" onMouseEnter={playHover}>
+                            <TechIcon name="github" className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
+                            <span className="text-xs font-mono uppercase tracking-widest font-bold">GitHub</span>
+                          </a>
+                        </Magnetic>
+                      </ScrollReveal>
+                    </ScrollReveal>
+                  </ScrollReveal>
+                </ScrollReveal>
 
-                <ScrollReveal delay={400} animation="fade-left" className="relative group/form">
+                <ScrollReveal delay={0.4} animation="fade-left" className="relative group/form">
                   <div className="relative p-12 md:p-16 bg-surface/40 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-2xl transition-all duration-1000 group-hover/form:border-accent/30"
                     style={{ clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)' }}>
 
@@ -330,9 +336,8 @@ const App: React.FC = () => {
                     <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-accent/40"></div>
 
                     {/* Scanline & HUD Elements */}
-                    <div className="absolute inset-0 bg-scanline opacity-[0.02] pointer-events-none"></div>
-                    <div className="absolute top-6 right-10 flex gap-4 opacity-20 group-hover/form:opacity-60 transition-opacity">
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                    <div className="absolute top-6 right-10 flex gap-4 opacity-60">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent" />
                       <div className="w-1.5 h-1.5 rounded-full bg-accent-purple" />
                     </div>
 
@@ -381,7 +386,7 @@ const App: React.FC = () => {
                             data-cursor="UPLINK"
                             onMouseEnter={playHover}
                           >
-                            <span className="relative z-10 transition-colors duration-500 group-hover/btn:text-white group-hover/btn:italic">
+                            <span className="relative z-10 transition-colors duration-500 group-hover/btn:text-white">
                               {emailStatus === 'sending' ? 'Sending...' : emailStatus === 'sent' ? 'Message Sent!' : 'Send Message'}
                             </span>
 
@@ -396,7 +401,7 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
-        </motion.main>
+        </main >
 
         <footer className="py-24 border-t border-white/5 bg-primary relative z-30">
           <div className="container mx-auto px-6">
@@ -420,11 +425,11 @@ const App: React.FC = () => {
               </div>
 
               <div className="md:col-span-2 space-y-6">
-                <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em]">Services</h4>
+                <h4 className="text-[10px] font-medium text-white/40 uppercase tracking-widest">What I Do</h4>
                 <ul className="space-y-4">
-                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">AI Solutions</span></li>
-                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">Neural Systems</span></li>
-                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">Web Architecture</span></li>
+                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">Machine Learning</span></li>
+                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">AI Development</span></li>
+                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">Web Applications</span></li>
                 </ul>
               </div>
 
@@ -438,17 +443,17 @@ const App: React.FC = () => {
             </div>
 
             <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
-                © 2026 Adnan Portfolio. All Rights Reserved.
+              <div className="text-sm text-slate-500">
+                © 2026 Mohammed Adnan. All Rights Reserved.
               </div>
-              <div className="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
-                Designed & Built by <span className="text-white">Adnan</span>
+              <div className="text-sm text-slate-500">
+                Made with <span className="text-accent-purple">❤️</span> by <span className="text-white">Adnan</span>
               </div>
             </div>
           </div>
         </footer>
-      </div>
-    </SmoothScroll>
+      </div >
+    </SmoothScroll >
   );
 };
 

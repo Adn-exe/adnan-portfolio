@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Lenis from 'lenis';
 
@@ -8,16 +7,15 @@ interface SmoothScrollProps {
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     useEffect(() => {
+        // Only enable on desktop for performance
+        if (window.innerWidth < 1024) return;
+
         const lenis = new Lenis({
-            duration: 1.2,
+            duration: 1.0,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             orientation: 'vertical',
-            gestureOrientation: 'vertical',
             smoothWheel: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 2,
-            infinite: false,
-            lerp: 0.1, // Increased from 0.05 for smoother response
+            lerp: 0.1,
         });
 
         function raf(time: number) {

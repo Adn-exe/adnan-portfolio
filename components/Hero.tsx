@@ -1,125 +1,137 @@
-
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll } from 'framer-motion';
+import ScrollReveal from './ScrollReveal';
+import Magnetic from './Magnetic';
 
 const Hero: React.FC = () => {
-  const [mounted, setMounted] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
 
-  const springX = useSpring(mouseX, { damping: 50, stiffness: 400 });
-  const springY = useSpring(mouseY, { damping: 50, stiffness: 400 });
-
-  useEffect(() => {
-    setMounted(true);
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
-      mouseX.set((clientX / innerWidth - 0.5) * 50);
-      mouseY.set((clientY / innerHeight - 0.5) * 50);
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
 
   return (
-    <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none">
-      {/* Parallax Background Aura */}
+    <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none bg-black">
+
+      {/* Dynamic Background */}
       <motion.div
-        style={{
-          x: springX,
-          y: springY,
-          opacity,
-          translateY: y1
-        }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[1200px] max-h-[1200px] bg-accent/5 rounded-full blur-[250px] pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-accent/5 via-black to-black pointer-events-none"
       />
 
-      {/* Lighting Spotlight */}
-      <motion.div
-        style={{
-          x: useTransform(springX, (v) => v * 3),
-          y: useTransform(springY, (v) => v * 3),
-          opacity: useTransform(opacity, (v) => v * 0.4)
-        }}
-        className="absolute w-[600px] h-[600px] bg-accent/10 rounded-full blur-[150px] pointer-events-none mix-blend-screen z-0"
-      />
-
-      <div className="relative z-10 space-y-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 0.6, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className="inline-block text-accent font-mono text-[11px] tracking-[0.6em] uppercase font-bold">
-            AI / ML Developer
-          </span>
-        </motion.div>
-
-        <motion.div
-          style={{ scale, opacity, translateY: y2 }}
-          className="relative group"
-        >
-          <motion.h1
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[12vw] md:text-[14rem] font-display font-black text-white tracking-tighter leading-[0.75]"
+      {/* Content Container */}
+      <ScrollReveal isContainer className="relative z-10 flex flex-col items-center justify-center gap-4 md:gap-6">
+        {/* Greeting & Name */}
+        <div className="space-y-2">
+          <ScrollReveal
+            animation="fade-down"
+            delay={0.2}
+            distance={20}
           >
-            <span className="text-gradient drop-shadow-[0_0_50px_rgba(56,189,248,0.1)]">ADNAN</span>
-          </motion.h1>
+            <span className="inline-block text-accent font-sans text-sm tracking-widest uppercase font-medium">
+              Hello, I'm
+            </span>
+          </ScrollReveal>
 
-          <motion.div
-            style={{
-              x: useTransform(springX, (v) => v * -0.5),
-              y: useTransform(springY, (v) => v * -0.5)
-            }}
-            className="absolute inset-0 text-white/5 -z-10 blur-sm select-none pointer-events-none"
+          <ScrollReveal
+            animation="zoom-in"
+            delay={0.4}
+            distance={5}
+            className="relative z-10"
           >
-            ADNAN
-          </motion.div>
-        </motion.div>
+            <h1 className="text-8xl md:text-[10rem] font-medium leading-none tracking-tighter mb-4 uppercase" style={{ fontFamily: '"Libertinus Math", serif', fontWeight: '400' }}>
+              <span className="text-gradient drop-shadow-2xl">Mohammed</span>
+              <br />
+              <span className="text-white">Adnan</span>
+            </h1>
+          </ScrollReveal>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-xl mx-auto"
+        {/* Tagline */}
+        <ScrollReveal
+          animation="fade-up"
+          delay={0.6}
+          distance={20}
+          className="max-w-2xl mx-auto"
         >
-          <p className="text-slate-400 font-light tracking-[0.6em] text-[10px] md:text-xs uppercase leading-loose">
-            Optimizing <span className="text-white font-bold">Machine Intelligence</span> through <br />
-            Architectural Logic & Aesthetic Precision
+          <p className="text-slate-400 font-light text-lg md:text-xl leading-relaxed">
+            <span className="text-white font-medium">AI & Machine Learning Student</span> crafting intelligent solutions.
           </p>
-        </motion.div>
-      </div>
+        </ScrollReveal>
 
-      {/* Enhanced Scroll Indicator */}
+        {/* Spacer */}
+        <div className="h-16"></div>
+      </ScrollReveal>
+
+      {/* Corner Socials - Left */}
       <motion.div
-        style={{ opacity }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50 hover:opacity-100 transition-all duration-700 cursor-pointer group"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="absolute bottom-8 left-8 hidden md:flex items-center gap-6 z-20"
+      >
+        <a href="https://www.linkedin.com/in/mohammed-adnan-956763297/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+        </a>
+        <a href="https://github.com/Adn-exe" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-white transition-colors">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+        </a>
+      </motion.div>
+
+      {/* Premium CTA - Right */}
+      <ScrollReveal
+        animation="fade-left"
+        delay={1.0}
+        distance={30}
+        className="absolute bottom-12 right-12 hidden md:block z-20"
+      >
+        <Magnetic>
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group relative flex items-center justify-center px-10 py-5 rounded-full bg-black/40 backdrop-blur-md border border-accent/30 overflow-hidden transition-all duration-500 hover:border-accent hover:shadow-[0_0_35px_rgba(0,209,255,0.4)]"
+            data-cursor="CONTACT"
+          >
+            <span className="relative z-10 text-xs font-black tracking-[0.4em] uppercase text-white group-hover:text-accent transition-colors duration-500">
+              Get In Touch
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/10 to-accent/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+          </a>
+        </Magnetic>
+      </ScrollReveal>
+
+      {/* Scroll Indicator with Glowing Line Above */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.8 }}
+        transition={{ delay: 2.5, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 hover:opacity-100 transition-opacity cursor-pointer group"
         onClick={() => {
           const aboutSection = document.getElementById('about');
           if (aboutSection) aboutSection.scrollIntoView({ behavior: 'smooth' });
         }}
       >
-        <span className="text-[9px] tracking-[0.8em] font-mono text-slate-400 uppercase font-medium group-hover:text-accent transition-colors duration-500">Explore</span>
-        <div className="relative w-[2px] h-20 bg-white/10 overflow-hidden rounded-full group-hover:bg-white/20 transition-colors duration-500">
-          <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-accent via-accent to-transparent animate-scanline shadow-[0_0_20px_#38BDF8,0_0_40px_#38BDF8]" />
+        {/* Glowing Vertical Line ABOVE Explore */}
+        <div className="relative w-[2px] h-12 overflow-hidden mb-1">
+          <motion.div
+            animate={{
+              height: ["0%", "100%", "0%"],
+              top: ["0%", "0%", "100%"]
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="w-full bg-gradient-to-b from-transparent via-accent to-transparent shadow-[0_0_15px_#00D1FF]"
+          />
         </div>
+
+        <span className="text-[10px] tracking-[0.6em] font-mono text-white/40 uppercase group-hover:text-accent transition-colors">Explore</span>
+
         <motion.div
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="text-accent/60 group-hover:text-accent transition-colors duration-500"
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="text-accent relative z-10"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M12 5v14M5 12l7 7 7-7" />
           </svg>
         </motion.div>

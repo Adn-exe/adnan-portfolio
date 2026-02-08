@@ -1,5 +1,6 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { motion, Variants } from 'framer-motion';
 
 type AnimationType = 'fade-up' | 'fade-down' | 'fade-left' | 'fade-right' | 'zoom-in' | 'zoom-out' | 'none';
 
@@ -8,52 +9,70 @@ interface ScrollRevealProps {
   className?: string;
   delay?: number;
   animation?: AnimationType;
-  threshold?: number;
+  duration?: number;
   once?: boolean;
+  distance?: number;
+  staggerChildren?: number;
+  isContainer?: boolean;
 }
 
-const ScrollReveal: React.FC<ScrollRevealProps> = ({ 
-  children, 
-  className = '', 
-  delay = 0, 
+const ScrollReveal: React.FC<ScrollRevealProps> = ({
+  children,
+  className = '',
+  delay = 0,
   animation = 'fade-up',
-  threshold = 0.1,
-  once = false // Changed to false to trigger animations every time by default
+  duration = 0.8,
+  once = false,
+  distance = 30,
+  staggerChildren = 0.1,
+  isContainer = false
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const domRef = useRef<HTMLDivElement>(null);
+  const variants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: animation === 'fade-up' ? distance : animation === 'fade-down' ? -distance : 0,
+      x: animation === 'fade-left' ? distance : animation === 'fade-right' ? -distance : 0,
+      scale: animation === 'zoom-in' ? 0.95 : animation === 'zoom-out' ? 1.05 : 1,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration,
+        delay,
+        ease: [0.22, 1, 0.36, 1],
+        staggerChildren: isContainer ? staggerChildren : 0,
+        when: "beforeChildren",
+      },
+    },
+  };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          if (once) observer.unobserve(entry.target);
-        } else {
-          // Reset visibility when leaving viewport to allow re-triggering
-          setIsVisible(false);
-        }
-      });
-    }, { threshold });
-
-    const current = domRef.current;
-    if (current) observer.observe(current);
-
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [threshold, once]);
-
-  const animationClass = animation === 'none' ? '' : `reveal-${animation}`;
+  if (isContainer) {
+    return (
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once, margin: "-10%" }}
+        variants={variants}
+        className={className}
+      >
+        {children}
+      </motion.div>
+    );
+  }
 
   return (
-    <div
-      ref={domRef}
-      style={{ transitionDelay: isVisible ? `${delay}ms` : '0ms' }}
-      className={`reveal-base ${animationClass} ${isVisible ? 'visible' : ''} ${className}`}
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, margin: "-10%" }}
+      variants={variants}
+      className={className}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 

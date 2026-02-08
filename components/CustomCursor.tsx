@@ -9,9 +9,8 @@ const CustomCursor: React.FC = () => {
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
-    const springConfig = { damping: 25, stiffness: 400 };
-    const cursorXSpring = useSpring(cursorX, springConfig);
-    const cursorYSpring = useSpring(cursorY, springConfig);
+    const cursorXSpring = cursorX;
+    const cursorYSpring = cursorY;
 
     useEffect(() => {
         const moveCursor = (e: MouseEvent) => {
