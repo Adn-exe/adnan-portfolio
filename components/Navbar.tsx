@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
           duration: 1.2,
           ease: [0.22, 1, 0.36, 1]
         }}
-        className={`fixed top-8 left-1/2 -translate-x-1/2 z-[100] rounded-full backdrop-blur-2xl border flex justify-center items-center min-w-[1100px] hidden md:flex`}
+        className={`fixed top-2 left-1/2 -translate-x-1/2 z-[100] rounded-full backdrop-blur-2xl border flex justify-center items-center min-w-[1100px] hidden md:flex`}
       >
         <div className="flex items-center justify-center w-full gap-12">
           <Magnetic>
