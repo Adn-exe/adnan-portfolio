@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
     rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/libertinus-math" rel="stylesheet">
   <script>
@@ -20,12 +20,16 @@
             sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
             display: ['Space Grotesk', 'sans-serif'],
             handwriting: ['Mr De Haviland', 'cursive'],
+            serif: ['Merriweather', 'serif'],
           },
           colors: {
-            primary: '#000000',
+            primary: 'var(--bg-primary)',
             accent: '#00D1FF',
             'accent-purple': '#A855F7',
-            surface: '#121212',
+            surface: 'var(--bg-surface)',
+            'theme-text': 'var(--text-primary)',
+            'theme-secondary': 'var(--text-secondary)',
+            'theme-border': 'var(--border-color)',
           },
         },
         animation: {
@@ -33,7 +37,7 @@
           'float': 'float 8s ease-in-out infinite',
           'reveal': 'reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
           'scanline': 'scanline 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',  /* deprecated */
-          'fadeIn': 'fadeIn 0.6s ease-out forwards',
+          'fadeIn': 'fadeIn 0.4s ease-out forwards',
           'slideUp': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
           'spin-slow': 'spin 12s linear infinite',
           'gradient': 'gradient 8s linear infinite',
@@ -127,18 +131,39 @@
       background: #F8FAFC;
     }
 
+    :root {
+      --bg-primary: #000000;
+      --bg-surface: #121212;
+      --text-primary: #F8FAFC;
+      --text-secondary: #94A3B8;
+      --border-color: rgba(255, 255, 255, 0.05);
+      --navbar-bg: rgba(0, 5, 10, 0.9);
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    .light {
+      --bg-primary: #FFFFFF;
+      --bg-surface: #F8FAFC;
+      --text-primary: #0F172A;
+      --text-secondary: #475569;
+      --border-color: rgba(0, 0, 0, 0.05);
+      --navbar-bg: rgba(255, 255, 255, 0.9);
+      --card-bg: rgba(0, 0, 0, 0.03);
+    }
+
     body {
-      background-color: #0F0F0F;
-      color: #F8FAFC;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.5s ease, color 0.5s ease;
     }
 
     .glass {
-      background: rgba(10, 12, 20, 0.3);
+      background: var(--card-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
     }
 
     .text-glow-cyan {

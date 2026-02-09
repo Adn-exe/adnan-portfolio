@@ -1,5 +1,6 @@
 
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ElysiumLogo } from './Icons';
 
 interface Particle {
@@ -13,44 +14,12 @@ interface Particle {
 
 const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [statusIdx, setStatusIdx] = useState(0);
   const [isFinishing, setIsFinishing] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [glitchActive, setGlitchActive] = useState(false);
-  const [milestone, setMilestone] = useState(0);
-
-  const loadingStatuses = useMemo(() => [
-    "Loading",
-    "Preparing content",
-    "Almost there",
-    "Setting things up",
-    "Just a moment",
-    "Ready",
-    "Welcome"
-  ], []);
-
-  // Generate particles for neural network effect
-  const particles = useMemo<Particle[]>(() => {
-    return Array.from({ length: 16 }, (_, i) => ({
-      id: i,
-      angle: (i / 16) * 360,
-      radius: 80 + Math.random() * 60,
-      speed: 0.3 + Math.random() * 0.4,
-      size: 3 + Math.random() * 4,
-      delay: Math.random() * 2,
-    }));
-  }, []);
-
-  // Track milestones for pulse effects
-  useEffect(() => {
-    if (progress >= 25 && milestone < 25) setMilestone(25);
-    else if (progress >= 50 && milestone < 50) setMilestone(50);
-    else if (progress >= 75 && milestone < 75) setMilestone(75);
-    else if (progress >= 100 && milestone < 100) setMilestone(100);
-  }, [progress, milestone]);
+  const [statusText, setStatusText] = useState("INITIALIZING SYSTEM");
 
   useEffect(() => {
-    const duration = 2800;
+    const duration = 2000;
     const interval = 16;
     const increment = 100 / (duration / interval);
 
@@ -60,327 +29,164 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
         if (next >= 100) {
           clearInterval(timer);
           setIsFinishing(true);
-          setTimeout(onComplete, 1200);
+          setTimeout(onComplete, 600);
           return 100;
         }
         return next;
       });
     }, interval);
 
-    const statusTimer = setInterval(() => {
-      setGlitchActive(true);
-      setTimeout(() => setGlitchActive(false), 300);
-      setStatusIdx((prev) => (prev < loadingStatuses.length - 1 ? prev + 1 : prev));
-    }, duration / loadingStatuses.length);
+    // Cycle status text
+    const statusInterval = setInterval(() => {
+      setStatusText(prev => {
+        if (prev === "INITIALIZING SYSTEM") return "LOADING ASSETS";
+        if (prev === "LOADING ASSETS") return "OPTIMIZING";
+        return "READY";
+      });
+    }, 600);
 
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({
-        x: (e.clientX / window.innerWidth - 0.5) * 60,
-        y: (e.clientY / window.innerHeight - 0.5) * 60,
+        x: (e.clientX / window.innerWidth - 0.5) * 40,
+        y: (e.clientY / window.innerHeight - 0.5) * 40,
       });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-
     return () => {
       clearInterval(timer);
-      clearInterval(statusTimer);
+      clearInterval(statusInterval);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [onComplete, loadingStatuses]);
-
-  const getParticlePosition = useCallback((particle: Particle, progressVal: number) => {
-    const time = Date.now() / 1000;
-    const angle = particle.angle + (time * particle.speed * 50) + (progressVal * 2);
-    const x = Math.cos((angle * Math.PI) / 180) * particle.radius;
-    const y = Math.sin((angle * Math.PI) / 180) * particle.radius;
-    return { x, y };
-  }, []);
-
-  // Generate connections between nearby particles
-  const getConnections = useCallback(() => {
-    const connections: { x1: number; y1: number; x2: number; y2: number; opacity: number }[] = [];
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const pos1 = getParticlePosition(particles[i], progress);
-        const pos2 = getParticlePosition(particles[j], progress);
-        const distance = Math.sqrt(Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2));
-        if (distance < 120) {
-          connections.push({
-            x1: pos1.x,
-            y1: pos1.y,
-            x2: pos2.x,
-            y2: pos2.y,
-            opacity: (1 - distance / 120) * 0.6 * (progress / 100),
-          });
-        }
-      }
-    }
-    return connections;
-  }, [particles, progress, getParticlePosition]);
-
-  const progressColor = progress >= 100 ? '#FFD700' : progress >= 75 ? '#FFFFFF' : '#38BDF8';
+  }, [onComplete]);
 
   return (
-    <div className={`fixed inset-0 z-[1000] flex flex-col items-center justify-center overflow-hidden transition-all duration-[1200ms] cubic-bezier(0.23, 1, 0.32, 1) ${isFinishing ? 'opacity-0 scale-[2] blur-3xl' : 'opacity-100'}`}>
+    <div className={`fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-primary transition-all duration-[800ms] cubic-bezier(0.23, 1, 0.32, 1) ${isFinishing ? 'opacity-0 scale-[1.1] blur-xl' : 'opacity-100'}`}>
 
-      {/* Animated Gradient Background */}
-      <div className="absolute inset-0 bg-primary">
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            background: `radial-gradient(ellipse at center, rgba(56, 189, 248, ${0.1 + progress / 500}) 0%, rgba(168, 85, 247, ${0.05 + progress / 800}) 40%, transparent 70%)`,
+      {/* Dynamic Flowing Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute inset-[-50%] opacity-[0.15]"
+          animate={{
+            background: [
+              `radial-gradient(circle at ${50 + mousePos.x * 0.5}% ${50 + mousePos.y * 0.5}%, rgba(0, 209, 255, 0.15) 0%, transparent 50%)`,
+              `radial-gradient(circle at ${40 - mousePos.x * 0.5}% ${60 - mousePos.y * 0.5}%, rgba(0, 209, 255, 0.1) 0%, transparent 45%)`,
+              `radial-gradient(circle at ${60 + mousePos.x * 0.5}% ${40 + mousePos.y * 0.5}%, rgba(0, 209, 255, 0.15) 0%, transparent 50%)`,
+            ]
           }}
-        />
-      </div>
-
-      {/* Vignette Overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 30%, rgba(1, 2, 8, 0.8) 100%)',
-        }}
-      />
-
-      {/* Dynamic Background Data Grid */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute inset-[-50%] opacity-[0.05] bg-[radial-gradient(#38BDF8_1px,transparent_1px)] bg-[size:40px_40px] transition-transform duration-[1.5s] ease-out"
-          style={{ transform: `translate(${mousePos.x * -0.5}px, ${mousePos.y * -0.5}px) rotate(${progress * 0.15}deg)` }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Secondary Grid Layer */}
-        <div
-          className="absolute inset-[-50%] opacity-[0.03] bg-[radial-gradient(#A855F7_1px,transparent_1px)] bg-[size:60px_60px] transition-transform duration-[2s] ease-out"
-          style={{ transform: `translate(${mousePos.x * 0.3}px, ${mousePos.y * 0.3}px) rotate(${-progress * 0.1}deg)` }}
+        {/* Moving Neon Blobs */}
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[120px]"
+          animate={{
+            x: [0, 100, -100, 0],
+            y: [0, -100, 100, 0],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         />
-
-        {/* Holographic Scanning Lines */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent animate-scanline" />
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent-purple to-transparent animate-scanline [animation-delay:2s]" />
-        </div>
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-accent/8 rounded-full blur-[100px]"
+          animate={{
+            x: [0, -150, 150, 0],
+            y: [0, 150, -150, 0],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
       </div>
 
       <div className="relative z-10 flex flex-col items-center">
-        {/* Quantum Core Visualizer */}
+        {/* Enhanced Central Element */}
         <div
-          className="relative w-80 h-80 flex items-center justify-center transition-transform duration-700 ease-out"
-          style={{
-            transform: `perspective(1000px) rotateX(${mousePos.y * -0.4}deg) rotateY(${mousePos.x * 0.4}deg)`,
-            transformStyle: 'preserve-3d'
-          }}
+          className="relative transition-transform duration-700 ease-out flex items-center justify-center w-80 h-80"
+          style={{ transform: `perspective(1000px) rotateX(${mousePos.y * -0.3}deg) rotateY(${mousePos.x * 0.3}deg)` }}
         >
-          {/* Neural Network Connections SVG */}
-          <svg className="absolute inset-0 w-full h-full" style={{ overflow: 'visible' }}>
-            <defs>
-              <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#38BDF8" stopOpacity="0" />
-                <stop offset="50%" stopColor="#38BDF8" stopOpacity="1" />
-                <stop offset="100%" stopColor="#A855F7" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <g transform="translate(160, 160)">
-              {getConnections().map((conn, i) => (
-                <line
-                  key={i}
-                  x1={conn.x1}
-                  y1={conn.y1}
-                  x2={conn.x2}
-                  y2={conn.y2}
-                  stroke="url(#connectionGradient)"
-                  strokeWidth="1"
-                  opacity={conn.opacity}
-                  className="animate-connection-pulse"
-                />
-              ))}
-            </g>
-          </svg>
-
-          {/* Neural Particles */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            {particles.map((particle) => {
-              const pos = getParticlePosition(particle, progress);
-              return (
-                <div
-                  key={particle.id}
-                  className="absolute rounded-full animate-particle-float"
-                  style={{
-                    width: particle.size,
-                    height: particle.size,
-                    background: particle.id % 2 === 0
-                      ? 'radial-gradient(circle, #38BDF8, transparent)'
-                      : 'radial-gradient(circle, #A855F7, transparent)',
-                    boxShadow: particle.id % 2 === 0
-                      ? '0 0 10px #38BDF8, 0 0 20px #38BDF8'
-                      : '0 0 10px #A855F7, 0 0 20px #A855F7',
-                    transform: `translate(${pos.x}px, ${pos.y}px)`,
-                    opacity: 0.3 + (progress / 150),
-                    animationDelay: `${particle.delay}s`,
-                  }}
-                />
-              );
-            })}
-          </div>
-
-          {/* Enhanced Animated Rings */}
-          {[...Array(6)].map((_, i) => (
-            <div
+          {/* Scanning Sentinel Rings */}
+          {[...Array(3)].map((_, i) => (
+            <motion.div
               key={i}
-              className="absolute rounded-full animate-breathe"
+              className="absolute rounded-full border border-accent/20"
               style={{
-                width: `${100 - i * 12}%`,
-                height: `${100 - i * 12}%`,
-                animation: `spin ${10 + i * 3}s linear infinite ${i % 2 === 0 ? '' : 'reverse'}, breathe ${3 + i * 0.5}s ease-in-out infinite`,
-                background: i === 0
-                  ? `conic-gradient(from ${progress * 3.6}deg, transparent, rgba(56, 189, 248, ${0.3 + progress / 300}), transparent)`
-                  : 'none',
-                border: `${i % 2 === 0 ? '1px' : '2px'} ${i % 3 === 0 ? 'solid' : 'dashed'} rgba(56, 189, 248, ${0.05 + (progress / 400) + (i * 0.02)})`,
-                boxShadow: i === 0
-                  ? `0 0 ${20 + progress / 3}px rgba(56, 189, 248, ${progress / 250}), inset 0 0 ${10 + progress / 5}px rgba(168, 85, 247, ${progress / 400})`
-                  : 'none',
-                animationDelay: `${i * 0.2}s`,
+                width: `${100 - i * 15}%`,
+                height: `${100 - i * 15}%`,
+                borderTopColor: 'rgba(0, 209, 255, 0.8)',
+                borderRightColor: 'transparent',
+                borderBottomColor: 'rgba(0, 209, 255, 0.1)',
+                borderLeftColor: 'transparent',
+              }}
+              animate={{
+                rotate: i % 2 === 0 ? 360 : -360,
+                scale: [1, 1.02, 1],
+              }}
+              transition={{
+                rotate: { duration: 3 + i, repeat: Infinity, ease: "linear" },
+                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
               }}
             />
           ))}
 
-          {/* Central Hologram Core */}
-          <div className="relative group scale-100 flex items-center justify-center">
-            {/* Outer Glow Layers */}
-            <div
-              className="absolute rounded-full blur-[60px] animate-core-pulse"
-              style={{
-                width: 120 + progress / 2,
-                height: 120 + progress / 2,
-                background: `radial-gradient(circle, rgba(56, 189, 248, ${0.4 + progress / 250}) 0%, rgba(168, 85, 247, ${0.2 + progress / 400}) 50%, transparent 70%)`,
+          {/* Logo Reveal with Intelligent Glow */}
+          <div className="relative group">
+            <motion.div
+              className="absolute inset-[-40px] blur-3xl bg-accent/20 rounded-full"
+              animate={{
+                opacity: [0.2, 0.5, 0.2],
+                scale: [0.9, 1.1, 0.9]
               }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
-            <div
-              className="absolute rounded-full blur-[30px] animate-pulse-slow"
-              style={{
-                width: 80 + progress / 3,
-                height: 80 + progress / 3,
-                background: `radial-gradient(circle, rgba(56, 189, 248, 0.6) 0%, transparent 60%)`,
+            <motion.div
+              animate={{
+                scale: [1, 1.05, 1],
+                filter: [`drop-shadow(0 0 15px rgba(0,209,255,0.5))`, `drop-shadow(0 0 30px rgba(0,209,255,0.8))`, `drop-shadow(0 0 15px rgba(0,209,255,0.5))`]
               }}
-            />
-
-            {/* The Logo */}
-            <ElysiumLogo
-              className="w-24 h-24 text-accent z-10 transition-all duration-500"
-              style={{
-                filter: `drop-shadow(0 0 ${20 + progress / 5}px rgba(56, 189, 248, ${0.5 + progress / 200})) drop-shadow(0 0 ${40 + progress / 3}px rgba(168, 85, 247, 0.3))`,
-                transform: `scale(${1 + progress / 500})`,
-              }}
-            />
-
-            {/* Energy Discharge Orbs */}
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-2 h-2 rounded-full"
-                style={{
-                  background: i % 2 === 0 ? '#38BDF8' : '#A855F7',
-                  boxShadow: i % 2 === 0
-                    ? '0 0 8px #38BDF8, 0 0 16px #38BDF8'
-                    : '0 0 8px #A855F7, 0 0 16px #A855F7',
-                  transform: `rotate(${i * 60 + progress * 3}deg) translate(${55 + Math.sin(progress / 10) * 5}px)`,
-                  opacity: (progress / 100) * 0.9,
-                }}
-              />
-            ))}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ElysiumLogo className="w-24 h-24 text-accent relative z-10 transition-transform duration-500 group-hover:scale-110" />
+            </motion.div>
           </div>
         </div>
 
-        {/* Status Messaging & HUD */}
-        <div className="mt-16 w-[480px] flex flex-col items-center">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-[1px] w-16 bg-gradient-to-r from-transparent via-accent to-accent/40" />
-            <div className="relative h-5 overflow-hidden min-w-[240px] text-center">
-              <span
-                key={statusIdx}
-                className={`text-accent font-mono text-[10px] tracking-[0.5em] uppercase block font-black ${glitchActive ? 'animate-glitch' : 'animate-reveal'}`}
-                style={{
-                  textShadow: glitchActive
-                    ? '2px 0 #A855F7, -2px 0 #38BDF8'
-                    : '0 0 10px rgba(56, 189, 248, 0.5)',
-                }}
-              >
-                {loadingStatuses[statusIdx]}
-              </span>
-            </div>
-            <div className="h-[1px] w-16 bg-gradient-to-l from-transparent via-accent-purple to-accent-purple/40" />
+        {/* Minimal Progress HUD */}
+        <div className="mt-12 flex flex-col items-center">
+          {/* Animated Status Text */}
+          <div className="h-6 mb-4 overflow-hidden">
+            <motion.span
+              key={statusText}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              className="text-accent font-mono text-[10px] tracking-[0.6em] uppercase block"
+            >
+              {statusText}
+            </motion.span>
           </div>
 
-          <div className="flex flex-col items-center gap-5 w-full">
-            {/* Animated Progress Counter */}
-            <div className="flex items-end gap-2 h-12">
-              <span
-                className="text-6xl font-display font-black italic tracking-tighter tabular-nums transition-all duration-300"
-                style={{
-                  color: progressColor,
-                  textShadow: `0 0 30px ${progressColor}40, 0 0 60px ${progressColor}20`,
-                  transform: milestone === Math.round(progress) && milestone > 0 ? 'scale(1.1)' : 'scale(1)',
-                }}
-              >
-                {Math.round(progress)}
-              </span>
-              <div className="flex flex-col mb-2">
-                <span className="text-accent text-[9px] font-mono font-bold opacity-70 tracking-widest">%</span>
-                <span className="text-accent-purple text-[9px] font-mono font-bold opacity-70 tracking-widest">LOAD</span>
-              </div>
-            </div>
+          <div className="flex items-baseline gap-3 mb-8">
+            <span className="text-7xl font-display font-black text-theme-text tabular-nums italic tracking-tighter">
+              {Math.round(progress)}
+            </span>
+            <span className="text-accent text-[10px] font-mono font-bold opacity-40 leading-none">%</span>
+          </div>
 
-            {/* Segmented Progress Bar */}
-            <div className="w-72 h-[4px] bg-white/5 relative rounded-full overflow-hidden">
-              {/* Segment markers */}
-              <div className="absolute inset-0 flex justify-between px-[1px]">
-                {[...Array(10)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="w-[2px] h-full bg-primary/50 z-10"
-                  />
-                ))}
-              </div>
-
-              {/* Main progress fill */}
-              <div
-                className="absolute inset-0 rounded-full transition-all duration-100 ease-out"
-                style={{
-                  width: `${progress}%`,
-                  background: 'linear-gradient(90deg, #38BDF8, #A855F7, #38BDF8)',
-                  backgroundSize: '200% 100%',
-                  animation: 'gradient 2s linear infinite',
-                  boxShadow: `0 0 20px #38BDF8, 0 0 40px rgba(168, 85, 247, 0.5)`,
-                }}
-              />
-
-              {/* Shimmer overlay */}
-              <div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-shimmer"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-
+          {/* Shimmering High-Precision Progress Bar */}
+          <div className="w-64 h-[2px] bg-white/5 relative rounded-full overflow-hidden">
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent via-white to-accent shadow-[0_0_20px_rgba(0,209,255,1)]"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ ease: "linear" }}
+              style={{ backgroundSize: '200% 100%' }}
+            />
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              style={{ width: `${progress}%` }}
+            />
           </div>
         </div>
-      </div>
-
-      {/* Corner Accents */}
-      <div className="absolute top-8 left-8 w-20 h-20">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-accent/30 to-transparent" />
-        <div className="absolute top-0 left-0 h-full w-[1px] bg-gradient-to-b from-accent/30 to-transparent" />
-      </div>
-      <div className="absolute top-8 right-8 w-20 h-20">
-        <div className="absolute top-0 right-0 w-full h-[1px] bg-gradient-to-l from-accent-purple/30 to-transparent" />
-        <div className="absolute top-0 right-0 h-full w-[1px] bg-gradient-to-b from-accent-purple/30 to-transparent" />
-      </div>
-      <div className="absolute bottom-8 left-8 w-20 h-20">
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-accent/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 h-full w-[1px] bg-gradient-to-t from-accent/30 to-transparent" />
-      </div>
-      <div className="absolute bottom-8 right-8 w-20 h-20">
-        <div className="absolute bottom-0 right-0 w-full h-[1px] bg-gradient-to-l from-accent-purple/30 to-transparent" />
-        <div className="absolute bottom-0 right-0 h-full w-[1px] bg-gradient-to-t from-accent-purple/30 to-transparent" />
       </div>
     </div>
   );

@@ -10,16 +10,16 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, direction = 'normal' })
     return (
         <div className="flex overflow-hidden relative w-full">
             <div className={`flex flex-nowrap whitespace-nowrap shrink-0 ${direction === 'normal' ? 'animate-marquee' : 'animate-marquee-reverse'} will-change-transform`}>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
             </div>
             <div className={`flex flex-nowrap whitespace-nowrap shrink-0 ${direction === 'normal' ? 'animate-marquee' : 'animate-marquee-reverse'} will-change-transform`}>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
-                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-white/5 mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
+                <span className="block text-6xl md:text-9xl font-display font-black uppercase text-theme-text opacity-[0.08] mr-12">{children} </span>
             </div>
         </div>
     );

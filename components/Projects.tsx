@@ -1,160 +1,140 @@
-
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import { PROJECTS } from '../constants';
 import { TechIcon } from './Icons';
 import Magnetic from './Magnetic';
 
 const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
+  // Mouse position for border glow and parallax
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const handleMouseMove = ({ currentTarget, clientX, clientY }: React.MouseEvent) => {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  };
+
+  // Spring animations for smoothness
+  const springX = useSpring(mouseX, { stiffness: 100, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 100, damping: 30 });
 
   return (
     <ScrollReveal
       animation="fade-up"
-      distance={40}
-      className="h-full"
+      delay={idx * 0.15}
+      distance={30}
+      className="group"
     >
       <div
-        className="group relative flex flex-col h-full bg-surface glass border border-white/5 transition-all duration-500 hover:border-accent/40 hover:shadow-[0_40px_80px_-20px_rgba(0,209,255,0.15)] hover:-translate-y-2 overflow-hidden"
-        style={{
-          clipPath: 'polygon(0 0, 95% 0, 100% 5%, 100% 100%, 5% 100%, 0 95%)',
-          minHeight: '550px',
-        }}
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative flex flex-col h-[500px] bg-surface rounded-[2rem] border border-theme-border overflow-hidden transition-all duration-700 hover:border-accent/40"
       >
-        {/* Simple hover glare effect */}
-        <div className="absolute inset-0 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-accent/10 via-transparent to-transparent" />
-        {/* Image Section with Parallax Effect */}
-        <div className="relative h-80 overflow-hidden">
-          <motion.img
-            src={project.image}
-            alt={project.title}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full h-full object-cover grayscale brightness-[0.4] transition-all duration-700 group-hover:grayscale-0 group-hover:brightness-90 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent" />
+        {/* Dynamic Border Glow */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: `radial-gradient(400px circle at ${springX}px ${springY}px, var(--accent-color, rgba(0, 209, 255, 0.1)), transparent 80%)`,
+          }}
+        />
 
-          {/* Status Badge & Loading Overlay */}
-          {project.status === 'In Progress' ? (
-            <>
-              <div className="absolute inset-0 bg-black/60 z-10 backdrop-blur-[2px] flex flex-col items-center justify-center">
-                <div className="font-sans text-accent text-sm uppercase tracking-widest">
-                  Coming Soon
-                </div>
-              </div>
-              <div className="absolute top-6 right-6 z-20">
-                <div className="glass px-4 py-2 rounded-full border border-accent/20 flex items-center gap-2 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-                  <span className="text-[9px] font-mono text-white tracking-[0.2em] uppercase font-bold">In Progress</span>
-                </div>
-              </div>
-            </>
-          ) : project.status && (
-            <div className="absolute top-6 right-6">
-              <div className="glass px-4 py-2 rounded-full border border-accent/20 flex items-center gap-2 shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                <span className="text-[9px] font-mono text-white tracking-[0.2em] uppercase font-bold">{project.status}</span>
-              </div>
-            </div>
-          )}
+        {/* Image Container with Parallax & Mask */}
+        <div className="relative h-64 overflow-hidden">
+          <motion.div
+            className="h-full w-full"
+            animate={{ scale: isHovered ? 1.1 : 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover grayscale brightness-[0.4] transition-all duration-700 group-hover:grayscale-0 group-hover:brightness-90"
+            />
+          </motion.div>
+
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent" />
+
+          {/* Indexing Header */}
+          <div className="absolute top-6 left-6 right-6 flex justify-between items-start z-10">
+            <span className="text-[10px] font-mono tracking-widest text-theme-text/40 bg-primary/50 backdrop-blur-md px-3 py-1.5 rounded-full border border-theme-border uppercase">
+              Project / {project.id.padStart(2, '0')}
+            </span>
+          </div>
         </div>
 
         {/* Content Section */}
-        <div className="p-10 flex-1 flex flex-col">
-          <div className="flex flex-wrap gap-8 mb-10">
-            {project.status !== 'In Progress' && project.tags.map((tag: string) => (
-              <div key={tag} className="relative group/tag">
-                <Magnetic>
-                  <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 text-slate-500 
-                                  transition-all duration-500 transform
-                                  group-hover/tag:scale-125 group-hover/tag:text-accent group-hover/tag:border-accent/30 
-                                  group-hover/tag:shadow-[0_0_20px_rgba(56,189,248,0.2)] group-hover/tag:bg-white/10"
-                    data-cursor={tag.toUpperCase()}>
-                    <TechIcon name={tag} className="w-6 h-6" />
-                  </div>
-                </Magnetic>
+        <div className="p-8 flex-1 flex flex-col justify-between relative">
+          {project.status === 'In Progress' && (
+            <div className="absolute top-0 right-8 -translate-y-1/2 z-20">
+              <div className="flex items-center gap-2 bg-accent/20 border border-accent/40 backdrop-blur-xl px-4 py-2 rounded-2xl shadow-[0_0_20px_rgba(0,209,255,0.2)]">
+                <span className="text-[10px] font-mono font-black text-accent tracking-tighter uppercase italic">Alpha Build</span>
               </div>
-            ))}
+            </div>
+          )}
+
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-display font-black text-theme-text tracking-tighter group-hover:text-accent transition-colors">
+                {project.title}
+              </h3>
+
+              <div className="flex gap-2">
+                {project.github && (
+                  <Magnetic strength={0.2}>
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-theme-secondary hover:text-accent transition-colors p-2 rounded-full border border-theme-border bg-primary/50">
+                      <TechIcon name="github" className="w-4 h-4" />
+                    </a>
+                  </Magnetic>
+                )}
+                {project.link && project.link !== '#' && (
+                  <Magnetic strength={0.2}>
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-theme-secondary hover:text-accent transition-colors p-2 rounded-full border border-theme-border bg-primary/50">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </Magnetic>
+                )}
+              </div>
+            </div>
+
+            <p className="text-theme-secondary text-xs leading-relaxed font-light mb-6">
+              {project.description}
+            </p>
+
             {project.status === 'In Progress' && (
-              <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/5 opacity-50">
-                <div className="w-6 h-1 bg-white/20 animate-pulse rounded-full"></div>
+              <div className="mb-6 space-y-3 p-4 rounded-2xl bg-accent/5 border border-accent/10">
+                <div className="flex items-center justify-between text-[9px] font-mono font-bold text-accent uppercase tracking-[0.2em]">
+                  <span>Loading...</span>
+                  <span>78%</span>
+                </div>
+                <div className="h-1 w-full bg-theme-text/5 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: '78%' }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    className="h-full bg-gradient-to-r from-accent to-white rounded-full"
+                  />
+                </div>
               </div>
             )}
           </div>
 
-          <h3 className="text-4xl font-display font-black text-white mb-6 tracking-tighter group-hover:text-gradient transition-all duration-700">
-            {project.status === 'In Progress' ? 'Secret Project' : project.title}
-          </h3>
-
-          {project.status === 'In Progress' ? (
-            <div className="mb-10 space-y-4">
-              <div className="flex items-center justify-between text-sm font-medium text-accent">
-                <span>In Development</span>
-                <span>64%</span>
-              </div>
-              <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                <div className="h-full bg-accent w-[64%] rounded-full" />
-              </div>
-              <div className="text-sm text-slate-500">
-                Working on something exciting...
-              </div>
-            </div>
-          ) : (
-            <p className="text-slate-500 text-sm leading-relaxed font-light mb-10 group-hover:text-slate-300 transition-colors duration-700">
-              {project.description}
-            </p>
-          )}
-
-          {/* Action Bar */}
-          <div className="mt-auto pt-10 border-t border-white/5 flex items-center justify-between">
-            <div className="flex-1 text-left">
-              {project.link && project.link !== '#' && project.status !== 'In Progress' && (
-                <Magnetic>
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative inline-flex items-center gap-3 px-6 py-2.5 rounded-2xl overflow-hidden text-[10px] font-display font-black text-white uppercase tracking-[0.2em] transition-all group/link bg-white/5 border border-white/10 hover:border-accent/60"
-                    data-cursor="ACCESS"
-                  >
-                    <span className="relative z-10 transition-colors duration-500 group-hover/link:text-white">View Project</span>
-                    <svg className="w-4 h-4 text-accent group-hover/link:translate-x-1 transition-all duration-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-
-                    <div className="absolute inset-0 bg-gradient-to-r from-accent via-white to-accent translate-x-[-100%] group-hover/link:translate-x-[0%] transition-transform duration-700 opacity-20"></div>
-                    <div className="absolute inset-0 bg-[#081b33] opacity-0 group-hover/link:opacity-90 transition-opacity duration-300 -z-10"></div>
-                  </a>
-                </Magnetic>
-              )}
-              {project.status === 'In Progress' && (
-                <div className="inline-flex items-center gap-4 px-10 py-4 rounded-3xl text-sm font-medium text-slate-500 border border-white/5 cursor-not-allowed">
-                  Coming Soon
-                </div>
-              )}
-            </div>
-
-            <div className="flex-none">
-              {project.github && (
-                <Magnetic>
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/5 border border-white/10 text-slate-500 hover:text-accent-purple hover:border-accent-purple/40 transition-all duration-500 hover:scale-110 shadow-xl"
-                    data-cursor="GITHUB"
-                  >
-                    <TechIcon name="github" className="w-7 h-7" />
-                  </a>
-                </Magnetic>
-              )}
-            </div>
+          <div className="flex flex-wrap gap-2 pt-6 border-t border-theme-border">
+            {project.tags.map((tag: string) => (
+              <span key={tag} className="text-[9px] font-mono uppercase tracking-[0.2em] px-3 py-1 bg-theme-text/5 text-theme-secondary rounded-md border border-theme-border group-hover:bg-accent/10 group-hover:text-accent transition-colors">
+                {tag}
+              </span>
+            ))}
           </div>
-        </div>
-
-        <div className="absolute top-0 right-0 p-8 font-sans text-sm text-white/10 font-medium">
-          Project {project.id.padStart(2, '0')}
         </div>
       </div>
     </ScrollReveal>
@@ -163,34 +143,35 @@ const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) 
 
 const Projects: React.FC = () => {
   return (
-    <section id="projects" className="py-40 px-6 relative z-10">
+    <section id="projects" className="py-40 px-6 relative z-10 overflow-hidden">
+      {/* Background Decorative Blur */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-accent/5 rounded-full blur-[150px] -z-10 animate-pulse-slow"></div>
+
       <div className="container mx-auto">
-        <ScrollReveal isContainer className="flex flex-col md:flex-row md:items-end justify-between mb-32 gap-8">
-          <ScrollReveal
-            animation="fade-right"
-            className="flex-1"
-          >
-            <span className="text-accent font-medium text-sm tracking-widest uppercase mb-4 block">Featured Work</span>
-            <h2 className="text-6xl md:text-8xl font-display font-black text-white tracking-tighter leading-[0.85]">
-              Projects I've <span className="text-gradient">Built</span>
-            </h2>
-          </ScrollReveal>
-          <ScrollReveal
-            animation="fade-left"
-            delay={0.2}
-            className="flex-none"
-          >
-            <p className="text-slate-500 max-w-xs font-light text-lg md:text-xl leading-relaxed">
-              A selection of <span className="text-white font-medium">projects</span> I've worked on and am proud of.
-            </p>
-          </ScrollReveal>
+        <ScrollReveal isContainer className="flex flex-col md:flex-row md:items-end justify-between mb-32 gap-12">
+          <div className="flex-1">
+            <ScrollReveal animation="fade-right">
+              <span className="text-accent font-medium text-sm tracking-widest uppercase mb-4 block">Portfolio Gallery</span>
+              <h2 className="text-5xl md:text-8xl font-display font-black text-theme-text tracking-tighter leading-none">
+                Featured <span className="text-gradient">Creations</span>
+              </h2>
+            </ScrollReveal>
+          </div>
+
+          <div className="flex-none max-w-sm">
+            <ScrollReveal animation="fade-left" delay={0.2}>
+              <p className="text-theme-secondary font-light text-lg md:text-xl leading-relaxed">
+                A curated selection of high-precision <span className="text-theme-text font-medium">engineering projects</span> balancing complexity and utility.
+              </p>
+            </ScrollReveal>
+          </div>
         </ScrollReveal>
 
-        <ScrollReveal isContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {PROJECTS.map((project, idx) => (
             <ProjectCard key={project.id} project={project} idx={idx} />
           ))}
-        </ScrollReveal>
+        </div>
       </div>
     </section>
   );

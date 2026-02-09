@@ -46,11 +46,11 @@ const Skills: React.FC = () => {
           <span className="text-accent font-medium text-sm tracking-widest uppercase mb-4 block">
             What I Work With
           </span>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-white tracking-tighter mb-6 relative inline-block">
+          <h2 className="text-5xl md:text-7xl font-display font-black text-theme-text tracking-tighter mb-6 relative inline-block">
             Skills & <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-white relative z-10">Technologies</span>
             <div className="absolute -inset-1 bg-gradient-to-r from-accent to-white opacity-10 blur-md -z-10"></div>
           </h2>
-          <p className="max-w-2xl mx-auto text-slate-400 text-lg font-light leading-relaxed">
+          <p className="max-w-2xl mx-auto text-theme-secondary text-lg font-light leading-relaxed">
             Technologies and tools I use to bring ideas to life.
           </p>
         </ScrollReveal>
@@ -116,13 +116,13 @@ const Skills: React.FC = () => {
               >
                 {/* Internal Glow Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                <div className="absolute inset-0 bg-[#010206]/90 z-0"></div>
+                <div className="absolute inset-0 bg-surface/90 z-0"></div>
 
                 {/* Content Container */}
                 <div className="relative z-10 flex flex-col h-full">
                   {/* Category Header */}
-                  <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/5">
-                    <h3 className="text-xl font-display font-bold text-white tracking-wide group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all">
+                  <div className="flex items-center justify-between mb-8 pb-4 border-b border-theme-border">
+                    <h3 className="text-xl font-display font-bold text-theme-text tracking-wide group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all">
                       {cat.name}
                     </h3>
                     <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${cat.color} shadow-[0_0_10px_currentColor] animate-pulse`}></div>
@@ -146,7 +146,7 @@ const Skills: React.FC = () => {
                             <div className="w-10 h-10 mb-2 relative z-10 p-1.5 transition-transform duration-300 group-hover/skill:scale-110">
                               <TechIcon name={skill.icon} className="w-full h-full object-contain filter grayscale group-hover/skill:grayscale-0 transition-all duration-300 drop-shadow-lg" />
                             </div>
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 group-hover/skill:text-white transition-colors relative z-10">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-theme-secondary group-hover/skill:text-theme-text transition-colors relative z-10">
                               {skill.name}
                             </span>
                           </div>
@@ -175,7 +175,7 @@ const Skills: React.FC = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: false }}
-          className="mt-20 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-center text-sm font-medium text-slate-500"
+          className="mt-20 border-t border-theme-border pt-8 flex flex-col md:flex-row items-center justify-center text-sm font-medium text-theme-secondary"
         >
           <span className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">

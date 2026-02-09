@@ -24,12 +24,11 @@ export const PROJECTS: Project[] = [
   },
   {
     id: '3',
-    title: 'Quantum Nexus',
-    description: 'An experimental prototype exploring hybrid neuro-symbolic architectures. This project bridges raw statistical learning with rigid symbolic logical constraints for next-gen autonomous agents within complex environments.',
+    title: 'Coming Soon',
+    description: 'Will let you know on 100%',
     image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1200',
-    tags: ['PyTorch', 'CUDA', 'Python', 'C++'],
+    tags: ['Python'],
     link: '#',
-    github: 'https://github.com/Adn-exe',
     role: 'Researcher',
     status: 'In Progress'
   }

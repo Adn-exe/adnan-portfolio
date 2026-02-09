@@ -14,6 +14,7 @@ import ScrollVelocityText from './components/ScrollVelocityText';
 import ScrollReveal from './components/ScrollReveal';
 import Globe from './components/Globe';
 import { useAudio } from './hooks/useAudio';
+import ThemeToggle from './components/ThemeToggle';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +98,7 @@ const App: React.FC = () => {
 
   return (
     <SmoothScroll>
-      <div className="min-h-screen relative selection:bg-accent/30 selection:text-white bg-primary overflow-x-hidden animate-fadeIn cursor-none">
+      <div className="min-h-screen relative selection:bg-accent/30 selection:text-white bg-primary text-theme-text overflow-x-hidden animate-fadeIn cursor-none">
         {/* Scroll Progress Bar */}
         <motion.div
           className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent via-white to-accent z-[100] origin-left shadow-[0_0_15px_rgba(0,209,255,0.5)]"
@@ -107,6 +108,7 @@ const App: React.FC = () => {
         <CustomCursor />
 
         <TechBackground />
+        <ThemeToggle />
         <Navbar />
 
         <main className="relative z-10">
@@ -133,7 +135,7 @@ const App: React.FC = () => {
                     animation="fade-up"
                     distance={20}
                   >
-                    <div className="text-4xl md:text-5xl font-display font-black text-white mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
+                    <div className="text-4xl md:text-5xl font-display font-black text-theme-text mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
                       {s.val}
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.3em] text-accent font-semibold group-hover:text-white transition-colors">
@@ -160,7 +162,7 @@ const App: React.FC = () => {
 
                     <ScrollReveal animation="fade-up" delay={0.2}>
                       <h2 className="text-6xl md:text-8xl font-display font-black leading-[0.9] tracking-tighter mb-12">
-                        <span className="text-white">Who I</span> <span className="text-gradient">Am</span>
+                        <span className="text-theme-text">Who I</span> <span className="text-gradient">Am</span>
                       </h2>
                     </ScrollReveal>
                   </div>
@@ -168,10 +170,10 @@ const App: React.FC = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
                   <div className="lg:col-span-8 space-y-16">
-                    <ScrollReveal isContainer staggerChildren={0.2} className="relative space-y-12 text-slate-400">
+                    <ScrollReveal isContainer staggerChildren={0.2} className="relative space-y-12 text-theme-secondary">
                       <ScrollReveal animation="fade-right" distance={20}>
                         <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-accent/30 pl-8 group hover:border-accent transition-colors duration-700">
-                          As an <span className="text-white font-semibold">AI/ML Student</span>, I'm passionate about understanding how intelligent systems work. I go beyond implementing algorithms — I focus on grasping the <span className="text-accent font-semibold">fundamentals</span> that make models learn and solve complex problems.
+                          As an <span className="text-theme-text font-semibold">AI/ML Student</span>, I'm passionate about understanding how intelligent systems work. I go beyond implementing algorithms — I focus on grasping the <span className="text-accent font-semibold">fundamentals</span> that make models learn and solve complex problems.
                         </p>
                       </ScrollReveal>
 
@@ -266,13 +268,13 @@ const App: React.FC = () => {
                       </div>
                     </ScrollReveal>
                     <ScrollReveal animation="fade-up" delay={0.2}>
-                      <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-white leading-none tracking-tighter">
+                      <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-theme-text leading-none tracking-tighter">
                         Let's <span className="text-gradient">Connect</span>
                       </h2>
                     </ScrollReveal>
                     <ScrollReveal animation="fade-up" delay={0.3}>
-                      <p className="text-slate-500 text-xl font-light leading-relaxed max-w-sm">
-                        Open to collaborations on <span className="text-white font-medium">AI/ML projects</span> or exciting opportunities.
+                      <p className="text-theme-secondary text-xl font-light leading-relaxed max-w-sm">
+                        Open to collaborations on <span className="text-theme-text font-medium">AI/ML projects</span> or exciting opportunities.
                       </p>
                     </ScrollReveal>
                   </div>
@@ -280,7 +282,7 @@ const App: React.FC = () => {
                   <ScrollReveal isContainer staggerChildren={0.2} className="flex flex-col gap-12">
                     {/* Interactive Globe Area */}
                     <ScrollReveal animation="zoom-in" delay={0.4}>
-                      <div className="relative h-64 lg:h-80 w-full rounded-[3rem] bg-white/5 border border-white/10 overflow-hidden group hover:border-accent/30 transition-colors duration-700">
+                      <div className="relative h-64 lg:h-80 w-full rounded-[3rem] bg-surface border border-theme-border overflow-hidden group hover:border-accent/30 transition-colors duration-700">
                         <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent-purple/5 opacity-50"></div>
                         <div className="absolute inset-0 flex items-center justify-center scale-75 lg:scale-100">
                           <Globe />
@@ -291,16 +293,16 @@ const App: React.FC = () => {
                       </div>
                     </ScrollReveal>
 
-                    <ScrollReveal animation="fade-up" delay={0.6} className="pt-12 border-t border-white/5">
-                      <span className="text-[10px] font-mono text-slate-600 uppercase tracking-widest block mb-4 font-bold">Email:</span>
+                    <ScrollReveal animation="fade-up" delay={0.6} className="pt-12 border-t border-theme-border">
+                      <span className="text-[10px] font-mono text-theme-secondary uppercase tracking-widest block mb-4 font-bold">Email:</span>
                       <a
                         href="mailto:mohdadnan916786@gmail.com"
-                        className="text-3xl md:text-4xl font-display font-black text-white hover:text-accent transition-all duration-500 tracking-tighter"
+                        className="text-3xl md:text-4xl font-display font-black text-theme-text hover:text-accent transition-all duration-500 tracking-tighter"
                         data-cursor="EMAIL"
                         onMouseEnter={playHover}
                         onClick={playClick}
                       >
-                        mohdadnan916786<span className="text-white font-light italic">@</span>gmail.com
+                        mohdadnan916786<span className="text-theme-text font-light italic">@</span>gmail.com
                       </a>
                     </ScrollReveal>
 
@@ -316,7 +318,7 @@ const App: React.FC = () => {
                       </ScrollReveal>
                       <ScrollReveal animation="fade-right" delay={0.9}>
                         <Magnetic>
-                          <a href="https://github.com/Adn-exe" target="_blank" className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group" onMouseEnter={playHover}>
+                          <a href="https://github.com/Adn-exe" target="_blank" className="flex items-center gap-3 text-theme-secondary hover:text-theme-text transition-colors group" onMouseEnter={playHover}>
                             <TechIcon name="github" className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
                             <span className="text-xs font-mono uppercase tracking-widest font-bold">GitHub</span>
                           </a>
@@ -327,7 +329,7 @@ const App: React.FC = () => {
                 </ScrollReveal>
 
                 <ScrollReveal delay={0.4} animation="fade-left" className="relative group/form">
-                  <div className="relative p-12 md:p-16 bg-surface/40 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-2xl transition-all duration-1000 group-hover/form:border-accent/30"
+                  <div className="relative p-12 md:p-16 bg-surface glass shadow-2xl transition-all duration-1000 group-hover/form:border-accent/30"
                     style={{ clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)' }}>
 
                     {/* Corner Accents */}
@@ -403,51 +405,51 @@ const App: React.FC = () => {
           </section>
         </main >
 
-        <footer className="py-24 border-t border-white/5 bg-primary relative z-30">
+        <footer className="py-24 border-t border-theme-border bg-primary relative z-30">
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
               <div className="md:col-span-4 space-y-6">
-                <a href="#" className="text-2xl font-display font-bold text-white tracking-tighter block">
+                <a href="#" className="text-2xl font-display font-bold text-theme-text tracking-tighter block">
                   Mohammed Adnan
                 </a>
-                <p className="text-slate-500 font-light text-sm leading-relaxed max-w-xs">
+                <p className="text-theme-secondary font-light text-sm leading-relaxed max-w-xs">
                   Constructing intelligent systems and digital architectures with precision and passion.
                 </p>
               </div>
 
               <div className="md:col-span-2 md:col-start-7 space-y-6">
-                <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em]">Index</h4>
+                <h4 className="text-[10px] font-mono text-theme-text/40 uppercase tracking-[0.2em]">Index</h4>
                 <ul className="space-y-4">
-                  <li><a href="#" className="text-sm text-slate-400 hover:text-accent transition-colors">Home</a></li>
-                  <li><a href="#about" className="text-sm text-slate-400 hover:text-accent transition-colors">About</a></li>
-                  <li><a href="#projects" className="text-sm text-slate-400 hover:text-accent transition-colors">Works</a></li>
+                  <li><a href="#" className="text-sm text-theme-secondary hover:text-accent transition-colors">Home</a></li>
+                  <li><a href="#about" className="text-sm text-theme-secondary hover:text-accent transition-colors">About</a></li>
+                  <li><a href="#projects" className="text-sm text-theme-secondary hover:text-accent transition-colors">Works</a></li>
                 </ul>
               </div>
 
               <div className="md:col-span-2 space-y-6">
-                <h4 className="text-[10px] font-medium text-white/40 uppercase tracking-widest">What I Do</h4>
+                <h4 className="text-[10px] font-medium text-theme-text/40 uppercase tracking-widest">What I Do</h4>
                 <ul className="space-y-4">
-                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">Machine Learning</span></li>
-                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">AI Development</span></li>
-                  <li><span className="text-sm text-slate-400 hover:text-accent transition-colors cursor-default">Web Applications</span></li>
+                  <li><span className="text-sm text-theme-secondary hover:text-accent transition-colors cursor-default">Machine Learning</span></li>
+                  <li><span className="text-sm text-theme-secondary hover:text-accent transition-colors cursor-default">AI Development</span></li>
+                  <li><span className="text-sm text-theme-secondary hover:text-accent transition-colors cursor-default">Web Applications</span></li>
                 </ul>
               </div>
 
               <div className="md:col-span-2 space-y-6">
-                <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-[0.2em]">Legal</h4>
+                <h4 className="text-[10px] font-mono text-theme-text/40 uppercase tracking-[0.2em]">Legal</h4>
                 <ul className="space-y-4">
-                  <li><span className="text-sm text-slate-600 cursor-not-allowed">Privacy</span></li>
-                  <li><span className="text-sm text-slate-600 cursor-not-allowed">Terms</span></li>
+                  <li><span className="text-sm text-theme-secondary/60 cursor-not-allowed">Privacy</span></li>
+                  <li><span className="text-sm text-theme-secondary/60 cursor-not-allowed">Terms</span></li>
                 </ul>
               </div>
             </div>
 
-            <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="text-sm text-slate-500">
+            <div className="pt-8 border-t border-theme-border flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="text-sm text-theme-secondary">
                 © 2026 Mohammed Adnan. All Rights Reserved.
               </div>
-              <div className="text-sm text-slate-500">
-                Made with <span className="text-accent-purple">❤️</span> by <span className="text-white">Adnan</span>
+              <div className="text-sm text-theme-secondary">
+                Made with <span className="text-accent-purple">❤️</span> by <span className="text-theme-text">Adnan</span>
               </div>
             </div>
           </div>

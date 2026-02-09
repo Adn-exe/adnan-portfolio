@@ -42,26 +42,38 @@ const Navbar: React.FC = () => {
           width: scrolled ? "65%" : "95%",
           paddingTop: scrolled ? "1rem" : "1.5rem",
           paddingBottom: scrolled ? "1rem" : "1.5rem",
-          backgroundColor: scrolled ? "rgba(0, 5, 10, 0.9)" : "rgba(0, 0, 0, 0)",
-          borderColor: scrolled ? "rgba(0, 209, 255, 0.4)" : "rgba(255, 255, 255, 0)",
+          backgroundColor: scrolled ? "var(--navbar-bg)" : "rgba(0, 0, 0, 0)",
+          borderColor: scrolled ? "rgba(0, 209, 255, 0.2)" : "rgba(255, 255, 255, 0)",
           boxShadow: scrolled
-            ? "0 0 30px rgba(0, 209, 255, 0.2), 0 0 60px rgba(0, 0, 0, 0.8)"
+            ? "0 0 40px rgba(0, 209, 255, 0.15), inset 0 0 12px rgba(0, 209, 255, 0.05)"
             : "0 0 0px rgba(0, 0, 0, 0)",
         }}
         transition={{
           duration: 1.2,
           ease: [0.22, 1, 0.36, 1]
         }}
-        className={`fixed top-2 left-1/2 -translate-x-1/2 z-[100] rounded-full backdrop-blur-2xl border flex justify-center items-center min-w-[1100px] hidden md:flex`}
+        className={`fixed top-2 left-1/2 -translate-x-1/2 z-[100] rounded-full backdrop-blur-2xl border flex justify-center items-center min-w-[1100px] hidden md:flex overflow-hidden`}
       >
-        <div className="flex items-center justify-center w-full gap-12">
+        {/* Interior Gradient Glow */}
+        <AnimatePresence>
+          {scrolled && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(0,209,255,0.08),transparent_70%)]"
+            />
+          )}
+        </AnimatePresence>
+
+        <div className="flex items-center justify-center w-full gap-12 relative z-10">
           <Magnetic>
             <motion.a
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               href="#hero"
               onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}
-              className="group flex items-center gap-3 text-xl font-display font-bold tracking-tighter text-white"
+              className="group flex items-center gap-3 text-xl font-display font-bold tracking-tighter text-theme-text"
               data-cursor="HOME"
             >
               <ElysiumLogo className="w-8 h-8 text-accent group-hover:rotate-[45deg] transition-transform duration-700 drop-shadow-[0_0_8px_rgba(0,209,255,0.6)]" />
@@ -77,7 +89,7 @@ const Navbar: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * i }}
                   onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`relative text-xs font-medium tracking-widest uppercase transition-all duration-300 group ${activeItem === item ? 'text-white' : 'text-slate-400 hover:text-accent'
+                  className={`relative text-xs font-medium tracking-widest uppercase transition-all duration-300 group ${activeItem === item ? 'text-theme-text' : 'text-theme-secondary hover:text-accent'
                     }`}
                   data-cursor={item.toUpperCase()}
                 >
@@ -100,7 +112,7 @@ const Navbar: React.FC = () => {
                 data-cursor="RESUME"
               >
                 <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-full group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(0,209,255,0.4)] transition-all duration-500" />
-                <span className="relative z-10 text-xs font-bold text-white tracking-widest uppercase transition-colors duration-500">
+                <span className="relative z-10 text-xs font-bold text-theme-text tracking-widest uppercase transition-colors duration-500">
                   Resume
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-accent via-white to-accent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out opacity-20"></div>

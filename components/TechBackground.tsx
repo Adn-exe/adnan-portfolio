@@ -8,13 +8,13 @@ const TechBackground: React.FC = () => {
   }, []);
 
   if (!mounted) {
-    return <div className="fixed inset-0 bg-[#000000] z-0" />;
+    return <div className="fixed inset-0 bg-primary z-0" />;
   }
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-[#000000] pointer-events-none">
-      {/* Pure Black Background - No Noise, No Grid */}
-      <div className="absolute inset-0 bg-black" />
+    <div className="fixed inset-0 z-0 overflow-hidden bg-primary pointer-events-none">
+      {/* Dynamic Theme Background */}
+      <div className="absolute inset-0 bg-primary" />
     </div>
   );
 };
