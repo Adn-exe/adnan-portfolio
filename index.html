@@ -142,13 +142,15 @@
     }
 
     .light {
-      --bg-primary: #FFFFFF;
-      --bg-surface: #F8FAFC;
-      --text-primary: #0F172A;
-      --text-secondary: #475569;
-      --border-color: rgba(0, 0, 0, 0.05);
-      --navbar-bg: rgba(255, 255, 255, 0.9);
-      --card-bg: rgba(0, 0, 0, 0.03);
+      --bg-primary: #FFFDF5;
+      /* Warm Ivory/Cream */
+      --bg-surface: #FFF9E5;
+      /* Subtle Bulb Yellow */
+      --text-primary: #1A1A1A;
+      --text-secondary: #5D5D4A;
+      --border-color: rgba(60, 60, 0, 0.05);
+      --navbar-bg: rgba(255, 253, 245, 0.9);
+      --card-bg: rgba(255, 255, 255, 0.5);
     }
 
     body {
@@ -171,7 +173,7 @@
     }
 
     .text-gradient {
-      background: linear-gradient(to right, #00D1FF, #FFFFFF, #00D1FF);
+      background: linear-gradient(to right, #00D1FF, var(--text-primary), #00D1FF);
       background-size: 200% auto;
       background-clip: text;
       -webkit-background-clip: text;

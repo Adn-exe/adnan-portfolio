@@ -1,191 +1,302 @@
-import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import ScrollReveal from './ScrollReveal';
+import React, { useRef, useState, useEffect, useMemo, useLayoutEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SKILLS } from '../constants';
 import { TechIcon } from './Icons';
-import Magnetic from './Magnetic';
+import ScrollReveal from './ScrollReveal';
 
-// Simple hover card with GPU-friendly scale effect (no 3D tilt)
-const HoverCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => {
+// --- VIEW MODES ---
+const VIEW_MODES = [
+  { id: 'pulse', label: 'Pulse' },
+  { id: 'grid', label: 'Grid' },
+];
+
+/**
+ * --- PULSE VIEW COMPONENT (Carousel) ---
+ * A cinematic, infinitely scrolling carousel of skills with seamless glows.
+ */
+const PulseView: React.FC = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Multiple sets for "infinite" feel
+  const loopSkills = useMemo(() => {
+    return [...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS];
+  }, []);
+
+  const MIDDLE_SET_INDEX = 2;
+  const pythonIndexInOneSet = useMemo(() => {
+    const idx = SKILLS.findIndex(s => s.name === 'Python');
+    return idx === -1 ? 0 : idx;
+  }, []);
+  const initialFocusIndex = (MIDDLE_SET_INDEX * SKILLS.length) + pythonIndexInOneSet;
+
+  const [activeIndex, setActiveIndex] = useState(initialFocusIndex);
+
+  // Initialize scroll position instantly
+  useLayoutEffect(() => {
+    const scrollToTarget = () => {
+      const targetItem = itemsRef.current[initialFocusIndex];
+      const container = scrollContainerRef.current;
+      if (targetItem && container) {
+        // Temporarily disable snap to allow precise positioning
+        container.style.scrollSnapType = 'none';
+
+        const containerCenter = container.offsetWidth / 2;
+        const itemCenter = targetItem.offsetLeft + targetItem.offsetWidth / 2;
+        container.scrollLeft = itemCenter - containerCenter;
+
+        // Re-enable snap after a frame
+        requestAnimationFrame(() => {
+          if (container) container.style.scrollSnapType = 'x mandatory';
+          setIsInitialized(true);
+        });
+      }
+    };
+
+    scrollToTarget();
+    const timer = setTimeout(scrollToTarget, 100);
+    return () => clearTimeout(timer);
+  }, [initialFocusIndex]);
+
+  const handleScroll = () => {
+    if (!scrollContainerRef.current || !isInitialized) return;
+    const container = scrollContainerRef.current;
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+    let closestIndex = activeIndex;
+    let minDistance = Infinity;
+
+    itemsRef.current.forEach((item, index) => {
+      if (!item) return;
+      const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+      const distance = Math.abs(containerCenter - itemCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    if (closestIndex !== activeIndex) {
+      setActiveIndex(closestIndex);
+    }
+  };
+
+  const activeRealSkill = loopSkills[activeIndex] || SKILLS[0];
+
   return (
-    <div
-      className={`relative transition-transform duration-300 ease-out hover:scale-[1.02] ${className}`}
-    >
-      {children}
+    <div className={`relative w-full h-[600px] flex flex-col justify-center overflow-visible transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}>
+      {/* Background Glow Layer (Unclipped) */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blur-[120px] rounded-full opacity-10 dark:opacity-25 transition-colors duration-1000"
+          style={{
+            background: `radial-gradient(circle, ${activeRealSkill?.color || '#888'} 0%, transparent 70%)`
+          }}
+        />
+      </div>
+
+      {/* Cinematic Vignette */}
+      <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-primary via-primary/80 to-transparent z-20 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-primary via-primary/80 to-transparent z-20 pointer-events-none" />
+
+      <div
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
+        className="w-full overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex items-center scrollbar-hide py-10 relative z-10"
+        style={{ scrollBehavior: 'auto' }}
+      >
+        <div className="spacer shrink-0 w-[calc(50%_-_140px)] md:w-[calc(50%_-_180px)]" />
+
+        {loopSkills.map((skill, index) => {
+          const isActive = index === activeIndex;
+          const isNeighbor = Math.abs(index - activeIndex) === 1;
+
+          return (
+            <motion.div
+              key={`${skill.name}-${index}`}
+              ref={(el) => (itemsRef.current[index] = el)}
+              className={`
+                w-[240px] md:w-[320px] shrink-0 snap-center mx-6 md:mx-12 flex flex-col items-center justify-center transition-all duration-700 ease-out
+                ${isActive ? 'scale-110 opacity-100 blur-0' : isNeighbor ? 'scale-95 opacity-60 blur-[4px]' : 'scale-85 opacity-10 blur-[8px]'}
+              `}
+            >
+              {/* Card Wrapper with Gradient Border */}
+              <div className={`
+                    relative p-[1.5px] rounded-[3rem] w-full aspect-[4/5] overflow-visible transition-all duration-700
+                    ${isActive
+                  ? 'bg-gradient-to-br from-neutral-300 via-neutral-200 to-transparent dark:from-white/50 dark:via-white/5 dark:to-transparent shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_0_60px_-15px_rgba(255,255,255,0.05)]'
+                  : 'bg-neutral-200/50 dark:bg-white/5'}
+                `}>
+                <div className={`
+                      relative w-full h-full rounded-[2.9rem] flex flex-col items-center justify-center gap-6 p-8
+                      transition-all duration-700 overflow-hidden
+                      ${isActive
+                    ? 'bg-white dark:bg-neutral-900 shadow-inner'
+                    : 'bg-white/20 dark:bg-black/20'}
+                    `}>
+                  {/* Shimmer Effect Removed */}
+
+                  {/* Dynamic Icon Inner Glow */}
+                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-0 transition-opacity duration-700 ${isActive ? 'opacity-10 dark:opacity-20' : ''}`}
+                    style={{ background: `radial-gradient(circle, ${skill.color}, transparent 60%)` }} />
+
+                  <div className="relative w-28 h-28 md:w-36 md:h-36 mb-2 transition-transform duration-700">
+                    <TechIcon
+                      name={skill.icon}
+                      className="w-full h-full object-contain relative z-10 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.1)] dark:brightness-110"
+                    />
+                  </div>
+
+                  <div className="text-center z-10 relative">
+                    <h3 className="text-2xl md:text-4xl font-bold font-display tracking-tight text-theme-text">
+                      {skill.name}
+                    </h3>
+                    <div className={`mt-4 px-5 py-2 rounded-full text-[10px] font-mono uppercase tracking-[0.2em] font-bold border border-theme-border bg-surface text-theme-secondary`}>
+                      {skill.category}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+        <div className="spacer shrink-0 w-[calc(50%_-_140px)] md:w-[calc(50%_-_180px)]" />
+      </div>
     </div>
   );
 };
 
-const Skills: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const categories = [
-    { id: 'frontend', name: 'Languages', color: 'from-accent to-white' },
-    { id: 'backend', name: 'Data Science', color: 'from-blue-600 to-accent' },
-    { id: 'ai', name: 'Frameworks', color: 'from-white to-accent' },
-    { id: 'devops', name: 'Core Web', color: 'from-accent/80 to-blue-400' }
+// --- BENTO GRID VIEW COMPONENT ---
+const BentoView: React.FC = () => {
+  const BENTO_GROUPS = [
+    { title: 'Languages', items: ['Python', 'C Language', 'TypeScript', 'R Programming'] },
+    { title: 'Data Science', items: ['NumPy', 'Pandas', 'Scikit-learn', 'Jupyter'] },
+    { title: 'Frameworks', items: ['Flask', 'React', 'REST API', 'Git Systems'] },
+    { title: 'Core Web', items: ['HTML5', 'CSS3'] }
   ];
 
   return (
-    <section id="skills" className="py-32 px-6 relative overflow-visible min-h-screen flex items-center perspective-[2000px]" ref={containerRef}>
+    <div className="w-full max-w-7xl mx-auto px-6 py-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {BENTO_GROUPS.map((group, index) => (
+          <motion.div
+            key={group.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1, duration: 0.6 }}
+            className="relative rounded-[3rem] p-8 border border-theme-border bg-surface/50 dark:bg-neutral-900/40 overflow-hidden group hover:shadow-2xl transition-all duration-500"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-accent/5 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-      {/* Dynamic Background Elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[120px] mix-blend-screen animate-pulse-slow max-w-full"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] mix-blend-screen animate-pulse-slow delay-700 max-w-full"></div>
-      </div>
+            <h3 className="text-xs font-mono uppercase tracking-[0.25em] text-theme-secondary opacity-50 mb-8 relative z-10 flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(0,209,255,0.5)]" />
+              {group.title}
+            </h3>
 
-      <div className="container mx-auto max-w-7xl relative z-10">
-        <ScrollReveal
-          animation="fade-up"
-          className="text-center mb-24 relative"
-        >
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-[200%] bg-gradient-to-r from-transparent via-accent/5 to-transparent blur-3xl -z-10"></div>
-
-          <span className="text-accent font-medium text-sm tracking-widest uppercase mb-4 block">
-            What I Work With
-          </span>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-theme-text tracking-tighter mb-6 relative inline-block">
-            Skills & <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-white relative z-10">Technologies</span>
-            <div className="absolute -inset-1 bg-gradient-to-r from-accent to-white opacity-10 blur-md -z-10"></div>
-          </h2>
-          <p className="max-w-2xl mx-auto text-theme-secondary text-lg font-light leading-relaxed">
-            Technologies and tools I use to bring ideas to life.
-          </p>
-        </ScrollReveal>
-
-        <ScrollReveal isContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 relative">
-
-          {/* Connection Lines (Visible on Desktop) */}
-          <div className="hidden lg:block absolute inset-0 pointer-events-none z-0">
-            <svg className="w-full h-full opacity-30 overflow-visible">
-              <defs>
-                <linearGradient id="gridGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="transparent" />
-                  <stop offset="50%" stopColor="#00D1FF" stopOpacity="0.5" />
-                  <stop offset="100%" stopColor="transparent" />
-                </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {/* Animated Data Lines */}
-              <motion.line
-                x1="10%" y1="50%" x2="90%" y2="50%"
-                stroke="url(#gridGradient)" strokeWidth="1"
-                filter="url(#glow)"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 2, ease: "easeInOut" }}
-              />
-
-              {/* Vertical Connectors */}
-              {[25, 50, 75].map((pos, i) => (
-                <motion.line
-                  key={i}
-                  x1={`${pos}%`} y1="20%" x2={`${pos}%`} y2="80%"
-                  stroke="rgba(0, 209, 255, 0.1)" strokeWidth="1"
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.5 + (i * 0.2) }}
-                />
-              ))}
-            </svg>
-          </div>
-
-          {categories.map((cat, idx) => (
-            <HoverCard key={cat.id} className="group">
-              <ScrollReveal
-                animation="zoom-in"
-                distance={10}
-                onMouseEnter={() => setActiveCategory(cat.id)}
-                onMouseLeave={() => setActiveCategory(null)}
-                className={`
-                  relative h-full glass p-8 rounded-[2rem] border border-white/5 
-                  transition-all duration-500 overflow-hidden backdrop-blur-xl
-                  ${activeCategory === cat.id
-                    ? 'bg-white/10 border-white/20 shadow-[0_0_50px_rgba(0,209,255,0.15)] ring-1 ring-white/20'
-                    : 'bg-white/5 hover:bg-white/10'}
-                `}
-              >
-                {/* Internal Glow Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                <div className="absolute inset-0 bg-surface/90 z-0"></div>
-
-                {/* Content Container */}
-                <div className="relative z-10 flex flex-col h-full">
-                  {/* Category Header */}
-                  <div className="flex items-center justify-between mb-8 pb-4 border-b border-theme-border">
-                    <h3 className="text-xl font-display font-bold text-theme-text tracking-wide group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-400 transition-all">
-                      {cat.name}
-                    </h3>
-                    <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${cat.color} shadow-[0_0_10px_currentColor] animate-pulse`}></div>
-                  </div>
-
-                  {/* Skills Grid */}
-                  <div className="grid grid-cols-2 gap-4 flex-grow content-start">
-                    {SKILLS.filter(s => s.category === cat.id).map((skill, sIdx) => (
-                      <motion.div
-                        key={skill.name}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 + (sIdx * 0.05) }}
-                      >
-                        <Magnetic strength={0.3}>
-                          <div className="group/skill relative flex flex-col items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 transition-all duration-300 cursor-none overflow-hidden">
-
-                            {/* Hover Gradient Sweep */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover/skill:opacity-10 transition-opacity duration-300`}></div>
-
-                            <div className="w-10 h-10 mb-2 relative z-10 p-1.5 transition-transform duration-300 group-hover/skill:scale-110">
-                              <TechIcon name={skill.icon} className="w-full h-full object-contain filter grayscale group-hover/skill:grayscale-0 transition-all duration-300 drop-shadow-lg" />
-                            </div>
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-theme-secondary group-hover/skill:text-theme-text transition-colors relative z-10">
-                              {skill.name}
-                            </span>
-                          </div>
-                        </Magnetic>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Decorative Footer */}
-                  <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center opacity-40 group-hover:opacity-100 transition-opacity">
-                    <div className="flex gap-1">
-                      <span className="w-1 h-1 rounded-full bg-white/50"></span>
-                      <span className="w-1 h-1 rounded-full bg-white/50"></span>
-                      <span className="w-1 h-1 rounded-full bg-white/50"></span>
+            <div className="grid grid-cols-2 gap-4 relative z-10">
+              {group.items.map(itemName => {
+                const skill = SKILLS.find(s => s.name === itemName);
+                if (!skill) return null;
+                return (
+                  <div key={itemName} className="flex flex-col items-center justify-center gap-3 p-5 rounded-[2rem] bg-surface border border-theme-border hover:bg-primary/50 hover:scale-105 transition-all duration-300 aspect-square group/item">
+                    <div className="w-12 h-12 transition-all duration-500 group-hover/item:scale-110">
+                      <TechIcon name={skill.icon} className="w-full h-full object-contain" />
                     </div>
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-white/50">Node_0{idx + 1}</span>
+                    <span className="text-[10px] font-bold text-theme-secondary text-center leading-tight">
+                      {skill.name}
+                    </span>
                   </div>
-                </div>
-              </ScrollReveal>
-            </HoverCard>
-          ))}
+                );
+              })}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- MAIN WRAPPER COMPONENT ---
+const Skills: React.FC = () => {
+  const [viewMode, setViewMode] = useState<'pulse' | 'grid'>('pulse');
+
+  return (
+    <section
+      id="skills"
+      className="relative z-20 bg-primary overflow-hidden flex flex-col items-center transition-colors duration-1000 pt-20 pb-32"
+    >
+      {/* Bulb Glow for Light Mode */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] pointer-events-none opacity-0 transition-opacity duration-1000 dark:hidden [.light_&]:opacity-40"
+        style={{ background: 'radial-gradient(circle at 50% 0%, #FFF9E5, transparent 70%)' }} />
+
+      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] dark:opacity-10 brightness-200 contrast-100 mix-blend-overlay pointer-events-none" />
+
+      {/* Header Container */}
+      <div className="container mx-auto px-6 mb-10">
+        <ScrollReveal animation="fade-right">
+          <h2 className="text-5xl md:text-8xl font-display font-black text-theme-text tracking-tighter leading-tight text-center md:text-left">
+            Technical <span className="text-gradient">Arsenal</span>
+          </h2>
         </ScrollReveal>
 
-        {/* Bottom Status Bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: false }}
-          className="mt-20 border-t border-theme-border pt-8 flex flex-col md:flex-row items-center justify-center text-sm font-medium text-theme-secondary"
-        >
-          <span className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            Always learning, always building
-          </span>
-        </motion.div>
+        {/* Improved View Toggle */}
+        <ScrollReveal animation="fade-up" delay={0.2} className="flex justify-center md:justify-start mt-10">
+          <div className="flex items-center gap-1 p-1 rounded-full bg-surface/50 border border-theme-border backdrop-blur-3xl shadow-xl">
+            {VIEW_MODES.map((mode) => (
+              <button
+                key={mode.id}
+                onClick={() => setViewMode(mode.id as 'pulse' | 'grid')}
+                className={`
+                        relative px-10 py-3 rounded-full text-xs font-mono tracking-[0.2em] font-bold transition-all duration-500 z-10
+                        ${viewMode === mode.id
+                    ? 'text-theme-text'
+                    : 'text-theme-secondary hover:text-theme-text'}
+                    `}
+              >
+                {mode.label}
+                {viewMode === mode.id && (
+                  <motion.div
+                    layoutId="activeView"
+                    className="absolute inset-0 rounded-full bg-primary/40 dark:bg-white/10 shadow-inner border border-theme-border"
+                    transition={{ type: "spring", bounce: 0, duration: 0.6 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
+
+      {/* Main Content Area */}
+      <div className="w-full relative">
+        <AnimatePresence mode="wait">
+          {viewMode === 'pulse' ? (
+            <motion.div
+              key="pulse"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+              className="w-full"
+            >
+              <PulseView />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="grid"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+              className="w-full"
+            >
+              <BentoView />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
     </section>
   );
 };

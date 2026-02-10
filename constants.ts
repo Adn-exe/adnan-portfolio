@@ -36,26 +36,110 @@ export const PROJECTS: Project[] = [
 
 export const SKILLS: Skill[] = [
   // Programming Languages
-  { name: 'Python', icon: 'python', category: 'frontend' }, // Category maps to 'Languages' in UI
-  { name: 'C Language', icon: 'c', category: 'frontend' },
-  { name: 'TypeScript', icon: 'typescript', category: 'frontend' },
-  { name: 'R Programming', icon: 'r', category: 'frontend' },
+  {
+    name: 'Python',
+    icon: 'python',
+    category: 'Languages',
+    color: '#3776AB',
+    description: 'My primary language for AI/ML development, data analysis, and backend logic. I leverage its vast ecosystem to build scalable, intelligent systems.',
+  },
+  {
+    name: 'C Language',
+    icon: 'c',
+    category: 'Languages',
+    color: '#A8B9CC',
+    description: 'The foundation of my understanding of memory management and low-level system architecture. Crucial for optimizing performance-critical components.',
+  },
+  {
+    name: 'TypeScript',
+    icon: 'typescript',
+    category: 'Languages',
+    color: '#3178C6',
+    description: 'Bringing type safety and robustness to JavaScript. Essential for building maintainable, large-scale web applications and clean APIs.',
+  },
+  {
+    name: 'R Programming',
+    icon: 'r',
+    category: 'Languages',
+    color: '#276DC3',
+    description: 'Used for specialized statistical analysis and data visualization. A powerful tool for uncovering deep insights from complex datasets.',
+  },
 
-  // Libraries & Tools
-  { name: 'NumPy', icon: 'numpy', category: 'backend' }, // Category maps to 'Data Science'
-  { name: 'Pandas', icon: 'pandas', category: 'backend' },
-  { name: 'Scikit-learn', icon: 'sklearn', category: 'backend' },
-  { name: 'Jupyter', icon: 'jupyter', category: 'backend' },
+  // Data Science
+  {
+    name: 'NumPy',
+    icon: 'numpy',
+    category: 'Data Science',
+    color: '#013243',
+    description: 'The core of my numerical computing stack. I use it for efficient matrix operations and handling large-dimensional arrays in ML pipelines.',
+  },
+  {
+    name: 'Pandas',
+    icon: 'pandas',
+    category: 'Data Science',
+    color: '#150458',
+    description: 'My go-to tool for data manipulation and cleaning. It streamlines the process of transforming raw data into analysis-ready structures.',
+  },
+  {
+    name: 'Scikit-learn',
+    icon: 'sklearn',
+    category: 'Data Science',
+    color: '#F7931E',
+    description: 'Rapid prototyping and implementation of standard ML algorithms. Perfect for building baseline models and exploring feature importance.',
+  },
+  {
+    name: 'Jupyter',
+    icon: 'jupyter',
+    category: 'Data Science',
+    color: '#F37626',
+    description: 'My interactive laboratory for data exploration. It allows me to document my thought process, visualize results, and iterate quickly.',
+  },
 
-  // Frameworks & Web
-  { name: 'Flask', icon: 'flask', category: 'ai' }, // Category maps to 'Frameworks'
-  { name: 'React', icon: 'react', category: 'ai' },
-  { name: 'REST API', icon: 'rest', category: 'ai' },
-  { name: 'Git Systems', icon: 'git', category: 'ai' },
+  // Frameworks
+  {
+    name: 'Flask',
+    icon: 'flask',
+    category: 'Frameworks',
+    color: '#FFFFFF',
+    description: 'A lightweight framework for deploying ML models as APIs. Its simplicity allows for quick integration of AI services into web applications.',
+  },
+  {
+    name: 'React',
+    icon: 'react',
+    category: 'Frameworks',
+    color: '#61DAFB',
+    description: 'Building dynamic, responsive user interfaces. I love its component-based architecture for creating interactive dashboards and tools.',
+  },
+  {
+    name: 'REST API',
+    icon: 'rest',
+    category: 'Frameworks',
+    color: '#00AEEF',
+    description: 'Designing clean, standard interfaces for system communication. Ensuring seamless data exchange between frontend, backend, and AI services.',
+  },
+  {
+    name: 'Git Systems',
+    icon: 'git',
+    category: 'Frameworks',
+    color: '#F05032',
+    description: 'Version control is non-negotiable. I use Git to track changes, collaborate efficiently, and maintain the integrity of my codebases.',
+  },
 
-  // Web Basics
-  { name: 'HTML5', icon: 'html', category: 'devops' }, // Category maps to 'Core Web'
-  { name: 'CSS3', icon: 'css', category: 'devops' },
+  // Core Web
+  {
+    name: 'HTML5',
+    icon: 'html',
+    category: 'Core Web',
+    color: '#E34F26',
+    description: 'Structure and semantics. The backbone of the web, ensuring content is accessible and properly organized.',
+  },
+  {
+    name: 'CSS3',
+    icon: 'css',
+    category: 'Core Web',
+    color: '#1572B6',
+    description: 'Styling and layout. I use modern CSS features to create visually engaging, responsive, and polished user experiences.',
+  },
 ];
 
 export const SYSTEM_INSTRUCTION = `

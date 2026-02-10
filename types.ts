@@ -15,6 +15,8 @@ export interface Skill {
   name: string;
   icon: string;
   category: 'frontend' | 'backend' | 'devops' | 'ai';
+  color?: string;
+  description?: string;
 }
 
 export interface Message {

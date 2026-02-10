@@ -12,14 +12,12 @@ import CustomCursor from './components/CustomCursor';
 import Magnetic from './components/Magnetic';
 import ScrollVelocityText from './components/ScrollVelocityText';
 import ScrollReveal from './components/ScrollReveal';
-import Globe from './components/Globe';
+import Contact from './components/Contact';
 import { useAudio } from './hooks/useAudio';
 import ThemeToggle from './components/ThemeToggle';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
-  const [formData, setFormData] = useState({ email: '', message: '' });
   const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
   const { playHover, playClick } = useAudio();
 
@@ -50,47 +48,7 @@ const App: React.FC = () => {
     setPhotoRotate({ x: 0, y: 0 });
   };
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.email.includes('@')) return;
 
-    playClick(); // Sound feedback on submit
-    setEmailStatus('sending');
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-          name: "Portfolio Visitor",
-          email: formData.email,
-          message: formData.message,
-          subject: "New Message from Portfolio",
-        }),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setEmailStatus('sent');
-        setTimeout(() => {
-          setFormData({ email: '', message: '' });
-          setEmailStatus('idle');
-        }, 3000);
-      } else {
-        console.error("Submission failed:", result);
-        setEmailStatus('idle');
-        alert("Something went wrong. Please try again or use the direct email link.");
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setEmailStatus('idle');
-      alert("Failed to send message. Please check your connection.");
-    }
-  };
 
   if (isLoading) {
     return <Loader onComplete={() => setIsLoading(false)} />;
@@ -255,154 +213,7 @@ const App: React.FC = () => {
 
           <Skills />
 
-          <section id="contact" className="py-32 px-6 relative z-20 overflow-hidden">
-            <div className="container mx-auto max-w-6xl">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
-
-                <ScrollReveal isContainer className="space-y-16">
-                  <div className="space-y-8">
-                    <ScrollReveal animation="fade-right">
-                      <div className="flex items-center gap-4">
-                        <div className="w-3 h-3 rounded-full bg-accent shadow-[0_0_10px_rgba(0,209,255,0.6)]"></div>
-                        <span className="text-accent font-medium text-sm tracking-widest uppercase">Get In Touch</span>
-                      </div>
-                    </ScrollReveal>
-                    <ScrollReveal animation="fade-up" delay={0.2}>
-                      <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-black text-theme-text leading-none tracking-tighter">
-                        Let's <span className="text-gradient">Connect</span>
-                      </h2>
-                    </ScrollReveal>
-                    <ScrollReveal animation="fade-up" delay={0.3}>
-                      <p className="text-theme-secondary text-xl font-light leading-relaxed max-w-sm">
-                        Open to collaborations on <span className="text-theme-text font-medium">AI/ML projects</span> or exciting opportunities.
-                      </p>
-                    </ScrollReveal>
-                  </div>
-
-                  <ScrollReveal isContainer staggerChildren={0.2} className="flex flex-col gap-12">
-                    {/* Interactive Globe Area */}
-                    <ScrollReveal animation="zoom-in" delay={0.4}>
-                      <div className="relative h-64 lg:h-80 w-full rounded-[3rem] bg-surface border border-theme-border overflow-hidden group hover:border-accent/30 transition-colors duration-700">
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent-purple/5 opacity-50"></div>
-                        <div className="absolute inset-0 flex items-center justify-center scale-75 lg:scale-100">
-                          <Globe />
-                        </div>
-                        <div className="absolute bottom-6 left-0 right-0 text-center pointer-events-none">
-                          <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/40">Global Connectivity_Active</span>
-                        </div>
-                      </div>
-                    </ScrollReveal>
-
-                    <ScrollReveal animation="fade-up" delay={0.6} className="pt-12 border-t border-theme-border">
-                      <span className="text-[10px] font-mono text-theme-secondary uppercase tracking-widest block mb-4 font-bold">Email:</span>
-                      <a
-                        href="mailto:mohdadnan916786@gmail.com"
-                        className="text-3xl md:text-4xl font-display font-black text-theme-text hover:text-accent transition-all duration-500 tracking-tighter"
-                        data-cursor="EMAIL"
-                        onMouseEnter={playHover}
-                        onClick={playClick}
-                      >
-                        mohdadnan916786<span className="text-theme-text font-light italic">@</span>gmail.com
-                      </a>
-                    </ScrollReveal>
-
-                    {/* Social Links Moved Below */}
-                    <ScrollReveal isContainer className="flex items-center gap-8 mt-4">
-                      <ScrollReveal animation="fade-right" delay={0.8}>
-                        <Magnetic>
-                          <a href="https://www.linkedin.com/in/mohammed-adnan-956763297/" target="_blank" className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group" onMouseEnter={playHover}>
-                            <TechIcon name="linkedin" className="w-5 h-5 text-accent-purple group-hover:scale-110 transition-transform" />
-                            <span className="text-xs font-mono uppercase tracking-widest font-bold">LinkedIn</span>
-                          </a>
-                        </Magnetic>
-                      </ScrollReveal>
-                      <ScrollReveal animation="fade-right" delay={0.9}>
-                        <Magnetic>
-                          <a href="https://github.com/Adn-exe" target="_blank" className="flex items-center gap-3 text-theme-secondary hover:text-theme-text transition-colors group" onMouseEnter={playHover}>
-                            <TechIcon name="github" className="w-5 h-5 text-accent group-hover:scale-110 transition-transform" />
-                            <span className="text-xs font-mono uppercase tracking-widest font-bold">GitHub</span>
-                          </a>
-                        </Magnetic>
-                      </ScrollReveal>
-                    </ScrollReveal>
-                  </ScrollReveal>
-                </ScrollReveal>
-
-                <ScrollReveal delay={0.4} animation="fade-left" className="relative group/form">
-                  <div className="relative p-12 md:p-16 bg-surface glass shadow-2xl transition-all duration-1000 group-hover/form:border-accent/30"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%)' }}>
-
-                    {/* Corner Accents */}
-                    <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent/40"></div>
-                    <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-accent/40"></div>
-                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-accent/40"></div>
-
-                    {/* Scanline & HUD Elements */}
-                    <div className="absolute top-6 right-10 flex gap-4 opacity-60">
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent-purple" />
-                    </div>
-
-                    <form onSubmit={handleEmailSubmit} className="relative z-10 space-y-12">
-                      <div className="space-y-4">
-                        <label className="text-[10px] font-mono text-accent-purple uppercase tracking-[0.4em] ml-2 font-bold opacity-60">Your Email</label>
-                        <div className="relative">
-                          <input
-                            type="email"
-                            required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            onMouseEnter={playHover}
-                            placeholder="you@example.com"
-                            className="w-full bg-white/5 border-b border-white/10 px-8 py-6 text-sm text-white focus:outline-none focus:border-accent-purple transition-all placeholder:text-slate-800 font-mono tracking-widest"
-                          />
-                          <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-20"><TechIcon name="rest" className="w-5 h-5" /></div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <label className="text-[10px] font-mono text-accent uppercase tracking-[0.4em] ml-2 font-bold opacity-60">Your Message</label>
-                        <div className="relative">
-                          <textarea
-                            required
-                            rows={5}
-                            value={formData.message}
-                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                            onMouseEnter={playHover}
-                            placeholder="ENTER YOUR MESSAGE..."
-                            className="w-full bg-white/5 border-b border-white/10 px-8 py-6 text-sm text-white focus:outline-none focus:border-accent transition-all placeholder:text-slate-800 resize-none font-mono tracking-widest min-h-[150px]"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="pt-6">
-                        <Magnetic>
-                          <button
-                            type="submit"
-                            disabled={emailStatus !== 'idle'}
-                            className={`w-full py-6 rounded-none font-display font-black text-[12px] tracking-[0.4em] uppercase transition-all duration-700 relative overflow-hidden flex items-center justify-center gap-6 group/btn shadow-2xl ${emailStatus === 'sent'
-                              ? 'bg-green-500/20 text-green-400 border border-green-500/50'
-                              : 'bg-white text-primary border border-white hover:scale-[1.02] shadow-[0_0_50px_rgba(56,189,248,0.3)]'
-                              }`}
-                            style={{ clipPath: 'polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%)' }}
-                            data-cursor="UPLINK"
-                            onMouseEnter={playHover}
-                          >
-                            <span className="relative z-10 transition-colors duration-500 group-hover/btn:text-white">
-                              {emailStatus === 'sending' ? 'Sending...' : emailStatus === 'sent' ? 'Message Sent!' : 'Send Message'}
-                            </span>
-
-                            <div className="absolute inset-0 bg-gradient-to-r from-accent via-accent-purple to-accent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out"></div>
-                            <div className="absolute inset-0 bg-[#081b33] opacity-0 group-hover/btn:opacity-95 transition-opacity duration-300 -z-10"></div>
-                          </button>
-                        </Magnetic>
-                      </div>
-                    </form>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-          </section>
+          <Contact />
         </main >
 
         <footer className="py-24 border-t border-theme-border bg-primary relative z-30">
