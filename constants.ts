@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
     title: 'SmartHandel',
     description: 'An AI-powered grocery optimizer for Norway. SmartHandel parses natural language shopping lists using Google Gemini AI and finds the cheapest store combinations in real-time via the Kassalapp API.',
     image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200',
-    tags: ['React', 'TypeScript', 'Tailwind', 'Gemini AI'],
+    tags: ['React', 'TypeScript', 'Tailwind'],
     link: 'https://github.com/Adn-exe/smarthandel-mvp',
     github: 'https://github.com/Adn-exe/smarthandel-mvp',
     role: 'Full Stack Dev'
