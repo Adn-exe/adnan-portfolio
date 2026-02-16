@@ -17,64 +17,80 @@ const VIEW_MODES = [
 const PulseView: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const isStabilized = useRef(false);
 
   // Multiple sets for "infinite" feel
   const loopSkills = useMemo(() => {
     return [...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS];
   }, []);
 
-  const MIDDLE_SET_INDEX = 2;
-  const pythonIndexInOneSet = useMemo(() => {
+  const pythonIndex = useMemo(() => {
     const idx = SKILLS.findIndex(s => s.name === 'Python');
     return idx === -1 ? 0 : idx;
   }, []);
-  const initialFocusIndex = (MIDDLE_SET_INDEX * SKILLS.length) + pythonIndexInOneSet;
+
+  const MIDDLE_SET_INDEX = 2;
+  const initialFocusIndex = (MIDDLE_SET_INDEX * SKILLS.length) + pythonIndex;
 
   const [activeIndex, setActiveIndex] = useState(initialFocusIndex);
 
-  // Initialize scroll position instantly
+  // Robust initialization: Force scroll before any user interaction or snap interference
   useLayoutEffect(() => {
-    const scrollToTarget = () => {
-      const targetItem = itemsRef.current[initialFocusIndex];
+    const performInitialScroll = () => {
       const container = scrollContainerRef.current;
-      if (targetItem && container) {
-        // Temporarily disable snap to allow precise positioning
+      const target = itemsRef.current[initialFocusIndex];
+      if (container && target) {
+        // Disable snapping temporarily for absolute precision
         container.style.scrollSnapType = 'none';
 
-        const containerCenter = container.offsetWidth / 2;
-        const itemCenter = targetItem.offsetLeft + targetItem.offsetWidth / 2;
-        container.scrollLeft = itemCenter - containerCenter;
+        const containerWidth = container.clientWidth;
+        const itemWidth = target.offsetWidth;
+        const itemLeft = target.offsetLeft;
 
-        // Re-enable snap after a frame
+        // Instant jump to Python
+        container.scrollLeft = itemLeft - (containerWidth / 2) + (itemWidth / 2);
+
+        // Re-enable snapping after a frame to ensure the browser respects the position
         requestAnimationFrame(() => {
-          if (container) container.style.scrollSnapType = 'x mandatory';
-          setIsInitialized(true);
+          if (container) {
+            container.style.scrollSnapType = 'x mandatory';
+            // Mark as stabilized so handleScroll can take over
+            setTimeout(() => {
+              isStabilized.current = true;
+            }, 100);
+          }
         });
       }
     };
 
-    scrollToTarget();
-    const timer = setTimeout(scrollToTarget, 100);
+    performInitialScroll();
+
+    // Backup for dynamic layout adjustments
+    const timer = setTimeout(performInitialScroll, 150);
     return () => clearTimeout(timer);
   }, [initialFocusIndex]);
 
   const handleScroll = () => {
-    if (!scrollContainerRef.current || !isInitialized) return;
+    if (!scrollContainerRef.current || !isStabilized.current) return;
+
     const container = scrollContainerRef.current;
     const containerCenter = container.scrollLeft + container.clientWidth / 2;
+
     let closestIndex = activeIndex;
     let minDistance = Infinity;
 
-    itemsRef.current.forEach((item, index) => {
-      if (!item) return;
+    for (let i = 0; i < itemsRef.current.length; i++) {
+      const item = itemsRef.current[i];
+      if (!item) continue;
+
       const itemCenter = item.offsetLeft + item.offsetWidth / 2;
       const distance = Math.abs(containerCenter - itemCenter);
+
       if (distance < minDistance) {
         minDistance = distance;
-        closestIndex = index;
+        closestIndex = i;
       }
-    });
+    }
 
     if (closestIndex !== activeIndex) {
       setActiveIndex(closestIndex);
@@ -84,7 +100,7 @@ const PulseView: React.FC = () => {
   const activeRealSkill = loopSkills[activeIndex] || SKILLS[0];
 
   return (
-    <div className={`relative w-full h-[600px] flex flex-col justify-center overflow-visible transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}>
+    <div className="relative w-full h-[600px] flex flex-col justify-center overflow-visible">
       {/* Background Glow Layer (Unclipped) */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <motion.div

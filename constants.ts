@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     image: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?auto=format&fit=crop&q=80&w=1200',
     tags: ['React', 'TypeScript', 'Tailwind', 'ML'],
     link: 'https://vizaris.vercel.app',
-    github: 'https://github.com/Adn-exe',
+    github: 'https://github.com/Adn-exe/Vizaris',
     role: 'Lead Architect'
   },
   {
