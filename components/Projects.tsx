@@ -145,7 +145,7 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="py-40 px-6 relative z-10 overflow-hidden">
       {/* Background Decorative Blur */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-accent/5 rounded-full blur-[150px] -z-10 animate-pulse-slow"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-accent/5 rounded-full blur-[150px] -z-10"></div>
 
       <div className="container mx-auto">
         <ScrollReveal isContainer className="flex flex-col md:flex-row md:items-end justify-between mb-32 gap-12">

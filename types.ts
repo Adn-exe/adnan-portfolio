@@ -19,7 +19,4 @@ export interface Skill {
   description?: string;
 }
 
-export interface Message {
-  role: 'user' | 'model';
-  text: string;
-}
+

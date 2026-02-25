@@ -1,232 +1,213 @@
 import React, { useRef, useState, useEffect, useMemo, useLayoutEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useMotionTemplate, useTransform, MotionValue } from 'framer-motion';
 import { SKILLS } from '../constants';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
 
 // --- VIEW MODES ---
 const VIEW_MODES = [
-  { id: 'pulse', label: 'Pulse' },
+  { id: 'loop', label: 'Loop' },
   { id: 'grid', label: 'Grid' },
 ];
 
-/**
- * --- PULSE VIEW COMPONENT (Carousel) ---
- * A cinematic, infinitely scrolling carousel of skills with seamless glows.
- */
-const PulseView: React.FC = () => {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const isStabilized = useRef(false);
 
-  // Multiple sets for "infinite" feel
-  const loopSkills = useMemo(() => {
-    return [...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS, ...SKILLS];
-  }, []);
 
-  const pythonIndex = useMemo(() => {
-    const idx = SKILLS.findIndex(s => s.name === 'Python');
-    return idx === -1 ? 0 : idx;
-  }, []);
-
-  const MIDDLE_SET_INDEX = 2;
-  const initialFocusIndex = (MIDDLE_SET_INDEX * SKILLS.length) + pythonIndex;
-
-  const [activeIndex, setActiveIndex] = useState(initialFocusIndex);
-
-  // Robust initialization: Force scroll before any user interaction or snap interference
-  useLayoutEffect(() => {
-    const performInitialScroll = () => {
-      const container = scrollContainerRef.current;
-      const target = itemsRef.current[initialFocusIndex];
-      if (container && target) {
-        // Disable snapping temporarily for absolute precision
-        container.style.scrollSnapType = 'none';
-
-        const containerWidth = container.clientWidth;
-        const itemWidth = target.offsetWidth;
-        const itemLeft = target.offsetLeft;
-
-        // Instant jump to Python
-        container.scrollLeft = itemLeft - (containerWidth / 2) + (itemWidth / 2);
-
-        // Re-enable snapping after a frame to ensure the browser respects the position
-        requestAnimationFrame(() => {
-          if (container) {
-            container.style.scrollSnapType = 'x mandatory';
-            // Mark as stabilized so handleScroll can take over
-            setTimeout(() => {
-              isStabilized.current = true;
-            }, 100);
-          }
-        });
-      }
-    };
-
-    performInitialScroll();
-
-    // Backup for dynamic layout adjustments
-    const timer = setTimeout(performInitialScroll, 150);
-    return () => clearTimeout(timer);
-  }, [initialFocusIndex]);
-
-  const handleScroll = () => {
-    if (!scrollContainerRef.current || !isStabilized.current) return;
-
-    const container = scrollContainerRef.current;
-    const containerCenter = container.scrollLeft + container.clientWidth / 2;
-
-    let closestIndex = activeIndex;
-    let minDistance = Infinity;
-
-    for (let i = 0; i < itemsRef.current.length; i++) {
-      const item = itemsRef.current[i];
-      if (!item) continue;
-
-      const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-      const distance = Math.abs(containerCenter - itemCenter);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestIndex = i;
-      }
-    }
-
-    if (closestIndex !== activeIndex) {
-      setActiveIndex(closestIndex);
-    }
-  };
-
-  const activeRealSkill = loopSkills[activeIndex] || SKILLS[0];
+const LoopView: React.FC = () => {
+  const [isPaused, setIsPaused] = useState(false);
+  // Duplicate skills for infinite loop
+  const duplicatedSkills = [...SKILLS, ...SKILLS];
 
   return (
-    <div className="relative w-full h-[600px] flex flex-col justify-center overflow-visible">
-      {/* Background Glow Layer (Unclipped) */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blur-[120px] rounded-full opacity-10 dark:opacity-25 transition-colors duration-1000"
-          style={{
-            background: `radial-gradient(circle, ${activeRealSkill?.color || '#888'} 0%, transparent 70%)`
-          }}
-        />
-      </div>
-
+    <div className="relative w-full overflow-hidden py-16">
       {/* Cinematic Vignette */}
       <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-primary via-primary/80 to-transparent z-20 pointer-events-none" />
       <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-primary via-primary/80 to-transparent z-20 pointer-events-none" />
 
       <div
-        ref={scrollContainerRef}
-        onScroll={handleScroll}
-        className="w-full overflow-x-auto overflow-y-hidden snap-x snap-mandatory flex items-center scrollbar-hide py-10 relative z-10"
-        style={{ scrollBehavior: 'auto' }}
+        className="flex w-full overflow-hidden relative"
+        style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
       >
-        <div className="spacer shrink-0 w-[calc(50%_-_140px)] md:w-[calc(50%_-_180px)]" />
-
-        {loopSkills.map((skill, index) => {
-          const isActive = index === activeIndex;
-          const isNeighbor = Math.abs(index - activeIndex) === 1;
-
-          return (
-            <motion.div
-              key={`${skill.name}-${index}`}
-              ref={(el) => (itemsRef.current[index] = el)}
-              className={`
-                w-[240px] md:w-[320px] shrink-0 snap-center mx-6 md:mx-12 flex flex-col items-center justify-center transition-all duration-700 ease-out
-                ${isActive ? 'scale-110 opacity-100 blur-0' : isNeighbor ? 'scale-95 opacity-60 blur-[4px]' : 'scale-85 opacity-10 blur-[8px]'}
-              `}
-            >
-              {/* Card Wrapper with Gradient Border */}
-              <div className={`
-                    relative p-[1.5px] rounded-[3rem] w-full aspect-[4/5] overflow-visible transition-all duration-700
-                    ${isActive
-                  ? 'bg-gradient-to-br from-neutral-300 via-neutral-200 to-transparent dark:from-white/50 dark:via-white/5 dark:to-transparent shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_0_60px_-15px_rgba(255,255,255,0.05)]'
-                  : 'bg-neutral-200/50 dark:bg-white/5'}
-                `}>
-                <div className={`
-                      relative w-full h-full rounded-[2.9rem] flex flex-col items-center justify-center gap-6 p-8
-                      transition-all duration-700 overflow-hidden
-                      ${isActive
-                    ? 'bg-white dark:bg-neutral-900 shadow-inner'
-                    : 'bg-white/20 dark:bg-black/20'}
-                    `}>
-                  {/* Shimmer Effect Removed */}
-
-                  {/* Dynamic Icon Inner Glow */}
-                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-0 transition-opacity duration-700 ${isActive ? 'opacity-10 dark:opacity-20' : ''}`}
-                    style={{ background: `radial-gradient(circle, ${skill.color}, transparent 60%)` }} />
-
-                  <div className="relative w-28 h-28 md:w-36 md:h-36 mb-2 transition-transform duration-700">
-                    <TechIcon
-                      name={skill.icon}
-                      className="w-full h-full object-contain relative z-10 filter drop-shadow-[0_10px_10px_rgba(0,0,0,0.1)] dark:brightness-110"
-                    />
-                  </div>
-
-                  <div className="text-center z-10 relative">
-                    <h3 className="text-2xl md:text-4xl font-bold font-display tracking-tight text-theme-text">
-                      {skill.name}
-                    </h3>
-                    <div className={`mt-4 px-5 py-2 rounded-full text-[10px] font-mono uppercase tracking-[0.2em] font-bold border border-theme-border bg-surface text-theme-secondary`}>
-                      {skill.category}
-                    </div>
-                  </div>
+        {[1, 2].map((set) => (
+          <div
+            key={`set-${set}`}
+            className="flex flex-nowrap whitespace-nowrap shrink-0 animate-marquee will-change-transform gap-[60px] px-[30px]"
+            style={{ animationPlayState: 'inherit' }}
+          >
+            {duplicatedSkills.map((skill, index) => (
+              <div
+                key={`${skill.name}-loop-${set}-${index}`}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                className="flex flex-col items-center justify-center gap-4 p-8 rounded-[2.5rem] bg-surface border border-theme-border hover:bg-primary transition-all duration-300 w-[200px] md:w-[220px] group cursor-pointer"
+              >
+                <div className="h-[60px] flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                  <TechIcon name={skill.icon} className="h-full w-auto object-contain" />
+                </div>
+                <div className="text-center">
+                  <div className="text-sm font-bold text-theme-text mb-1">{skill.name}</div>
+                  <div className="text-[9px] font-mono uppercase tracking-widest text-theme-secondary opacity-50">{skill.category}</div>
                 </div>
               </div>
-            </motion.div>
-          );
-        })}
-        <div className="spacer shrink-0 w-[calc(50%_-_140px)] md:w-[calc(50%_-_180px)]" />
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
+const BentoCard: React.FC<{
+  group: any;
+  idx: number;
+  className?: string;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+}> = ({ group, idx, className = "", mouseX, mouseY }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const relX = useTransform(mouseX, (val: number) => {
+    if (!cardRef.current) return 0;
+    const rect = cardRef.current.getBoundingClientRect();
+    return val - rect.left;
+  });
+
+  const relY = useTransform(mouseY, (val: number) => {
+    if (!cardRef.current) return 0;
+    const rect = cardRef.current.getBoundingClientRect();
+    return val - rect.top;
+  });
+
+  const springX = useSpring(relX, { stiffness: 150, damping: 25 });
+  const springY = useSpring(relY, { stiffness: 150, damping: 25 });
+
+  const opacity = useTransform([mouseX, mouseY], ([x, y]: number[]) => {
+    if (!cardRef.current) return 0;
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+    const radius = Math.max(rect.width, rect.height) * 1.5;
+    return Math.max(0, 1 - distance / radius);
+  });
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: idx * 0.1, duration: 0.6 }}
+      className={`relative rounded-[1.5rem] p-6 border border-theme-border bg-surface/50 dark:bg-neutral-900/40 overflow-hidden group hover:shadow-2xl transition-all duration-500 ${className}`}
+    >
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          opacity,
+          background: useMotionTemplate`radial-gradient(350px circle at ${springX}px ${springY}px, var(--accent-glow, rgba(0, 209, 255, 0.12)), transparent 80%)`,
+        }}
+      />
+
+      <motion.div
+        className="absolute inset-[1px] rounded-[1.4rem] pointer-events-none z-10 box-content border border-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          WebkitMaskImage: useMotionTemplate`radial-gradient(200px circle at ${springX}px ${springY}px, black, transparent)`,
+          maskImage: useMotionTemplate`radial-gradient(200px circle at ${springX}px ${springY}px, black, transparent)`,
+        }}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent to-accent/5 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+      <h3 className="text-[10px] font-mono uppercase tracking-[0.25em] text-theme-secondary opacity-50 mb-6 relative z-10 flex items-center gap-3">
+        <span className="w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(0,209,255,0.5)]" />
+        {group.title}
+      </h3>
+
+      <div className={`grid gap-3 relative z-10 h-[calc(100%-40px)] ${group.innerGrid || 'grid-cols-2'}`}>
+        {group.items.map((itemName: string, i: number) => {
+          const skill = SKILLS.find(s => s.name === itemName);
+          if (!skill) return null;
+          const isFeatured = group.featured && i === 0;
+          return (
+            <div
+              key={itemName}
+              className={`
+                flex flex-col items-center justify-center gap-2 p-3 rounded-[1.2rem] bg-surface border border-theme-border hover:bg-primary/50 hover:scale-[1.02] transition-all duration-300 group/item cursor-pointer
+                ${isFeatured ? 'col-span-2 bg-primary/20 border-accent/20' : ''}
+              `}
+            >
+              <div className={`${isFeatured ? 'w-12 h-12' : 'w-8 h-8'} transition-all duration-500 group-hover/item:scale-110`}>
+                <TechIcon name={skill.icon} className="w-full h-full object-contain" />
+              </div>
+              <span className={`${isFeatured ? 'text-[10px]' : 'text-[8px]'} font-bold text-theme-secondary text-center leading-tight opacity-70 group-hover/item:opacity-100`}>
+                {skill.name}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
+};
+
 // --- BENTO GRID VIEW COMPONENT ---
 const BentoView: React.FC = () => {
+  const mouseX = useMotionValue(-500);
+  const mouseY = useMotionValue(-500);
+
+  const handleMouseMove = ({ clientX, clientY }: React.MouseEvent) => {
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(-500);
+    mouseY.set(-500);
+  };
+
   const BENTO_GROUPS = [
-    { title: 'Languages', items: ['Python', 'C Language', 'TypeScript', 'R Programming'] },
-    { title: 'Data Science', items: ['NumPy', 'Pandas', 'Scikit-learn', 'Jupyter'] },
-    { title: 'Frameworks', items: ['Flask', 'React', 'REST API', 'Git Systems'] },
-    { title: 'Core Web', items: ['HTML5', 'CSS3'] }
+    {
+      title: 'Languages',
+      items: ['Python', 'C Language', 'TypeScript', 'R Programming'],
+      span: 'md:col-span-2 md:row-span-2',
+      innerGrid: 'grid-cols-2 grid-rows-2'
+    },
+    {
+      title: 'Data Science',
+      items: ['NumPy', 'Pandas', 'Scikit-learn', 'Jupyter'],
+      span: 'md:col-span-1 md:row-span-2',
+      innerGrid: 'grid-cols-1 grid-rows-4'
+    },
+    {
+      title: 'Frameworks',
+      items: ['Flask', 'React', 'REST API', 'Git Systems'],
+      span: 'md:col-span-2 md:row-span-1',
+      innerGrid: 'grid-cols-2 grid-rows-2',
+      featured: false
+    },
+    {
+      title: 'Core Web',
+      items: ['HTML5', 'CSS3'],
+      span: 'md:col-span-1 md:row-span-1',
+      innerGrid: 'grid-cols-2 grid-rows-1'
+    }
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 py-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div
+      className="w-full max-w-5xl mx-auto px-6 py-6 group/grid"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[220px]">
         {BENTO_GROUPS.map((group, index) => (
-          <motion.div
+          <BentoCard
             key={group.title}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1, duration: 0.6 }}
-            className="relative rounded-[3rem] p-8 border border-theme-border bg-surface/50 dark:bg-neutral-900/40 overflow-hidden group hover:shadow-2xl transition-all duration-500"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-accent/5 dark:to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-            <h3 className="text-xs font-mono uppercase tracking-[0.25em] text-theme-secondary opacity-50 mb-8 relative z-10 flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_rgba(0,209,255,0.5)]" />
-              {group.title}
-            </h3>
-
-            <div className="grid grid-cols-2 gap-4 relative z-10">
-              {group.items.map(itemName => {
-                const skill = SKILLS.find(s => s.name === itemName);
-                if (!skill) return null;
-                return (
-                  <div key={itemName} className="flex flex-col items-center justify-center gap-3 p-5 rounded-[2rem] bg-surface border border-theme-border hover:bg-primary/50 hover:scale-105 transition-all duration-300 aspect-square group/item">
-                    <div className="w-12 h-12 transition-all duration-500 group-hover/item:scale-110">
-                      <TechIcon name={skill.icon} className="w-full h-full object-contain" />
-                    </div>
-                    <span className="text-[10px] font-bold text-theme-secondary text-center leading-tight">
-                      {skill.name}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
+            group={group}
+            idx={index}
+            className={group.span}
+            mouseX={mouseX}
+            mouseY={mouseY}
+          />
         ))}
       </div>
     </div>
@@ -235,7 +216,7 @@ const BentoView: React.FC = () => {
 
 // --- MAIN WRAPPER COMPONENT ---
 const Skills: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'pulse' | 'grid'>('pulse');
+  const [viewMode, setViewMode] = useState<'grid' | 'loop'>('loop');
 
   return (
     <section
@@ -251,7 +232,7 @@ const Skills: React.FC = () => {
       {/* Header Container */}
       <div className="container mx-auto px-6 mb-10">
         <ScrollReveal animation="fade-right">
-          <h2 className="text-5xl md:text-8xl font-display font-black text-theme-text tracking-tighter leading-tight text-center md:text-left">
+          <h2 className="text-5xl md:text-7xl font-display font-black text-theme-text tracking-tighter leading-tight text-center md:text-left">
             Technical <span className="text-gradient">Arsenal</span>
           </h2>
         </ScrollReveal>
@@ -262,9 +243,9 @@ const Skills: React.FC = () => {
             {VIEW_MODES.map((mode) => (
               <button
                 key={mode.id}
-                onClick={() => setViewMode(mode.id as 'pulse' | 'grid')}
+                onClick={() => setViewMode(mode.id as 'grid' | 'loop')}
                 className={`
-                        relative px-10 py-3 rounded-full text-xs font-mono tracking-[0.2em] font-bold transition-all duration-500 z-10
+                        relative px-6 py-2.5 rounded-full text-[10px] font-mono tracking-[0.2em] font-bold transition-all duration-500 z-10
                         ${viewMode === mode.id
                     ? 'text-theme-text'
                     : 'text-theme-secondary hover:text-theme-text'}
@@ -287,16 +268,16 @@ const Skills: React.FC = () => {
       {/* Main Content Area */}
       <div className="w-full relative">
         <AnimatePresence mode="wait">
-          {viewMode === 'pulse' ? (
+          {viewMode === 'loop' ? (
             <motion.div
-              key="pulse"
+              key="loop"
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
               className="w-full"
             >
-              <PulseView />
+              <LoopView />
             </motion.div>
           ) : (
             <motion.div

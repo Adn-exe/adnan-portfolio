@@ -33,7 +33,7 @@
           },
         },
         animation: {
-          'pulse-slow': 'pulse 12s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+
           'float': 'float 8s ease-in-out infinite',
           'reveal': 'reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
           'scanline': 'scanline 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',  /* deprecated */
@@ -44,9 +44,7 @@
           'glitch': 'glitch 0.3s ease-in-out',  /* deprecated */
           'breathe': 'breathe 3s ease-in-out infinite',
           'shimmer': 'shimmer 2s linear infinite',
-          'particle-float': 'particleFloat 4s ease-in-out infinite',
-          'connection-pulse': 'connectionPulse 2s ease-in-out infinite',
-          'core-pulse': 'corePulse 2s ease-in-out infinite',
+
           'scatter': 'scatter 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
         },
         keyframes: {
@@ -97,14 +95,7 @@
             '50%': { transform: 'translateY(0) translateX(10px)' },
             '75%': { transform: 'translateY(10px) translateX(5px)' },
           },
-          connectionPulse: {
-            '0%, 100%': { opacity: '0.2', strokeWidth: '1' },
-            '50%': { opacity: '0.8', strokeWidth: '2' },
-          },
-          corePulse: {
-            '0%, 100%': { transform: 'scale(1)', opacity: '0.4' },
-            '50%': { transform: 'scale(1.2)', opacity: '0.8' },
-          },
+
           scatter: {
             '0%': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
             '100%': { transform: 'translate(var(--scatter-x, 100px), var(--scatter-y, 100px)) scale(0)', opacity: '0' },
