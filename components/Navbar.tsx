@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ElysiumLogo } from './Icons';
 import Magnetic from './Magnetic';
+import { useAudio } from '../hooks/useAudio';
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{ onTerminalToggle?: () => void }> = ({ onTerminalToggle }) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeItem, setActiveItem] = useState('Hero');
+  const { playHover, playClick } = useAudio();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -111,21 +113,42 @@ const Navbar: React.FC = () => {
                 </motion.button>
               </Magnetic>
             ))}
-            <Magnetic>
-              <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="relative overflow-hidden px-8 py-3 group rounded-full"
-                data-cursor="RESUME"
-              >
-                <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-full group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(0,209,255,0.4)] transition-all duration-500" />
-                <span className="relative z-10 text-xs font-bold text-theme-text tracking-widest uppercase transition-colors duration-500">
-                  Resume
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-accent via-white to-accent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out opacity-20"></div>
-              </motion.button>
-            </Magnetic>
+            <div className="flex items-center gap-4">
+              <Magnetic>
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.55 }}
+                  onClick={() => {
+                    playClick();
+                    onTerminalToggle?.();
+                  }}
+                  onMouseEnter={playHover}
+                  className="w-11 h-11 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:border-accent hover:text-accent transition-all duration-500 text-theme-secondary"
+                  data-cursor="TERMINAL"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </motion.button>
+              </Magnetic>
+
+              <Magnetic>
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="relative overflow-hidden px-8 py-3 group rounded-full"
+                  data-cursor="RESUME"
+                >
+                  <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-full group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(0,209,255,0.4)] transition-all duration-500" />
+                  <span className="relative z-10 text-xs font-bold text-theme-text tracking-widest uppercase transition-colors duration-500">
+                    Resume
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent via-white to-accent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out opacity-20"></div>
+                </motion.button>
+              </Magnetic>
+            </div>
           </div>
         </div>
       </motion.nav>

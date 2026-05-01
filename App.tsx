@@ -15,9 +15,11 @@ import ScrollReveal from './components/ScrollReveal';
 import Contact from './components/Contact';
 import { useAudio } from './hooks/useAudio';
 import ThemeToggle from './components/ThemeToggle';
+import Terminal from './components/Terminal';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
   const { playHover, playClick } = useAudio();
 
@@ -67,7 +69,8 @@ const App: React.FC = () => {
 
         <TechBackground />
         <ThemeToggle />
-        <Navbar />
+        <Terminal isOpen={isTerminalOpen} setIsOpen={setIsTerminalOpen} />
+        <Navbar onTerminalToggle={() => setIsTerminalOpen(!isTerminalOpen)} />
 
         <main className="relative z-10">
           <Hero />
