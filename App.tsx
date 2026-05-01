@@ -16,6 +16,7 @@ import Contact from './components/Contact';
 import { useAudio } from './hooks/useAudio';
 import ThemeToggle from './components/ThemeToggle';
 import Terminal from './components/Terminal';
+import TerminalFab from './components/TerminalFab';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,8 +70,9 @@ const App: React.FC = () => {
 
         <TechBackground />
         <ThemeToggle />
+        <TerminalFab isOpen={isTerminalOpen} onToggle={() => setIsTerminalOpen(!isTerminalOpen)} />
         <Terminal isOpen={isTerminalOpen} setIsOpen={setIsTerminalOpen} />
-        <Navbar onTerminalToggle={() => setIsTerminalOpen(!isTerminalOpen)} />
+        <Navbar />
 
         <main className="relative z-10">
           <Hero />
