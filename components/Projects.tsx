@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import { PROJECTS } from '../constants';
 import { TechIcon } from './Icons';
@@ -8,20 +8,6 @@ import Magnetic from './Magnetic';
 const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) => {
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-
-  // Mouse position for border glow and parallax
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const handleMouseMove = ({ currentTarget, clientX, clientY }: React.MouseEvent) => {
-    const { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  };
-
-  // Spring animations for smoothness
-  const springX = useSpring(mouseX, { stiffness: 100, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 100, damping: 30 });
 
   return (
     <ScrollReveal
@@ -32,30 +18,26 @@ const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) 
     >
       <div
         ref={cardRef}
-        onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative flex flex-col h-[500px] bg-surface rounded-[2rem] border border-theme-border overflow-hidden transition-all duration-700 hover:border-accent/40"
+        className="relative flex flex-col h-[500px] bg-surface rounded-[2rem] border border-theme-border overflow-hidden transition-all duration-700 hover:border-accent/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
       >
-        {/* Dynamic Border Glow */}
-        <motion.div
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background: `radial-gradient(400px circle at ${springX}px ${springY}px, var(--accent-color, rgba(0, 209, 255, 0.1)), transparent 80%)`,
-          }}
-        />
+        {/* Subtle Static Glow on Hover */}
+        <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-        {/* Image Container with Parallax & Mask */}
+        {/* Image Container */}
         <div className="relative h-64 overflow-hidden">
           <motion.div
             className="h-full w-full"
-            animate={{ scale: isHovered ? 1.1 : 1 }}
+            animate={{ 
+              scale: isHovered ? 1.05 : 1,
+            }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover grayscale brightness-[0.4] transition-all duration-700 group-hover:grayscale-0 group-hover:brightness-90"
+              className="w-full h-full object-cover grayscale brightness-[0.5] transition-all duration-1000 group-hover:grayscale-0 group-hover:brightness-90"
             />
           </motion.div>
 

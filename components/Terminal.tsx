@@ -16,6 +16,8 @@ const COMMANDS = [
   { cmd: 'sudo', desc: 'Attempt superuser access (easter egg)' },
   { cmd: 'date', desc: 'Show current date and time' },
   { cmd: 'echo', desc: 'Echo a message (usage: echo <message>)' },
+  { cmd: 'secret', desc: '???' },
+  { cmd: 'achieve', desc: 'Show unlocked achievements' },
 ];
 
 const ASCII_ART = `
@@ -249,6 +251,55 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
         newHistory.push({
           type: 'output',
           content: <span className="text-accent">{new Date().toString()}</span>,
+        });
+        break;
+      case 'secret':
+        newHistory.push({
+          type: 'output',
+          content: (
+            <div className="text-accent space-y-2 p-3 border border-accent/20 bg-accent/5 rounded-lg">
+              <div className="font-bold">DECRYPTING CLASSIFIED DATA...</div>
+              <div className="text-[10px] opacity-70">
+                You've found a hidden node. Try these hidden commands:
+                <br />
+                <span className="text-white font-mono">• "core" - Access core memories</span>
+                <br />
+                <span className="text-white font-mono">• "override" - ???</span>
+              </div>
+            </div>
+          )
+        });
+        break;
+      case 'core':
+        newHistory.push({
+           type: 'output',
+           content: (
+             <div className="text-purple-400 space-y-1">
+               <div>ACCESSING CORE MEMORY VAULT...</div>
+               <div className="text-[10px] opacity-60">Status: Entangled // Location: Quantum Plane</div>
+               <div className="mt-2 text-white">"Every line of code is a memory of a problem solved."</div>
+             </div>
+           )
+        });
+        break;
+      case 'achieve':
+        newHistory.push({
+          type: 'output',
+          content: (
+            <div className="space-y-3 mt-2">
+              <div className="text-accent font-bold uppercase tracking-widest text-[10px]">Unlocked Achievements</div>
+              <div className="space-y-2">
+                <div className="flex gap-3 items-center opacity-100">
+                  <div className="w-4 h-4 rounded-full bg-accent flex items-center justify-center text-[8px] text-primary font-bold">✓</div>
+                  <div className="text-[11px]"><span className="text-white font-bold">First Contact</span> - Opened the Terminal</div>
+                </div>
+                <div className="flex gap-3 items-center opacity-40">
+                  <div className="w-4 h-4 rounded-full border border-white/20 flex items-center justify-center text-[8px] text-white font-bold">?</div>
+                  <div className="text-[11px]"><span>Master Hacker</span> - ???</div>
+                </div>
+              </div>
+            </div>
+          )
         });
         break;
       default:

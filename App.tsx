@@ -31,10 +31,6 @@ const App: React.FC = () => {
     restDelta: 0.001
   });
 
-
-
-  // Removed heavy scroll transforms for performance
-
   const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -51,15 +47,13 @@ const App: React.FC = () => {
     setPhotoRotate({ x: 0, y: 0 });
   };
 
-
-
   if (isLoading) {
     return <Loader onComplete={() => setIsLoading(false)} />;
   }
 
   return (
     <SmoothScroll>
-      <div className="min-h-screen relative selection:bg-accent/30 selection:text-white bg-primary text-theme-text overflow-x-hidden animate-fadeIn cursor-none">
+      <div className="min-h-screen relative selection:bg-accent/30 selection:text-white bg-primary text-theme-text overflow-x-hidden cursor-none">
         {/* Scroll Progress Bar */}
         <motion.div
           className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent via-white to-accent z-[100] origin-left shadow-[0_0_15px_rgba(0,209,255,0.5)]"
@@ -74,7 +68,16 @@ const App: React.FC = () => {
         <Terminal isOpen={isTerminalOpen} setIsOpen={setIsTerminalOpen} />
         <Navbar />
 
-        <main className="relative z-10">
+        <motion.main 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ 
+            duration: 1.2, 
+            ease: [0.22, 1, 0.36, 1],
+            opacity: { duration: 0.8 }
+          }}
+          className="relative z-10"
+        >
           <Hero />
 
           {/* Atmospheric Gradient Blend */}
@@ -111,7 +114,7 @@ const App: React.FC = () => {
           </section>
 
           {/* About Section */}
-          <section id="about" className="py-48 px-6 relative overflow-hidden z-10">
+          <section id="about" className="py-48 px-6 relative z-10">
             <div className="container mx-auto max-w-7xl">
               <div className="space-y-24">
                 <ScrollReveal isContainer className="space-y-24">
@@ -197,6 +200,13 @@ const App: React.FC = () => {
                               />
                             </div>
 
+                            {/* Glitch Overlays */}
+                            <div className="absolute inset-0 bg-accent/20 mix-blend-overlay opacity-0 group-hover:animate-glitch-1 pointer-events-none" />
+                            <div className="absolute inset-0 bg-purple-500/20 mix-blend-overlay opacity-0 group-hover:animate-glitch-2 pointer-events-none" />
+                            
+                            {/* Scanline Effect */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-30 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] transition-opacity duration-700" />
+
                             <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
                             <div className="absolute inset-x-0 bottom-8 translate-z-100 transform transition-all duration-1000 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-8 flex justify-center">
@@ -219,7 +229,7 @@ const App: React.FC = () => {
           <Skills />
 
           <Contact />
-        </main >
+        </motion.main>
 
         <footer className="py-24 border-t border-theme-border bg-primary relative z-30">
           <div className="container mx-auto px-6">
@@ -270,8 +280,8 @@ const App: React.FC = () => {
             </div>
           </div>
         </footer>
-      </div >
-    </SmoothScroll >
+      </div>
+    </SmoothScroll>
   );
 };
 
