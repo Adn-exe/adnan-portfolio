@@ -16,6 +16,7 @@ const Magnetic: React.FC<MagneticProps> = ({ children }) => {
     const springY = useSpring(y, springConfig);
 
     const handleMouseMove = (e: React.MouseEvent) => {
+        if (window.matchMedia('(pointer: coarse)').matches) return;
         const { clientX, clientY } = e;
         if (!ref.current) return;
         const { left, top, width, height } = ref.current.getBoundingClientRect();

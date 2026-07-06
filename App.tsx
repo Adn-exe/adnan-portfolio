@@ -101,7 +101,7 @@ const App: React.FC = () => {
                     animation="fade-up"
                     distance={20}
                   >
-                    <div className="text-4xl md:text-5xl font-display font-black text-theme-text mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
+                    <div className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-theme-text mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
                       {s.val}
                     </div>
                     <div className="text-[11px] uppercase tracking-[0.3em] text-accent font-semibold group-hover:text-white transition-colors">
@@ -175,7 +175,7 @@ const App: React.FC = () => {
                     </ScrollReveal>
                   </div>
 
-                  <div className="lg:col-span-4 relative hidden lg:block sticky top-32">
+                  <div className="lg:col-span-4 relative mt-12 lg:mt-0 lg:sticky lg:top-32 w-full max-w-sm mx-auto">
                     <ScrollReveal delay={0.6} animation="zoom-in">
                       <div className="aspect-square relative flex items-center justify-center perspective-[2000px]">
                         {/* Interactive 3D Photo Frame - Rounded Full */}

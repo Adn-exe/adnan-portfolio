@@ -1,16 +1,29 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import Magnetic from './Magnetic';
+import StarBorder from './StarBorder';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
+  const [isLight, setIsLight] = useState(false);
 
-
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light'));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    setIsLight(document.documentElement.classList.contains('light'));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none bg-primary">
+
 
       {/* Dynamic Background */}
       <motion.div
@@ -37,7 +50,7 @@ const Hero: React.FC = () => {
             distance={5}
             className="relative z-10"
           >
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-medium leading-[1.1] tracking-tighter mb-4 uppercase" style={{ fontFamily: '"Libertinus Math", serif', fontWeight: '400' }}>
+            <h1 className="text-[10vw] sm:text-7xl md:text-8xl lg:text-9xl font-medium leading-[1.1] tracking-tighter mb-4 uppercase" style={{ fontFamily: '"Libertinus Math", serif', fontWeight: '400' }}>
               <span className="text-gradient drop-shadow-2xl">Mohammed Adnan</span>
             </h1>
           </ScrollReveal>
@@ -57,8 +70,39 @@ const Hero: React.FC = () => {
           </p>
         </ScrollReveal>
 
+        {/* Mobile Get in Touch CTA */}
+        <ScrollReveal
+          animation="fade-up"
+          delay={0.8}
+          distance={20}
+          className="md:hidden mt-6"
+        >
+          <a
+            href="#contact"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+              e.preventDefault();
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="group inline-flex items-center justify-center gap-4 px-6 py-3.5 rounded-full border border-accent/20 text-[10px] font-bold tracking-[0.3em] uppercase text-theme-text bg-surface/40 backdrop-blur-md transition-all duration-300 hover:border-accent hover:shadow-[0_0_10px_rgba(0,209,255,0.2)]"
+          >
+            <span className="transition-colors duration-300 group-hover:text-accent">
+              Get In Touch
+            </span>
+            <div className="w-6 h-6 flex items-center justify-center rounded-full bg-theme-text/5 text-theme-text group-hover:bg-accent/10 group-hover:text-accent transition-all duration-300">
+              <svg
+                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-90"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </a>
+        </ScrollReveal>
+
         {/* Spacer */}
-        <div className="h-16"></div>
+        <div className="h-8 md:h-16"></div>
       </ScrollReveal>
 
       {/* Corner Socials - Left removed as per request */}
@@ -71,34 +115,31 @@ const Hero: React.FC = () => {
         distance={30}
         className="absolute bottom-12 right-12 hidden md:block z-20"
       >
-        <Magnetic>
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="group relative flex items-center gap-4 px-6 py-3 rounded-full bg-surface/40 backdrop-blur-md border border-theme-border overflow-hidden transition-all duration-500 hover:border-accent hover:shadow-[0_0_25px_rgba(0,209,255,0.2)]"
-            data-cursor="CONTACT"
-          >
-            <span className="relative z-10 text-[10px] font-bold tracking-[0.3em] uppercase text-theme-text group-hover:text-accent transition-colors duration-500">
-              Get In Touch
-            </span>
-
-            <div className="relative w-8 h-8 flex items-center justify-center rounded-full bg-theme-text/5 text-theme-text group-hover:bg-accent group-hover:text-primary transition-all duration-500">
-              <svg
-                className="w-4 h-4 transition-transform duration-500 group-hover:rotate-[-45deg]"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </div>
-
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/0 via-accent/5 to-accent/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.2s] ease-in-out" />
-          </a>
-        </Magnetic>
+          <Magnetic>
+            <a
+              href="#contact"
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                e.preventDefault();
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="group inline-flex items-center justify-center gap-4 px-6 py-3.5 rounded-full border border-accent/20 text-[10px] font-bold tracking-[0.3em] uppercase text-theme-text bg-surface/40 backdrop-blur-md transition-all duration-300 hover:border-accent hover:shadow-[0_0_10px_rgba(0,209,255,0.2)]"
+              data-cursor="CONTACT"
+            >
+              <span className="transition-colors duration-300 group-hover:text-accent">
+                Get In Touch
+              </span>
+              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-theme-text/5 text-theme-text group-hover:bg-accent/10 group-hover:text-accent transition-all duration-300">
+                <svg
+                  className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-90"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
+          </Magnetic>
       </ScrollReveal>
 
       {/* Scroll Indicator with Glowing Line Above */}

@@ -85,7 +85,6 @@ const Navbar: React.FC = () => {
               data-cursor="HOME"
             >
               <ElysiumLogo className="w-8 h-8 text-accent group-hover:rotate-[45deg] transition-transform duration-700 drop-shadow-[0_0_8px_rgba(0,209,255,0.6)]" />
-              <span className="hidden sm:inline">ADNAN</span>
             </motion.a>
           </Magnetic>
 
@@ -113,21 +112,7 @@ const Navbar: React.FC = () => {
                 </motion.button>
               </Magnetic>
             ))}
-            <Magnetic>
-              <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
-                  className="relative overflow-hidden px-8 py-3 group rounded-full"
-                  data-cursor="RESUME"
-                >
-                  <div className="absolute inset-0 bg-white/5 border border-white/10 rounded-full group-hover:border-accent group-hover:shadow-[0_0_15px_rgba(0,209,255,0.4)] transition-all duration-500" />
-                  <span className="relative z-10 text-xs font-bold text-theme-text tracking-widest uppercase transition-colors duration-500">
-                    Resume
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-accent via-white to-accent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out opacity-20"></div>
-                </motion.button>
-              </Magnetic>
+
           </div>
         </div>
       </motion.nav>

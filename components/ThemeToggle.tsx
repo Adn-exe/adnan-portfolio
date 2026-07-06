@@ -3,6 +3,7 @@ import { motion, useDragControls } from 'framer-motion';
 
 const ThemeToggle: React.FC = () => {
     const [isLight, setIsLight] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const dragControls = useDragControls();
 
     useEffect(() => {
@@ -10,6 +11,13 @@ const ThemeToggle: React.FC = () => {
         if (document.documentElement.classList.contains('light')) {
             setIsLight(true);
         }
+
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
     const toggleTheme = () => {
@@ -22,20 +30,22 @@ const ThemeToggle: React.FC = () => {
         }
     };
 
+    const wireHeight = isMobile ? (isLight ? 70 : 45) : (isLight ? 120 : 80);
+
     return (
-        <div className="fixed top-0 right-12 z-[200] flex flex-col items-center">
+        <div className="fixed top-0 right-4 md:right-12 z-[200] flex flex-col items-center">
             {/* Wire */}
             <motion.div
                 className="w-[2px] bg-slate-500/50 origin-top"
-                style={{ height: isLight ? 120 : 80 }}
-                animate={{ height: isLight ? 120 : 80 }}
+                style={{ height: wireHeight }}
+                animate={{ height: wireHeight }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             />
 
             {/* Bulb Wrapper */}
             <motion.div
                 drag="y"
-                dragConstraints={{ top: 0, bottom: 60 }}
+                dragConstraints={{ top: 0, bottom: isMobile ? 35 : 60 }}
                 dragElastic={0.2}
                 dragControls={dragControls}
                 onDragEnd={(_, info) => {

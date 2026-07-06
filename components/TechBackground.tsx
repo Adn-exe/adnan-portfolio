@@ -13,7 +13,6 @@ const TechBackground: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-primary pointer-events-none">
-      {/* Dynamic Theme Background */}
       <div className="absolute inset-0 bg-primary" />
     </div>
   );

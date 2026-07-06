@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useMotionTemplate, 
 import { SKILLS } from '../constants';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
+import './marquee.css';
 
 // --- VIEW MODES ---
 const VIEW_MODES = [
@@ -64,6 +65,29 @@ const BentoCard: React.FC<{
   mouseY: MotionValue<number>;
 }> = ({ group, idx, className = "", mouseX, mouseY }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    const xVal = e.clientX - rect.left;
+    const yVal = e.clientY - rect.top;
+
+    const x = xVal / width - 0.5;
+    const y = yVal / height - 0.5;
+
+    setRotateX(-y * 8);
+    setRotateY(x * 8);
+  };
+
+  const handleMouseLeave = () => {
+    setRotateX(0);
+    setRotateY(0);
+  };
 
   const relX = useTransform(mouseX, (val: number) => {
     if (!cardRef.current) return 0;
@@ -96,8 +120,18 @@ const BentoCard: React.FC<{
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      animate={{
+        rotateX: rotateX,
+        rotateY: rotateY,
+      }}
+      style={{
+        transformStyle: 'preserve-3d',
+        perspective: 1000,
+      }}
       transition={{ delay: idx * 0.1, duration: 0.6 }}
-      className={`relative rounded-[1.5rem] p-6 border border-theme-border bg-surface/50 dark:bg-neutral-900/40 overflow-hidden group hover:shadow-2xl transition-all duration-500 ${className}`}
+      className={`relative rounded-[1.5rem] p-6 border border-theme-border bg-surface/50 dark:bg-neutral-900/40 overflow-hidden group hover:shadow-2xl transition-[border-color,box-shadow] duration-500 ${className}`}
     >
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -175,7 +209,7 @@ const BentoView: React.FC = () => {
       title: 'Data Science',
       items: ['NumPy', 'Pandas', 'Scikit-learn', 'Jupyter'],
       span: 'md:col-span-1 md:row-span-2',
-      innerGrid: 'grid-cols-1 grid-rows-4'
+      innerGrid: 'grid-cols-2 md:grid-cols-1'
     },
     {
       title: 'Frameworks',
@@ -255,7 +289,7 @@ const Skills: React.FC = () => {
                 {viewMode === mode.id && (
                   <motion.div
                     layoutId="activeView"
-                    className="absolute inset-0 rounded-full bg-primary/40 dark:bg-white/10 shadow-inner border border-theme-border"
+                    className="absolute inset-0 rounded-full bg-slate-200/60 dark:bg-white/10 shadow-inner border border-theme-border"
                     transition={{ type: "spring", bounce: 0, duration: 0.6 }}
                   />
                 )}

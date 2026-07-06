@@ -7,26 +7,70 @@ import Magnetic from './Magnetic';
 
 const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+  const [shineX, setShineX] = useState(50);
+  const [shineY, setShineY] = useState(50);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+
+    const xVal = e.clientX - rect.left;
+    const yVal = e.clientY - rect.top;
+
+    const x = xVal / width - 0.5;
+    const y = yVal / height - 0.5;
+
+    setRotateX(-y * 12);
+    setRotateY(x * 12);
+    setShineX((xVal / width) * 100);
+    setShineY((yVal / height) * 100);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotateX(0);
+    setRotateY(0);
+  };
 
   return (
     <ScrollReveal
       animation="fade-up"
       delay={idx * 0.15}
       distance={30}
-      className="group"
+      className="group perspective-[1000px]"
     >
-      <div
+      <motion.div
         ref={cardRef}
         onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className="relative flex flex-col h-[500px] bg-surface rounded-[2rem] border border-theme-border overflow-hidden transition-all duration-700 hover:border-accent/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        animate={{
+          rotateX: rotateX,
+          rotateY: rotateY,
+          scale: isHovered ? 1.02 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 300, damping: 20, mass: 0.5 }}
+        style={{ transformStyle: "preserve-3d" }}
+        className="relative flex flex-col h-auto md:h-[500px] bg-surface rounded-[2rem] border border-theme-border overflow-hidden transition-[border-color,box-shadow] duration-500 hover:border-accent/40 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
       >
         {/* Subtle Static Glow on Hover */}
         <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
+        {/* Dynamic Spotlight Shine */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-30"
+          style={{
+            background: `radial-gradient(circle 220px at ${shineX}% ${shineY}%, rgba(255,255,255,0.06), transparent 80%)`
+          }}
+        />
+
         {/* Image Container */}
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-48 md:h-64 overflow-hidden">
           <motion.div
             className="h-full w-full"
             animate={{ 
@@ -53,7 +97,7 @@ const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) 
         </div>
 
         {/* Content Section */}
-        <div className="p-8 flex-1 flex flex-col justify-between relative">
+        <div className="p-6 md:p-8 flex-1 flex flex-col justify-between relative">
           {project.status === 'In Progress' && (
             <div className="absolute top-0 right-8 -translate-y-1/2 z-20">
               <div className="flex items-center gap-2 bg-accent/20 border border-accent/40 backdrop-blur-xl px-4 py-2 rounded-2xl shadow-[0_0_20px_rgba(0,209,255,0.2)]">
@@ -118,7 +162,7 @@ const ProjectCard: React.FC<{ project: any; idx: number }> = ({ project, idx }) 
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </ScrollReveal>
   );
 };

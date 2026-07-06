@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
+import StarBorder from './StarBorder';
 
 const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -122,25 +123,32 @@ const Contact: React.FC = () => {
                                 </div>
 
                                 <div className="pt-2">
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full py-4 rounded-xl font-bold text-lg tracking-widest uppercase relative overflow-hidden group/btn shadow-xl disabled:opacity-70 disabled:cursor-not-allowed border border-emerald-500/20 text-emerald-950"
-                                        style={{
-                                            background: 'linear-gradient(to right, #FFFFFF, #10B981)',
-                                            backgroundSize: '200% auto'
-                                        }}
+                                    <StarBorder
+                                        as="div"
+                                        className="w-full rounded-xl"
+                                        color="#10B981"
+                                        thickness={1.5}
                                     >
-                                        <span className="relative z-10 transition-colors duration-500 group-hover/btn:text-white">
-                                            {isSubmitting ? 'Sending...' : status === 'success' ? 'Message Sent!' : 'Submit Request'}
-                                        </span>
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="w-full py-4 rounded-xl font-bold text-lg tracking-widest uppercase relative overflow-hidden group/btn shadow-xl disabled:opacity-70 disabled:cursor-not-allowed border border-emerald-500/20 text-emerald-950"
+                                            style={{
+                                                background: 'linear-gradient(to right, #FFFFFF, #10B981 30%, #10B981 100%)',
+                                                backgroundSize: '200% auto'
+                                            }}
+                                        >
+                                            <span className="relative z-10 transition-colors duration-500 group-hover/btn:text-white">
+                                                {isSubmitting ? 'Sending...' : status === 'success' ? 'Message Sent!' : 'Submit Request'}
+                                            </span>
 
-                                        {/* Blue-Green Flow Gradient on Hover */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-emerald-400 to-blue-600 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out"></div>
+                                            {/* Blue-Green Flow Gradient on Hover */}
+                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-emerald-400 to-blue-600 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-[1.5s] ease-in-out"></div>
 
-                                        {/* Static Hover State background to ensure it stays colored */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-emerald-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 -z-10"></div>
-                                    </button>
+                                            {/* Static Hover State background to ensure it stays colored */}
+                                            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-emerald-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 -z-10"></div>
+                                        </button>
+                                    </StarBorder>
                                 </div>
                             </form>
                         </div>

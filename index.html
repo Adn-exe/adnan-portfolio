@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/libertinus-math" rel="stylesheet">
   <script>
@@ -24,7 +24,7 @@
           },
           colors: {
             primary: 'var(--bg-primary)',
-            accent: '#00D1FF',
+            accent: 'var(--accent)',
             'accent-purple': '#A855F7',
             surface: 'var(--bg-surface)',
             'theme-text': 'var(--text-primary)',
@@ -130,6 +130,8 @@
       --border-color: rgba(255, 255, 255, 0.05);
       --navbar-bg: rgba(0, 5, 10, 0.9);
       --card-bg: rgba(255, 255, 255, 0.05);
+      --accent: #00D1FF;
+      --accent-color: #00D1FF;
     }
 
     .light {
@@ -142,6 +144,8 @@
       --border-color: rgba(60, 60, 0, 0.05);
       --navbar-bg: rgba(255, 253, 245, 0.9);
       --card-bg: rgba(255, 255, 255, 0.5);
+      --accent: #006680; /* Highly readable dark teal accent in light mode */
+      --accent-color: #006680;
     }
 
     body {
@@ -190,6 +194,12 @@
 
     .premium-spacing {
       word-spacing: 0.15rem;
+    }
+    .custom-cursor-icon {
+      filter: invert(1);
+    }
+    .light .custom-cursor-icon {
+      filter: invert(0);
     }
   </style>
 </head>
