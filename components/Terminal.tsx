@@ -20,6 +20,7 @@ const COMMANDS = [
   { cmd: 'quantum', desc: 'Simulate quantum state collapse' },
   { cmd: 'train', desc: 'Train neural network model (simulation)' },
   { cmd: 'achieve', desc: 'Show unlocked achievements' },
+  { cmd: 'resume', desc: 'Open/Download my professional resume' },
 ];
 
 const ASCII_ART = `
@@ -455,6 +456,27 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
           type: 'output',
           content: <QuantumSimulator />,
         });
+        break;
+      case 'resume':
+        newHistory.push({
+          type: 'output',
+          content: (
+            <div className="space-y-2 mt-2 border border-white/5 bg-white/[0.02] p-4 rounded-lg">
+              <div className="flex items-center gap-3">
+                <span className="text-accent font-bold min-w-[60px]">LINK:</span>
+                <a 
+                  href="https://drive.google.com/file/d/1F1k0iSJmDbv-Kco-zUqlyic6hhgyBZqn/view?usp=drive_link" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-theme-secondary hover:text-accent transition-colors underline"
+                >
+                  Click to open resume in a new tab
+                </a>
+              </div>
+            </div>
+          )
+        });
+        window.open('https://drive.google.com/file/d/1F1k0iSJmDbv-Kco-zUqlyic6hhgyBZqn/view?usp=drive_link', '_blank');
         break;
       case 'train':
         newHistory.push({

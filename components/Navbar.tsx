@@ -112,7 +112,23 @@ const Navbar: React.FC = () => {
                 </motion.button>
               </Magnetic>
             ))}
+            <Magnetic>
+              <motion.a
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * 4 }}
+                href="https://drive.google.com/file/d/1F1k0iSJmDbv-Kco-zUqlyic6hhgyBZqn/view?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/resume relative overflow-hidden inline-flex items-center px-6 py-2 rounded-full text-xs font-medium tracking-widest uppercase border border-accent/30 text-accent transition-all duration-500 hover:text-primary hover:border-accent hover:shadow-[0_0_18px_rgba(0,209,255,0.25)]"
+                data-cursor="RESUME"
+              >
+                {/* Fill sweep from left on hover */}
+                <span className="absolute inset-0 bg-accent rounded-full scale-x-0 origin-left group-hover/resume:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]" />
 
+                <span className="relative z-10">Resume</span>
+              </motion.a>
+            </Magnetic>
           </div>
         </div>
       </motion.nav>

@@ -107,7 +107,6 @@ const Hero: React.FC = () => {
 
       {/* Corner Socials - Left removed as per request */}
 
-
       {/* Premium CTA - Right */}
       <ScrollReveal
         animation="fade-left"
