@@ -462,21 +462,31 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
           type: 'output',
           content: (
             <div className="space-y-2 mt-2 border border-white/5 bg-white/[0.02] p-4 rounded-lg">
-              <div className="flex items-center gap-3">
-                <span className="text-accent font-bold min-w-[60px]">LINK:</span>
-                <a 
-                  href="https://drive.google.com/file/d/1F1k0iSJmDbv-Kco-zUqlyic6hhgyBZqn/view?usp=drive_link" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-theme-secondary hover:text-accent transition-colors underline"
-                >
-                  Click to open resume in a new tab
-                </a>
+              <div className="flex flex-col gap-2">
+                <span className="text-accent font-bold">Resume Options:</span>
+                <div className="flex flex-col gap-1.5 sm:flex-row sm:gap-6">
+                  <a 
+                    href="https://drive.google.com/file/d/1UTLmV5K6b1z0jgcAhCU-qIW2rwdiD1RN/view?usp=drive_link" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-theme-secondary hover:text-accent transition-colors underline"
+                  >
+                    [View Resume in Browser]
+                  </a>
+                  <a 
+                    href="https://drive.google.com/uc?export=download&id=1UTLmV5K6b1z0jgcAhCU-qIW2rwdiD1RN" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-theme-secondary hover:text-accent transition-colors underline"
+                  >
+                    [Download PDF Version]
+                  </a>
+                </div>
               </div>
             </div>
           )
         });
-        window.open('https://drive.google.com/file/d/1F1k0iSJmDbv-Kco-zUqlyic6hhgyBZqn/view?usp=drive_link', '_blank');
+        window.open('https://drive.google.com/file/d/1UTLmV5K6b1z0jgcAhCU-qIW2rwdiD1RN/view?usp=drive_link', '_blank');
         break;
       case 'train':
         newHistory.push({
