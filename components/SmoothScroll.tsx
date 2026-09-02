@@ -7,6 +7,11 @@ interface SmoothScrollProps {
 
 const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     useEffect(() => {
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+
         // Only enable on desktop for performance
         if (window.innerWidth < 1024) return;
 
@@ -18,14 +23,17 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
             lerp: 0.1,
         });
 
+        lenis.scrollTo(0, { immediate: true });
+
         function raf(time: number) {
             lenis.raf(time);
             requestAnimationFrame(raf);
         }
 
-        requestAnimationFrame(raf);
+        const rafId = requestAnimationFrame(raf);
 
         return () => {
+            cancelAnimationFrame(rafId);
             lenis.destroy();
         };
     }, []);

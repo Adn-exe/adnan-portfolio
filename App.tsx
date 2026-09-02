@@ -19,7 +19,15 @@ import Terminal from './components/Terminal';
 import TerminalFab from './components/TerminalFab';
 
 const App: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    try {
+      // If already loaded in this session, skip loader on normal reloads (Ctrl+R / Cmd+R)
+      const hasLoaded = sessionStorage.getItem('portfolio_has_loaded');
+      return !hasLoaded;
+    } catch {
+      return true;
+    }
+  });
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
   const { playHover, playClick } = useAudio();
@@ -30,6 +38,27 @@ const App: React.FC = () => {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    // Listen for Hard Refresh hotkeys (Cmd+Shift+R or Ctrl+Shift+R)
+    const handleHardRefreshKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'r' || e.key === 'R')) {
+        try {
+          sessionStorage.removeItem('portfolio_has_loaded');
+        } catch {}
+      }
+    };
+
+    window.addEventListener('keydown', handleHardRefreshKey);
+    return () => window.removeEventListener('keydown', handleHardRefreshKey);
+  }, []);
+
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -48,7 +77,17 @@ const App: React.FC = () => {
   };
 
   if (isLoading) {
-    return <Loader onComplete={() => setIsLoading(false)} />;
+    return (
+      <Loader
+        onComplete={() => {
+          try {
+            sessionStorage.setItem('portfolio_has_loaded', 'true');
+          } catch {}
+          setIsLoading(false);
+          window.scrollTo(0, 0);
+        }}
+      />
+    );
   }
 
   return (
@@ -64,6 +103,7 @@ const App: React.FC = () => {
 
         <TechBackground />
         <ThemeToggle />
+
         <TerminalFab isOpen={isTerminalOpen} onToggle={() => setIsTerminalOpen(!isTerminalOpen)} />
         <Terminal isOpen={isTerminalOpen} setIsOpen={setIsTerminalOpen} />
         <Navbar />

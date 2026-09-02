@@ -12,6 +12,20 @@
     href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
   <script>
+    // Listen for Hard Refresh hotkeys (Cmd+Shift+R or Ctrl+Shift+R) to clear loader session flag
+    window.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'r' || e.key === 'R')) {
+        try { sessionStorage.removeItem('portfolio_has_loaded'); } catch (err) {}
+      }
+    });
+
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
     try {
       if (localStorage.getItem('portfolio-theme') === 'light') {
         document.documentElement.classList.add('light');

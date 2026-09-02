@@ -25,11 +25,11 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
   const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400
+    damping: 60,
+    stiffness: 250
   });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-    clamp: false
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 2], {
+    clamp: true
   });
 
   // Wrap the position so the text loops infinitely
@@ -46,8 +46,8 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
       directionFactor.current = 1;
     }
 
-    // Scroll speed multiplies translation speed
-    moveBy += directionFactor.current * moveBy * velocityFactor.get();
+    // Smooth subtle scroll speed increase
+    moveBy += directionFactor.current * (baseVelocity * 0.5) * Math.abs(velocityFactor.get());
 
     baseX.set(baseX.get() + moveBy);
   });
@@ -74,8 +74,8 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
 const ScrollVelocityText: React.FC = () => {
   return (
     <section className="py-12 md:py-24 overflow-hidden relative z-0 pointer-events-none select-none flex flex-col gap-4">
-      <MarqueeText baseVelocity={4}>Innovation Intelligence Architecture</MarqueeText>
-      <MarqueeText baseVelocity={-4}>Design Engineering Systems</MarqueeText>
+      <MarqueeText baseVelocity={1.2}>Innovation Intelligence Architecture</MarqueeText>
+      <MarqueeText baseVelocity={-1.2}>Design Engineering Systems</MarqueeText>
     </section>
   );
 };
