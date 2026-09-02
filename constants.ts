@@ -4,6 +4,16 @@ import { Project, Skill } from './types';
 export const PROJECTS: Project[] = [
   {
     id: '1',
+    title: 'SmartHandel',
+    description: 'An AI-powered grocery optimizer for Norway. SmartHandel parses natural language shopping lists using Google Gemini AI and finds the cheapest store combinations in real-time via the Kassalapp API.',
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200',
+    tags: ['React', 'TypeScript', 'Tailwind', 'Node.js', 'API'],
+    link: '',
+    github: 'https://github.com/Adn-exe/smarthandel-mvp',
+    role: 'Full Stack Dev'
+  },
+  {
+    id: '2',
     title: 'Vizaris Studio',
     description: 'An interactive machine learning playground for visual pipeline construction. It bridges the gap between theory and intuition by allowing users to explore data flow across the ML lifecycle in real-time through an architectural lens.',
     image: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?auto=format&fit=crop&q=80&w=1200',
@@ -13,23 +23,23 @@ export const PROJECTS: Project[] = [
     role: 'Lead Architect'
   },
   {
-    id: '2',
+    id: '3',
+    title: 'Rakshak',
+    description: 'Rakshak is an AI-powered infrastructure safety platform that lets citizens report visible damage to flood-prone and critical structures, analyzes the evidence, and generates an explainable 0–100 risk score. Authorities can then review these reports, prioritize high-risk locations, and conduct field inspections before potential failures become disasters.',
+    image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=1200',
+    tags: ['Next.js', 'Python', 'FastAPI', 'OpenCV', 'LLM'],
+    link: '',
+    github: 'https://github.com/Adn-exe/Rakshak',
+    role: 'Lead AI Engineer'
+  },
+  {
+    id: '4',
     title: 'Soul Nest',
     description: 'A reflective digital sanctuary fostering mindfulness through minimal aesthetics and gentle prompts. It prioritizes emotional clarity and user well-being over metrics-driven engagement, creating a unique human-centered UI.',
     image: 'https://images.unsplash.com/photo-1528319725582-ddc096101511?auto=format&fit=crop&q=80&w=1200',
     tags: ['Python', 'Flask', 'SQLAlchemy', 'JS'],
     link: '',
     github: 'https://github.com/Adn-exe/soul_nest',
-    role: 'Full Stack Dev'
-  },
-  {
-    id: '3',
-    title: 'SmartHandel',
-    description: 'An AI-powered grocery optimizer for Norway. SmartHandel parses natural language shopping lists using Google Gemini AI and finds the cheapest store combinations in real-time via the Kassalapp API.',
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200',
-    tags: ['React', 'TypeScript', 'Tailwind', 'Node.js', 'API'],
-    link: 'https://github.com/Adn-exe/smarthandel-mvp',
-    github: 'https://github.com/Adn-exe/smarthandel-mvp',
     role: 'Full Stack Dev'
   }
 ];

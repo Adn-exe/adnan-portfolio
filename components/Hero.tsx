@@ -4,6 +4,9 @@ import ScrollReveal from './ScrollReveal';
 import Magnetic from './Magnetic';
 import StarBorder from './StarBorder';
 
+import StrokeText from './StrokeText';
+import DarkVeil from './DarkVeil';
+
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
@@ -24,22 +27,36 @@ const Hero: React.FC = () => {
   return (
     <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none bg-primary">
 
+      {/* React Bits DarkVeil Ambient Background with Feathered Bottom Edge */}
+      <div className="absolute inset-0 pointer-events-none opacity-60 [.light_&]:opacity-35 transition-opacity duration-700 [mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)]">
+        <DarkVeil
+          hueShift={0}
+          speed={0.8}
+          warpAmount={0.3}
+          noiseIntensity={0.01}
+          scanlineIntensity={0}
+          lightMode={isLight}
+        />
+      </div>
 
-      {/* Dynamic Background */}
+      {/* Dynamic Background Overlay */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-b from-accent/5 via-primary to-primary pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-accent/5 via-transparent to-primary pointer-events-none"
       />
 
+      {/* Seamless Bottom Fade Blend to Next Section */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-primary/80 to-primary pointer-events-none z-10" />
+
       {/* Content Container */}
-      <ScrollReveal isContainer className="relative z-10 flex flex-col items-center justify-center gap-4 md:gap-6">
+      <ScrollReveal isContainer className="relative z-10 flex flex-col items-center justify-center gap-1 md:gap-2 w-full max-w-5xl">
         {/* Greeting & Name */}
-        <div className="space-y-2">
+        <div className="space-y-0 w-full flex flex-col items-center">
           <ScrollReveal
             animation="fade-down"
             delay={0.2}
-            distance={20}
+            distance={15}
           >
-            <span className="inline-block text-accent font-sans text-sm tracking-widest uppercase font-medium">
+            <span className="inline-block text-accent font-sans text-sm tracking-widest uppercase font-medium mb-1">
               Hello, I'm
             </span>
           </ScrollReveal>
@@ -48,11 +65,27 @@ const Hero: React.FC = () => {
             animation="zoom-in"
             delay={0.4}
             distance={5}
-            className="relative z-10"
+            className="relative z-10 w-full max-w-6xl mx-auto"
           >
-            <h1 className="text-[10vw] sm:text-7xl md:text-8xl lg:text-9xl font-medium leading-[1.1] tracking-tighter mb-4 uppercase" style={{ fontFamily: '"Libertinus Math", serif', fontWeight: '400' }}>
-              <span className="text-gradient drop-shadow-2xl">Mohammed Adnan</span>
-            </h1>
+            <div className="w-full">
+              <StrokeText
+                text="MOHAMMED ADNAN"
+                fontFamily='"Libertinus Math", serif'
+                strokeColor={isLight ? '#D97706' : '#00D1FF'}
+                fillGradient={isLight ? ['#1F1A14', '#B45309', '#D97706'] : ['#FFFFFF', '#00D1FF', '#38BDF8', '#FFFFFF']}
+                strokeWidth={2.2}
+                drawDuration={1.8}
+                fillDelay={0.2}
+                stagger={0.06}
+                ease="power2.out"
+                trigger="mount"
+                fillMode="wipe"
+                fontSize={200}
+                fontWeight={400}
+                letterSpacing={-3}
+                className={isLight ? "w-full drop-shadow-[0_0_35px_rgba(217,119,6,0.3)]" : "w-full drop-shadow-[0_0_35px_rgba(0,209,255,0.4)]"}
+              />
+            </div>
           </ScrollReveal>
         </div>
 
@@ -60,8 +93,8 @@ const Hero: React.FC = () => {
         <ScrollReveal
           animation="fade-up"
           delay={0.6}
-          distance={20}
-          className="max-w-5xl mx-auto w-full px-4"
+          distance={15}
+          className="max-w-5xl mx-auto w-full px-4 -mt-2 md:-mt-4"
         >
           <p className="text-theme-secondary font-serif font-light text-lg md:text-xl leading-relaxed">
             I'm an <span className="text-theme-text font-medium">AIML engineering student</span> with strong interest in AI and Quantum world

@@ -24,13 +24,13 @@ const COMMANDS = [
 ];
 
 const ASCII_ART = `
-    _    ____  _   _    _    _   _ 
-   / \\  |  _ \\| \\ | |  / \\  | \\ | |
-  / _ \\ | | | |  \\| | / _ \\ |  \\| |
- / ___ \\| |_| | |\\  |/ ___ \\| |\\  |
-/_/   \\_\\____/|_| \\_/_/   \\_\\_| \\_|
-                                   
-      COMMAND CENTER v1.0.0
+  █████╗  ██████╗  ███╗   ██╗ █████╗  ███╗   ██╗
+ ██╔══██╗ ██╔══██╗ ████╗  ██║██╔══██╗ ████╗  ██║
+ ███████║ ██║  ██║ ██╔██╗ ██║███████║ ██╔██╗ ██║
+ ██╔══██║ ██║  ██║ ██║╚██╗██║██╔══██║ ██║╚██╗██║
+ ██║  ██║ ██████╔╝ ██║ ╚████║██║  ██║ ██║ ╚████║
+ ╚═╝  ╚═╝ ╚═════╝  ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═╝  ╚═══╝
+             [ >_ ] COMMAND CENTER v1.0.4
 `;
 
 const QuantumSimulator: React.FC = () => {
@@ -573,9 +573,13 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
                 <div className="w-3 h-3 rounded-full bg-[#FFBD2E]/80 hover:bg-[#FFBD2E] transition-colors shadow-[0_0_8px_rgba(255,189,46,0.2)]" />
                 <div className="w-3 h-3 rounded-full bg-[#27C93F]/80 hover:bg-[#27C93F] transition-colors shadow-[0_0_8px_rgba(39,201,63,0.2)]" />
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse shadow-[0_0_8px_#00D1FF]" />
-                <span className="text-[10px] font-mono text-white/40 uppercase tracking-[0.4em] font-black">ADNAN_OS_TERMINAL v1.0.4</span>
+              <div className="flex items-center gap-2.5">
+                <div className="flex items-center justify-center w-5 h-5 rounded bg-accent/10 border border-accent/30 text-accent shadow-[0_0_10px_rgba(0,209,255,0.2)]">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 17l6-6-6-6M12 19h8" />
+                  </svg>
+                </div>
+                <span className="text-[10px] font-mono text-white/60 uppercase tracking-[0.35em] font-black">ADNAN_OS_TERMINAL v1.0.4</span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}

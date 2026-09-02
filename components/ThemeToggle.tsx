@@ -7,8 +7,10 @@ const ThemeToggle: React.FC = () => {
     const dragControls = useDragControls();
 
     useEffect(() => {
-        // Check initial theme
-        if (document.documentElement.classList.contains('light')) {
+        // Check initial theme from document class or localStorage
+        const savedTheme = localStorage.getItem('portfolio-theme');
+        if (savedTheme === 'light' || document.documentElement.classList.contains('light')) {
+            document.documentElement.classList.add('light');
             setIsLight(true);
         }
 
@@ -25,8 +27,10 @@ const ThemeToggle: React.FC = () => {
         setIsLight(newStatus);
         if (newStatus) {
             document.documentElement.classList.add('light');
+            localStorage.setItem('portfolio-theme', 'light');
         } else {
             document.documentElement.classList.remove('light');
+            localStorage.setItem('portfolio-theme', 'dark');
         }
     };
 

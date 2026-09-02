@@ -110,9 +110,9 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
               style={{
                 width: `${100 - i * 15}%`,
                 height: `${100 - i * 15}%`,
-                borderTopColor: 'rgba(0, 209, 255, 0.8)',
+                borderTopColor: 'var(--accent)',
                 borderRightColor: 'transparent',
-                borderBottomColor: 'rgba(0, 209, 255, 0.1)',
+                borderBottomColor: 'rgba(217, 119, 6, 0.2)',
                 borderLeftColor: 'transparent',
               }}
               animate={{
@@ -139,7 +139,7 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
             <motion.div
               animate={{
                 scale: [1, 1.05, 1],
-                filter: [`drop-shadow(0 0 15px rgba(0,209,255,0.5))`, `drop-shadow(0 0 30px rgba(0,209,255,0.8))`, `drop-shadow(0 0 15px rgba(0,209,255,0.5))`]
+                filter: [`drop-shadow(0 0 15px var(--accent))`, `drop-shadow(0 0 30px var(--accent))`, `drop-shadow(0 0 15px var(--accent))`]
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -167,17 +167,16 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
             <span className="text-7xl font-display font-black text-theme-text tabular-nums italic tracking-tighter">
               {Math.round(progress)}
             </span>
-            <span className="text-accent text-[10px] font-mono font-bold opacity-40 leading-none">%</span>
+            <span className="text-accent text-[10px] font-mono font-bold opacity-60 leading-none">%</span>
           </div>
 
           {/* Shimmering High-Precision Progress Bar */}
-          <div className="w-64 h-[2px] bg-white/5 relative rounded-full overflow-hidden">
+          <div className="w-64 h-[3px] bg-theme-text/10 relative rounded-full overflow-hidden">
             <motion.div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent via-white to-accent shadow-[0_0_20px_rgba(0,209,255,1)]"
+              className="absolute inset-y-0 left-0 bg-accent shadow-[0_0_20px_var(--accent)]"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ ease: "linear" }}
-              style={{ backgroundSize: '200% 100%' }}
             />
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"

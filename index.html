@@ -11,7 +11,13 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <link href="https://fonts.cdnfonts.com/css/libertinus-math" rel="stylesheet">
+  <script>
+    try {
+      if (localStorage.getItem('portfolio-theme') === 'light') {
+        document.documentElement.classList.add('light');
+      }
+    } catch (e) {}
+  </script>
   <script>
     tailwind.config = {
       theme: {
@@ -20,7 +26,8 @@
             sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
             display: ['Space Grotesk', 'sans-serif'],
             handwriting: ['Mr De Haviland', 'cursive'],
-            serif: ['Merriweather', 'serif'],
+            serif: ['"Libertinus Math"', 'Merriweather', 'serif'],
+            libertinus: ['"Libertinus Math"', 'serif'],
           },
           colors: {
             primary: 'var(--bg-primary)',
@@ -135,17 +142,15 @@
     }
 
     .light {
-      --bg-primary: #FFFDF5;
-      /* Warm Ivory/Cream */
-      --bg-surface: #FFF9E5;
-      /* Subtle Bulb Yellow */
-      --text-primary: #1A1A1A;
-      --text-secondary: #5D5D4A;
-      --border-color: rgba(60, 60, 0, 0.05);
-      --navbar-bg: rgba(255, 253, 245, 0.9);
-      --card-bg: rgba(255, 255, 255, 0.5);
-      --accent: #006680; /* Highly readable dark teal accent in light mode */
-      --accent-color: #006680;
+      --bg-primary: #FAF8F2; /* Luxurious Warm White / Ivory */
+      --bg-surface: #F3EEE3; /* Warm Champagne Gold Tint */
+      --text-primary: #1F1A14; /* Deep Warm Charcoal */
+      --text-secondary: #706554; /* Warm Slate Gold */
+      --border-color: rgba(180, 130, 20, 0.15); /* Soft Gold Border */
+      --navbar-bg: rgba(250, 248, 242, 0.92);
+      --card-bg: rgba(243, 238, 227, 0.7);
+      --accent: #D97706; /* Rich Champagne Amber Gold Accent */
+      --accent-color: #D97706;
     }
 
     body {
@@ -163,12 +168,29 @@
       border: 1px solid var(--border-color);
     }
 
+    .light .glass {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(180, 130, 20, 0.18);
+      box-shadow: 0 10px 30px rgba(180, 130, 20, 0.08);
+    }
+
     .text-glow-cyan {
       text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
     }
 
     .text-gradient {
       background: linear-gradient(to right, #00D1FF, var(--text-primary), #00D1FF);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient 5s linear infinite;
+    }
+
+    .light .text-gradient {
+      background: linear-gradient(to right, #B45309, #1F1A14, #D97706);
       background-size: 200% auto;
       background-clip: text;
       -webkit-background-clip: text;

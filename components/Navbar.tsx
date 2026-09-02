@@ -152,12 +152,10 @@ const Navbar: React.FC = () => {
           paddingBottom: scrolled ? "1rem" : "1.5rem",
           backgroundColor: scrolled ? "var(--navbar-bg)" : "rgba(0, 0, 0, 0)",
           borderColor: scrolled
-            ? activeItem === 'Contact' ? "rgba(16, 185, 129, 0.4)" : "rgba(0, 209, 255, 0.2)"
+            ? "var(--border-color)"
             : "rgba(255, 255, 255, 0)",
           boxShadow: scrolled
-            ? activeItem === 'Contact'
-              ? "0 0 40px rgba(16, 185, 129, 0.25), inset 0 0 12px rgba(16, 185, 129, 0.1)"
-              : "0 0 40px rgba(0, 209, 255, 0.15), inset 0 0 12px rgba(0, 209, 255, 0.05)"
+            ? "0 0 40px rgba(0, 209, 255, 0.15), inset 0 0 12px rgba(0, 209, 255, 0.05)"
             : "0 0 0px rgba(0, 0, 0, 0)",
         }}
         transition={{
@@ -173,9 +171,7 @@ const Navbar: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className={`absolute inset-0 pointer-events-none ${activeItem === 'Contact'
-                ? 'bg-[radial-gradient(circle_at_center,rgba(52,211,153,0.15),transparent_70%)]'
-                : 'bg-[radial-gradient(circle_at_center,rgba(0,209,255,0.08),transparent_70%)]'}`}
+              className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(0,209,255,0.08),transparent_70%)]"
             />
           )}
         </AnimatePresence>
@@ -203,14 +199,14 @@ const Navbar: React.FC = () => {
                   transition={{ delay: 0.1 * i }}
                   onClick={() => scrollToSection(item.toLowerCase())}
                   className={`relative text-xs font-medium tracking-widest uppercase transition-all duration-300 group ${activeItem === item
-                    ? (activeItem === 'Contact' ? 'text-emerald-400' : 'text-theme-text')
+                    ? 'text-accent'
                     : 'text-theme-secondary hover:text-accent'
                     }`}
                   data-cursor={item.toUpperCase()}
                 >
                   {item}
                   <motion.span
-                    className={`absolute -bottom-2 left-0 h-[1px] shadow-[0_0_15px] ${activeItem === 'Contact' ? 'bg-emerald-400 shadow-emerald-400' : 'bg-accent shadow-[#00D1FF]'}`}
+                    className="absolute -bottom-2 left-0 h-[1px] bg-accent shadow-[0_0_15px_#00D1FF]"
                     initial={false}
                     animate={{ width: activeItem === item ? '100%' : '0%' }}
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}

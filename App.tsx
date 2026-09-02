@@ -90,7 +90,7 @@ const App: React.FC = () => {
             <div className="container mx-auto px-6">
               <ScrollReveal isContainer className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {[
-                  { val: '3+', label: 'Projects Built' },
+                  { val: '4+', label: 'Projects Built' },
                   { val: 'AI/ML', label: 'Core Focus' },
                   { val: 'Creator', label: 'Mindset' },
                   { val: 'Open', label: 'To Collaborate' }
@@ -138,35 +138,29 @@ const App: React.FC = () => {
                   <div className="lg:col-span-8 space-y-16">
                     <ScrollReveal isContainer staggerChildren={0.2} className="relative space-y-12 text-theme-secondary">
                       <ScrollReveal animation="fade-right" distance={20}>
-                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-accent/30 pl-8 group hover:border-accent transition-colors duration-700">
-                          As an <span className="text-theme-text font-semibold">AI/ML Student</span>, I'm passionate about understanding how intelligent systems work. I go beyond implementing algorithms — I focus on grasping the <span className="text-accent font-semibold">fundamentals</span> that make models learn and solve complex problems.
+                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-accent/40 pl-8 group hover:border-accent transition-colors duration-700">
+                          I’m an <span className="text-theme-text font-semibold">AI/ML student</span> passionate about understanding how intelligent systems work — not just implementing models, but building a <span className="text-accent font-semibold">strong foundation</span> in the concepts behind them. I enjoy breaking complex problems into structured, practical solutions and turning ideas into working projects.
                         </p>
                       </ScrollReveal>
 
                       <ScrollReveal animation="fade-right" distance={20}>
-                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-accent/20 pl-8 group hover:border-accent transition-colors duration-700">
-                          I approach challenges with <span className="text-white font-semibold">structured thinking</span>, breaking down complex problems into clear, testable solutions. My goal is to bridge deep technical knowledge with <span className="text-white font-semibold">practical applications</span>.
-                        </p>
-                      </ScrollReveal>
-
-                      <ScrollReveal animation="fade-right" distance={20}>
-                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-white/20 pl-8 group hover:border-white/40 transition-colors duration-700">
-                          I'm looking for collaborative environments where I can work on real problems and grow through <span className="text-white font-medium">mentorship and hands-on experience</span>.
+                        <p className="text-xl md:text-2xl font-light leading-relaxed border-l-2 border-theme-border pl-8 group hover:border-accent transition-colors duration-700">
+                          I’m particularly interested in applying AI to real-world problems and exploring the intersection of intelligent systems, software, and problem-solving. I’m looking for opportunities to collaborate, learn from experienced people, and grow through <span className="text-theme-text font-semibold">hands-on work on meaningful problems</span>.
                         </p>
                       </ScrollReveal>
                     </ScrollReveal>
 
-                    <ScrollReveal isContainer className="flex flex-wrap gap-16 pt-16 border-t border-white/10">
+                    <ScrollReveal isContainer className="flex flex-wrap gap-16 pt-16 border-t border-theme-border">
                       {[
-                        { label: 'Focus', val: 'AI & Machine Learning', icon: true },
-                        { label: 'Status', val: 'Learning & Building', color: true },
-                        { label: 'Location', val: 'Open to Remote' }
+                        { label: 'Focus', val: 'AI & Machine Learning', icon: true, isAccent: false },
+                        { label: 'Status', val: 'Learning & Building', icon: false, isAccent: true },
+                        { label: 'Location', val: 'Open to Remote', icon: false, isAccent: false }
                       ].map((item, i) => (
                         <ScrollReveal key={i} animation="fade-up" distance={10}>
                           <div className="flex flex-col gap-2">
-                            <span className="text-[10px] font-medium text-slate-500 uppercase tracking-widest">{item.label}</span>
-                            <span className={`text-sm font-display font-bold ${item.color ? 'text-accent' : 'text-white'} flex items-center gap-3`}>
-                              {item.icon && <div className="w-2 h-2 rounded-full bg-accent"></div>}
+                            <span className="text-[10px] font-mono font-medium text-theme-secondary uppercase tracking-widest">{item.label}</span>
+                            <span className={`text-sm font-display font-bold ${item.isAccent ? 'text-accent [.light_&]:text-amber-600' : 'text-theme-text [.light_&]:text-amber-700'} flex items-center gap-3`}>
+                              {item.icon && <div className="w-2 h-2 rounded-full bg-accent [.light_&]:bg-amber-500 shadow-[0_0_8px_var(--accent)]"></div>}
                               {item.val}
                             </span>
                           </div>
