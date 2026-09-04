@@ -17,6 +17,7 @@ import ThemeToggle from './components/ThemeToggle';
 import Terminal from './components/Terminal';
 import TerminalFab from './components/TerminalFab';
 import Footer from './components/Footer';
+import SectionDivider from './components/SectionDivider';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(() => {
@@ -109,7 +110,7 @@ const App: React.FC = () => {
           <ScrollVelocityText />
 
           {/* Statistics Section */}
-          <section className="py-32 border-y border-white/5 bg-surface/5 backdrop-blur-sm overflow-hidden relative z-20">
+          <section className="py-32 border-y border-white/5 bg-surface/5 overflow-hidden relative z-20">
             <div className="container mx-auto px-6">
               <ScrollReveal isContainer className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {[
@@ -142,6 +143,9 @@ const App: React.FC = () => {
           <Projects />
 
           <Skills />
+
+          {/* Single Distinction Divider between Skills and Contact */}
+          <SectionDivider />
 
           <Contact />
         </motion.main>

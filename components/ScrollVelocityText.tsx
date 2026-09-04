@@ -6,7 +6,8 @@ import {
   useTransform,
   useVelocity,
   useAnimationFrame,
-  useMotionValue
+  useMotionValue,
+  useInView
 } from "framer-motion";
 
 // Custom wrap function to avoid external dependency
@@ -21,6 +22,8 @@ interface MarqueeProps {
 }
 
 const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { margin: "150px 0px" });
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -37,6 +40,7 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
 
   const directionFactor = useRef<number>(1);
   useAnimationFrame((t, delta) => {
+    if (!isInView) return;
     let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
 
     // Dynamic direction mapping based on velocity direction
@@ -53,7 +57,7 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
   });
 
   return (
-    <div className="flex overflow-hidden relative w-full select-none pointer-events-none">
+    <div ref={containerRef} className="flex overflow-hidden relative w-full select-none pointer-events-none">
       <motion.div 
         className="flex flex-nowrap whitespace-nowrap shrink-0 will-change-transform" 
         style={{ x }}

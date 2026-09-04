@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import Magnetic from './Magnetic';
 import StrokeText from './StrokeText';
@@ -9,7 +9,6 @@ import SpecularButton from './SpecularButton';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
   const [isLight, setIsLight] = useState(false);
 
   useEffect(() => {

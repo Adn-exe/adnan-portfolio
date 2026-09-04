@@ -113,7 +113,7 @@ export default function DarkVeil({
     let renderer;
     try {
       renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
+        dpr: Math.min(window.devicePixelRatio, 1.5),
         canvas
       });
     } catch (e) {
@@ -165,8 +165,10 @@ export default function DarkVeil({
     const timeoutId = setTimeout(resize, 100);
 
     let frame = 0;
+    let isVisible = true;
 
     const loop = (t) => {
+      if (!isVisible) return;
       const sec = t * 0.001 * speed;
       program.uniforms.uTime.value = sec;
       program.uniforms.uHueShift.value = hueShift;
@@ -179,12 +181,26 @@ export default function DarkVeil({
       frame = requestAnimationFrame(loop);
     };
 
+    // Pause WebGL rendering whenever hero is scrolled out of view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          frame = requestAnimationFrame(loop);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     frame = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(frame);
       cancelAnimationFrame(rafId);
       clearTimeout(timeoutId);
+      observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener('resize', resize);
     };

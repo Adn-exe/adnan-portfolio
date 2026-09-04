@@ -12,4 +12,6 @@
 .word {
   display: inline-block;
   margin-bottom: 0;
+  will-change: opacity, filter;
+  transform: translateZ(0);
 }

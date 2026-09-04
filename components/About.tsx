@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollTextReveal';
+// @ts-ignore
+import PixelSwap from './PixelSwap';
 
 export const About: React.FC = () => {
   const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
@@ -88,37 +90,46 @@ export const About: React.FC = () => {
                       transform: `rotateX(${photoRotate.x}deg) rotateY(${photoRotate.y}deg)`,
                       transformStyle: 'preserve-3d'
                     }}
-                    data-cursor="CORE_MEM"
                   >
                     {/* Ambient Glow & Rotating Gradient Border */}
                     <div className="absolute -inset-2 rounded-[2.5rem] bg-gradient-to-r from-accent/40 via-purple-500/30 to-amber-500/40 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000 -z-10 animate-pulse"></div>
                     <div className="absolute -inset-[1px] rounded-[2.2rem] bg-gradient-to-tr from-accent/60 via-white/20 to-purple-500/60 opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                    {/* Main Image Container */}
+                    {/* Main Image Container with React Bits PixelSwap */}
                     <div className="w-full h-full relative overflow-hidden rounded-[2.1rem] border border-white/15 bg-black/40 backdrop-blur-xl shadow-2xl transition-all duration-700 group-hover:border-accent/80 group-hover:shadow-[0_0_50px_rgba(56,189,248,0.35)]">
-                      <div className="absolute inset-0 overflow-hidden">
-                        <img
-                          src="/profile.jpg"
-                          className="w-full h-full object-cover object-center scale-100 group-hover:scale-105 transition-all duration-700 ease-out filter grayscale brightness-85 contrast-110 saturate-50 group-hover:filter-none group-hover:grayscale-0 group-hover:brightness-105 group-hover:contrast-105 group-hover:saturate-125"
-                          alt="Mohammed Adnan"
-                        />
-                      </div>
-
-                      {/* Subtle Vignette & Gradient Overlays */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10 opacity-70 group-hover:opacity-40 transition-opacity duration-700"></div>
-
-                      {/* Name Tag Bottom Bar */}
-                      <div className="absolute inset-x-0 bottom-4 px-4 flex justify-between items-center z-20">
-                        <div className="glass px-4 py-2 rounded-xl border border-white/15 backdrop-blur-md shadow-lg w-full flex items-center justify-between">
-                          <div>
-                            <h4 className="text-xs font-display font-bold text-white tracking-wider uppercase">Mohammed Adnan</h4>
-                            <p className="text-[9px] font-mono text-accent">Student & Builder</p>
+                      <PixelSwap
+                        aspectRatio="1 / 1"
+                        pixelSize={42}
+                        gap={0}
+                        pixelRadius={0}
+                        pixelScale={0.3}
+                        duration={1100}
+                        pixelDuration={420}
+                        easing="cubic-bezier(0.16, 1, 0.3, 1)"
+                        pattern="random"
+                        fade={true}
+                        trigger="hover"
+                        firstContent={
+                          <div className="w-full h-full relative overflow-hidden">
+                            <img
+                              src="/profile.jpg"
+                              className="w-full h-full object-cover object-center filter contrast-105 brightness-95 transition-transform duration-700 group-hover:scale-105"
+                              alt="Mohammed Adnan Profile"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10 opacity-70 pointer-events-none" />
                           </div>
-                          <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-                            <span className="text-accent text-[10px]">✦</span>
+                        }
+                        secondContent={
+                          <div className="w-full h-full relative flex flex-col items-center justify-center bg-slate-950/95 backdrop-blur-xl p-6 select-none overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-accent/25 via-purple-500/15 to-amber-500/25 opacity-80" />
+                            <img
+                              src="/image.png"
+                              className="w-3/4 h-3/4 object-contain filter drop-shadow-[0_0_30px_rgba(56,189,248,0.6)] [.light_&]:drop-shadow-[0_0_30px_rgba(217,119,6,0.6)] relative z-10"
+                              alt="Portfolio Logo"
+                            />
                           </div>
-                        </div>
-                      </div>
+                        }
+                      />
                     </div>
                   </div>
                 </div>

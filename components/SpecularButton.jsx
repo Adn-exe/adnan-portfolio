@@ -150,12 +150,22 @@ const SpecularButton = ({
     ro.observe(btn);
     resize();
 
+    let isVisible = true;
+    let cachedRect = null;
+    const updateCachedRect = () => {
+      if (btn) cachedRect = btn.getBoundingClientRect();
+    };
+    updateCachedRect();
+    window.addEventListener('resize', updateCachedRect);
+    window.addEventListener('scroll', updateCachedRect, { passive: true });
+
     // Light angle steers toward the pointer (anywhere on the page) and falls
     // back to a slow sweep when the pointer hasn't moved yet.
     let pointerAngle = null;
     let proximityT = 0;
     const onPointerMove = e => {
-      const rect = btn.getBoundingClientRect();
+      if (!isVisible) return;
+      const rect = cachedRect || btn.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
       const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
@@ -173,7 +183,7 @@ const SpecularButton = ({
       const t = Math.max(0, 1 - dist / Math.max(propsRef.current.proximity, 1));
       proximityT = t * t * (3 - 2 * t);
     };
-    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     let angle = 2.4;
     let idleAngle = 2.4;
@@ -185,6 +195,7 @@ const SpecularButton = ({
     const baseC = new Color();
 
     const update = now => {
+      if (!isVisible) return;
       raf = requestAnimationFrame(update);
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
@@ -212,12 +223,30 @@ const SpecularButton = ({
       program.uniforms.uThickness.value = p.thickness * dpr;
       renderer.render({ scene: mesh });
     };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          last = performance.now();
+          updateCachedRect();
+          raf = requestAnimationFrame(update);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(btn);
+
     raf = requestAnimationFrame(update);
 
     return () => {
       cancelAnimationFrame(raf);
+      observer.disconnect();
       ro.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('resize', updateCachedRect);
+      window.removeEventListener('scroll', updateCachedRect);
       if (gl.canvas.parentNode === fx) fx.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
