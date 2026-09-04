@@ -14,7 +14,7 @@ export interface Project {
 export interface Skill {
   name: string;
   icon: string;
-  category: 'Languages' | 'Data Science' | 'Frameworks' | 'Core Web';
+  category: 'Languages' | 'Data Science' | 'Frameworks' | 'Core Web' | 'ML' | 'Backend' | 'Frontend' | 'AI' | 'Others';
   color?: string;
   description?: string;
 }

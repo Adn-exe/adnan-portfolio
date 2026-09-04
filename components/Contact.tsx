@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
-import StarBorder from './StarBorder';
+import { useAudio } from '../hooks/useAudio';
 
 const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const { playHover, playClick } = useAudio();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,10 +31,6 @@ const Contact: React.FC = () => {
 
     return (
         <section id="contact" className="py-32 px-6 relative z-20 overflow-hidden bg-gradient-to-b from-primary via-primary to-[#022b40] [.light_&]:from-[#FAF8F2] [.light_&]:via-[#FAF8F2] [.light_&]:to-[#FDF1D0] transition-colors duration-500">
-            {/* Background Accents (Theme aware - Contained to prevent bleeding) */}
-            <div className="absolute top-1/3 right-0 w-[360px] h-[360px] bg-sky-400/15 [.light_&]:bg-amber-500/15 rounded-full blur-[90px] pointer-events-none" />
-            <div className="absolute bottom-0 left-10 w-[320px] h-[320px] bg-[#00D1FF]/15 [.light_&]:bg-yellow-500/15 rounded-full blur-[80px] pointer-events-none" />
-
             <div className="container mx-auto max-w-6xl relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
 
@@ -49,7 +46,7 @@ const Contact: React.FC = () => {
                                     <span className="text-gradient">extraordinary.</span>
                                 </h2>
                                 <p className="text-theme-secondary text-sm leading-relaxed max-w-sm">
-                                    Open to AI collaborations and new opportunities.
+                                    Have an idea? Say Hi!
                                 </p>
                             </div>
                         </ScrollReveal>
@@ -79,9 +76,6 @@ const Contact: React.FC = () => {
                     {/* Right Column: Form */}
                     <ScrollReveal delay={0.2}>
                         <div className="relative p-8 md:p-10 rounded-3xl bg-surface border border-theme-border backdrop-blur-md shadow-2xl">
-                            {/* Glow Effect */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 to-blue-500/20 rounded-3xl blur opacity-10 group-hover:opacity-30 transition duration-1000 pointer-events-none"></div>
-
                             <form onSubmit={handleSubmit} className="relative space-y-6">
                                 <div className="space-y-2">
                                     <label htmlFor="name" className="text-xs font-mono uppercase tracking-widest text-theme-secondary ml-1">Name</label>
@@ -123,23 +117,48 @@ const Contact: React.FC = () => {
                                 </div>
 
                                 <div className="pt-2">
-                                    <StarBorder
-                                        as="div"
-                                        className="w-full rounded-xl"
-                                        color="var(--accent)"
-                                        thickness={1.5}
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting || status === 'success'}
+                                        onMouseEnter={playHover}
+                                        onClick={() => {
+                                            if (!isSubmitting && status === 'idle') playClick();
+                                        }}
+                                        className="group relative w-full py-4 px-6 rounded-2xl font-sans font-semibold text-xs sm:text-sm tracking-widest uppercase overflow-hidden transition-all duration-300 flex items-center justify-center gap-3 border shadow-lg cursor-pointer disabled:cursor-not-allowed bg-accent text-primary border-accent/40 shadow-accent/15 hover:shadow-accent/30 hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] [.light_&]:bg-accent [.light_&]:text-[#FAF8F2] [.light_&]:border-amber-600/30 disabled:opacity-80 disabled:hover:scale-100"
                                     >
-                                        <button
-                                            type="submit"
-                                            disabled={isSubmitting}
-                                            className="w-full py-4 rounded-xl font-bold text-sm tracking-[0.25em] uppercase relative overflow-hidden group/btn shadow-xl disabled:opacity-70 disabled:cursor-not-allowed bg-accent text-primary hover:opacity-90 transition-all duration-300"
-                                        >
-                                            <span className="relative z-10 font-mono font-black">
-                                                {isSubmitting ? 'Sending...' : status === 'success' ? 'Message Sent!' : 'Submit Request'}
-                                            </span>
-                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000 pointer-events-none" />
-                                        </button>
-                                    </StarBorder>
+                                        {/* Subtle ambient highlight */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                                        {/* Content based on status */}
+                                        {isSubmitting ? (
+                                            <div className="flex items-center gap-2.5">
+                                                <svg className="animate-spin h-4 w-4 text-primary [.light_&]:text-[#FAF8F2]" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                                </svg>
+                                                <span className="font-medium tracking-widest text-xs">Sending Message...</span>
+                                            </div>
+                                        ) : status === 'success' ? (
+                                            <div className="flex items-center gap-2 text-primary [.light_&]:text-[#FAF8F2]">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span className="font-semibold tracking-widest text-xs">Message Sent!</span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2.5">
+                                                <span className="font-semibold tracking-widest">Submit Request</span>
+                                                <svg
+                                                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                                </svg>
+                                            </div>
+                                        )}
+                                    </button>
                                 </div>
                             </form>
                         </div>

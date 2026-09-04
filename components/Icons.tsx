@@ -177,6 +177,68 @@ export const TechIcon: React.FC<{ name: string; className?: string }> = ({ name,
     </svg>
   );
 
+  // Prompt Engineering Icon (Sparkle/Wand)
+  if (n === 'prompt' || n === 'prompt engineering') return (
+    <svg viewBox="0 0 128 128" className={className} fill="none">
+      <path d="M64 8l8 24h24l-20 16 8 24-20-16-20 16 8-24-20-16h24z" fill="#A855F7" />
+      <path d="M96 56l4 12h12l-10 8 4 12-10-8-10 8 4-12-10-8h12z" fill="#C084FC" />
+      <path d="M32 56l4 12h12l-10 8 4 12-10-8-10 8 4-12-10-8h12z" fill="#C084FC" />
+      <rect x="56" y="80" width="16" height="40" rx="8" fill="#A855F7" opacity="0.7" />
+      <circle cx="64" cy="80" r="6" fill="#E9D5FF" />
+    </svg>
+  );
+
+  // Context Engineering Icon (Brain/Network)
+  if (n === 'context' || n === 'context engineering') return (
+    <svg viewBox="0 0 128 128" className={className} fill="none">
+      <circle cx="64" cy="40" r="20" stroke="#EC4899" strokeWidth="6" fill="#EC4899" fillOpacity="0.15" />
+      <circle cx="28" cy="90" r="14" stroke="#EC4899" strokeWidth="5" fill="#EC4899" fillOpacity="0.15" />
+      <circle cx="100" cy="90" r="14" stroke="#EC4899" strokeWidth="5" fill="#EC4899" fillOpacity="0.15" />
+      <line x1="52" y1="56" x2="36" y2="78" stroke="#EC4899" strokeWidth="4" strokeLinecap="round" />
+      <line x1="76" y1="56" x2="92" y2="78" stroke="#EC4899" strokeWidth="4" strokeLinecap="round" />
+      <line x1="42" y1="90" x2="86" y2="90" stroke="#EC4899" strokeWidth="4" strokeLinecap="round" strokeDasharray="6 6" />
+      <circle cx="64" cy="40" r="6" fill="#F9A8D4" />
+      <circle cx="28" cy="90" r="4" fill="#F9A8D4" />
+      <circle cx="100" cy="90" r="4" fill="#F9A8D4" />
+    </svg>
+  );
+
+  // Java Icon
+  if (n === 'java') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <path fill="#EA2D2E" d="M46.7 91.5c0 0-4.8 2.8 3.4 3.7 9.9 1.1 15.3 1 26.6-.9 0 0 3.7 2.3 8.8 4.3-30.8 13.1-61.9-2.2-38.8-7.1zM44.4 75.6c0 0-5.4 3.9 3.8 4.7 11.2 1 20.3 1.2 35.5-1.7 0 0 2.5 1.7 6.1 3.2-36.8 11.1-68.2.7-45.4-6.2z"/>
+      <path fill="#5382A1" d="M68.5 45.4c4.6 5.3-1.2 10.1-1.2 10.1s11.7-6 6.3-13.6c-5.2-7.3-9.5-10.9 12.8-23.9 0 0-25.2 6.3-17.9 27.4zM78.6 19.3c8.1 9.4-4.8 15.8-4.8 15.8s15.9-8.2 8.5-18.7C74.9 6.2 70.8 2.2 99.4 0c0 0-31.8 6.4-20.8 19.3zM40.7 110.8c24.6 1.6 51.5-1.1 52.8-8.1 0 0-1.8 2.9-8.4 4.5-23.7 5.7-53.1 4.5-66.5 1.5 0 0 3.3 1.4 22.1 2.1zM34.8 124.9c36.4 2.3 75.8-1.5 77.8-12.7 0 0-3.9 4.3-15.8 6.6-35.8 6.9-79.6 4.9-92.4 1.3 0 0 4.1 2.5 30.4 4.8z"/>
+      <path fill="#EA2D2E" d="M83.9 65.4s4.9-5.1-4.7-9.3c-11.6-5.1-17.1-7.6-5.8-18.9 0 0-23.5 6.3-15.6 22.5 8.8 18.2 26.1 5.7 26.1 5.7z"/>
+      <path fill="#5382A1" d="M91.3 84.8c18.5-10.1 9.9-19.8 9.9-19.8-7.9 7.7-18.2 8.7-25.2 9.2 18.9 4.8 15.3 10.6 15.3 10.6z"/>
+    </svg>
+  );
+
+  // FastAPI Icon
+  if (n === 'fastapi' || n === 'fast api') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <circle cx="64" cy="64" r="60" fill="#05998B" />
+      <path fill="#FFFFFF" d="M68 20L34 74h28l-8 34 38-54H64l8-34z" />
+    </svg>
+  );
+
+  // LangChain Icon
+  if (n === 'langchain') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="28" fill="#1C3C3C" />
+      <path fill="#10B981" d="M42 44c0-8.8 7.2-16 16-16h24c8.8 0 16 7.2 16 16v8c0 4.4-3.6 8-8 8s-8-3.6-8-8v-8H58v8c0 4.4-3.6 8-8 8s-8-3.6-8-8v-8z" />
+      <path fill="#34D399" d="M86 84c0 8.8-7.2 16-16 16H46c-8.8 0-16-7.2-16-16v-8c0-4.4 3.6-8 8-8s8 3.6 8 8v8h24v-8c0-4.4 3.6-8 8-8s8 3.6 8 8v8z" />
+      <circle cx="50" cy="64" r="8" fill="#F59E0B" />
+      <circle cx="78" cy="64" r="8" fill="#F59E0B" />
+    </svg>
+  );
+
+  // Node.js Icon
+  if (n === 'node' || n === 'node.js' || n === 'nodejs') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <path fill="#539E43" d="M64 5.2L10.4 36.1v61.8L64 128.8l53.6-30.9V36.1L64 5.2zm38.2 84.4c-.6.9-1.4 1.8-2.4 2.5l-6.7 3.9c-2.4 1.4-5.3 1.4-7.7 0l-17-9.8c-1.3-.8-2.1-2.1-2.1-3.6V63.3c0-1.5.8-2.9 2.1-3.6l17-9.8c2.4-1.4 5.3-1.4 7.7 0l6.7 3.9c2.4 1.4 3.9 3.9 3.9 6.7v24.6c0 1.9-.6 3.6-1.5 4.5zM61.9 43.1L45 52.9c-2.4 1.4-3.9 3.9-3.9 6.7v19.6c0 2.8 1.5 5.3 3.9 6.7l16.9 9.8c2.4 1.4 5.3 1.4 7.7 0l6.7-3.9c1.8-1 2.9-2.8 3.3-4.7l-7.7-4.5c-.7.6-1.6.9-2.5.9-.9 0-1.8-.3-2.5-.9l-11.7-6.8c-.8-.5-1.3-1.3-1.3-2.3v-13c0-.9.5-1.8 1.3-2.3l11.7-6.8c1.6-.9 3.5-.9 5.1 0l11.7 6.8c.8.5 1.3 1.3 1.3 2.3v3.7l9-5.2v-1.2c0-2.8-1.5-5.3-3.9-6.7L76.9 43.1c-2.4-1.4-5.3-1.4-7.7 0z"/>
+    </svg>
+  );
+
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <circle cx="12" cy="12" r="10" />

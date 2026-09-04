@@ -16,6 +16,32 @@
   overflow: hidden;
 }
 
+.sm-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 5, 12, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 140;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              backdrop-filter 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              -webkit-backdrop-filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.staggered-menu-wrapper[data-open] .sm-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.light .sm-backdrop {
+  background: rgba(250, 248, 242, 0.25);
+}
+
 .staggered-menu-header {
   position: fixed;
   top: 0;

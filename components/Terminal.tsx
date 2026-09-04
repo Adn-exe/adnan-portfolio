@@ -293,7 +293,7 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
           content: '',
         });
         setHistory(newHistory);
-        typeText("I'm an AIML engineering student passionate about building intelligent systems. My focus lies in understanding the fundamentals of how systems behave at their core, bridging the gap between theory and practical engineering.", () => {
+        typeText("I’m an AI/ML student passionate about understanding how intelligent systems work, with a focus on building strong foundations and turning ideas into practical solutions. I enjoy breaking down complex problems, building real-world AI projects, and exploring the intersection of AI and software. I’m always looking to learn, collaborate, and grow through meaningful hands-on work.", () => {
           setHistory(prev => prev.map((item, i) =>
             i === prev.length - 1 ? { ...item, typing: false } : item
           ));

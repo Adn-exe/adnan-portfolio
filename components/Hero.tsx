@@ -6,6 +6,8 @@ import StarBorder from './StarBorder';
 
 import StrokeText from './StrokeText';
 import DarkVeil from './DarkVeil';
+// @ts-ignore
+import SpecularButton from './SpecularButton';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -145,33 +147,32 @@ const Hero: React.FC = () => {
         animation="fade-left"
         delay={1.0}
         distance={30}
-        className="absolute bottom-12 right-12 hidden md:block z-20"
+        once={true}
+        margin="0px"
+        className="absolute bottom-14 right-6 hidden md:block z-20"
       >
-          <Magnetic>
-            <a
-              href="#contact"
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                e.preventDefault();
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="group inline-flex items-center justify-center gap-4 px-6 py-3.5 rounded-full border border-accent/20 text-[10px] font-bold tracking-[0.3em] uppercase text-theme-text bg-surface/40 backdrop-blur-md transition-all duration-300 hover:border-accent hover:shadow-[0_0_10px_rgba(0,209,255,0.2)]"
-              data-cursor="CONTACT"
-            >
-              <span className="transition-colors duration-300 group-hover:text-accent">
-                Get In Touch
-              </span>
-              <div className="w-6 h-6 flex items-center justify-center rounded-full bg-theme-text/5 text-theme-text group-hover:bg-accent/10 group-hover:text-accent transition-all duration-300">
-                <svg
-                  className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-90"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </div>
-            </a>
-          </Magnetic>
+        <SpecularButton
+          size="lg"
+          radius={999}
+          tint="#050B14"
+          tintOpacity={1}
+          textColor="#ffffff"
+          lineColor="#ffffff"
+          baseColor="#00D1FF"
+          intensity={1.2}
+          shineSize={15}
+          shineFade={45}
+          thickness={1.5}
+          speed={0.4}
+          followMouse={true}
+          proximity={300}
+          onClick={() => {
+            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="!px-9 !py-4.5 font-martel font-bold text-[17px] leading-none flex items-center justify-center rounded-full"
+        >
+          <span className="leading-none pt-[1px]">Get In Touch</span>
+        </SpecularButton>
       </ScrollReveal>
 
       {/* Scroll Indicator with Glowing Line Above */}

@@ -40,7 +40,7 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <section id="projects" className="py-32 px-6 relative z-10 overflow-hidden">
+    <section id="projects" className="pt-16 pb-32 px-6 relative z-10 overflow-hidden">
       {/* Background Decorative Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-accent/5 rounded-full blur-[160px] -z-10 pointer-events-none"></div>
 
@@ -49,7 +49,10 @@ const Projects: React.FC = () => {
         <ScrollReveal isContainer className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
           <div className="flex-1">
             <ScrollReveal animation="fade-right">
-              <span className="text-accent font-medium text-sm tracking-widest uppercase mb-4 block">Portfolio Showcase</span>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
+                <span className="text-accent font-medium text-sm tracking-widest uppercase">Projects</span>
+              </div>
               <h2 className="text-5xl md:text-8xl font-display font-black text-theme-text tracking-tighter leading-none">
                 Featured <span className="text-gradient">Creations</span>
               </h2>

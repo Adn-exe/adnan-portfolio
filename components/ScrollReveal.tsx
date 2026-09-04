@@ -14,6 +14,7 @@ interface ScrollRevealProps {
   distance?: number;
   staggerChildren?: number;
   isContainer?: boolean;
+  margin?: string;
 }
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
@@ -25,7 +26,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   once = false,
   distance = 30,
   staggerChildren = 0.1,
-  isContainer = false
+  isContainer = false,
+  margin = '0px'
 }) => {
   const variants: Variants = {
     hidden: {
@@ -54,7 +56,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       <motion.div
         initial="hidden"
         whileInView="visible"
-        viewport={{ once, margin: "-10%" }}
+        viewport={{ once, margin }}
         variants={variants}
         className={className}
       >
@@ -67,7 +69,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-10%" }}
+      viewport={{ once, margin }}
       variants={variants}
       className={className}
     >
