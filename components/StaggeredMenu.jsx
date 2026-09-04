@@ -390,7 +390,12 @@ export const StaggeredMenu = ({
       e.preventDefault();
       const el = document.getElementById(item.link.substring(1));
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        const lenis = window.__lenis;
+        if (lenis) {
+          lenis.scrollTo(el, { offset: 0, duration: 1.4 });
+        } else {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
     onItemClick?.(item, index);

@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ElysiumLogo } from './Icons';
 
 interface Particle {
   id: number;
@@ -112,7 +111,7 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
                 height: `${100 - i * 15}%`,
                 borderTopColor: 'var(--accent)',
                 borderRightColor: 'transparent',
-                borderBottomColor: 'rgba(217, 119, 6, 0.2)',
+                borderBottomColor: 'var(--accent)',
                 borderLeftColor: 'transparent',
               }}
               animate={{
@@ -143,7 +142,11 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
               }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <ElysiumLogo className="w-24 h-24 text-accent relative z-10 transition-transform duration-500 group-hover:scale-110" />
+              <img
+                src="/image.png"
+                alt="Portfolio Logo"
+                className="w-24 h-24 object-contain relative z-10 transition-transform duration-500 group-hover:scale-110 select-none [.light_&]:brightness-0"
+              />
             </motion.div>
           </div>
         </div>

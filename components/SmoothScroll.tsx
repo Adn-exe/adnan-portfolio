@@ -31,8 +31,24 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
         lenis.scrollTo(0, { immediate: true });
 
+        (window as any).__lenis = lenis;
+
         // Synchronize Lenis scroll position with GSAP ScrollTrigger on every frame
         lenis.on('scroll', ScrollTrigger.update);
+
+        let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+        const handleScroll = () => {
+            if (!document.body.classList.contains('is-scrolling')) {
+                document.body.classList.add('is-scrolling');
+            }
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                document.body.classList.remove('is-scrolling');
+            }, 120);
+        };
+
+        lenis.on('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
 
         const updateRaf = (time: number) => {
             lenis.raf(time * 1000);
@@ -43,8 +59,13 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
         gsap.ticker.lagSmoothing(500, 33);
 
         return () => {
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            document.body.classList.remove('is-scrolling');
+            window.removeEventListener('scroll', handleScroll);
+            lenis.off('scroll', handleScroll);
             gsap.ticker.remove(updateRaf);
             lenis.destroy();
+            delete (window as any).__lenis;
         };
     }, []);
 

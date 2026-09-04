@@ -23,6 +23,27 @@ const Hero: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  const scrollToContact = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const target = document.getElementById('contact');
+    const lenis = (window as any).__lenis;
+    if (lenis && target) {
+      lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+    } else if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToAbout = () => {
+    const aboutSection = document.getElementById('about');
+    const lenis = (window as any).__lenis;
+    if (lenis && aboutSection) {
+      lenis.scrollTo(aboutSection, { offset: 0, duration: 1.2 });
+    } else if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none bg-primary">
 
@@ -111,11 +132,8 @@ const Hero: React.FC = () => {
         >
           <a
             href="#contact"
-            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.preventDefault();
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="group inline-flex items-center justify-center gap-4 px-6 py-3.5 rounded-full border border-accent/20 text-[10px] font-bold tracking-[0.3em] uppercase text-theme-text bg-surface/40 backdrop-blur-md transition-all duration-300 hover:border-accent hover:shadow-[0_0_10px_rgba(0,209,255,0.2)]"
+            onClick={scrollToContact}
+            className="group inline-flex items-center justify-center gap-4 px-6 py-3.5 rounded-full border border-accent/20 text-[10px] font-bold tracking-[0.3em] uppercase text-theme-text bg-surface/40 backdrop-blur-md transition-all duration-300 hover:border-accent hover:shadow-[0_0_10px_rgba(0,209,255,0.2)] [.light_&]:border-amber-600/30 [.light_&]:bg-[#F3EEE3]/90 [.light_&]:hover:shadow-[0_0_10px_rgba(217,119,6,0.2)]"
           >
             <span className="transition-colors duration-300 group-hover:text-accent">
               Get In Touch
@@ -151,11 +169,11 @@ const Hero: React.FC = () => {
         <SpecularButton
           size="lg"
           radius={999}
-          tint="#050B14"
+          tint={isLight ? '#F3EEE3' : '#050B14'}
           tintOpacity={1}
-          textColor="#ffffff"
-          lineColor="#ffffff"
-          baseColor="#00D1FF"
+          textColor={isLight ? '#1F1A14' : '#ffffff'}
+          lineColor={isLight ? '#D97706' : '#ffffff'}
+          baseColor={isLight ? '#D97706' : '#00D1FF'}
           intensity={1.2}
           shineSize={15}
           shineFade={45}
@@ -163,9 +181,7 @@ const Hero: React.FC = () => {
           speed={0.4}
           followMouse={true}
           proximity={300}
-          onClick={() => {
-            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onClick={scrollToContact}
           className="!px-9 !py-4.5 font-martel font-bold text-[17px] leading-none flex items-center justify-center rounded-full"
         >
           <span className="leading-none pt-[1px]">Get In Touch</span>
@@ -178,10 +194,7 @@ const Hero: React.FC = () => {
         animate={{ opacity: 0.8 }}
         transition={{ delay: 2.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 hover:opacity-100 transition-opacity cursor-pointer group"
-        onClick={() => {
-          const aboutSection = document.getElementById('about');
-          if (aboutSection) aboutSection.scrollIntoView({ behavior: 'smooth' });
-        }}
+        onClick={scrollToAbout}
       >
         {/* Glowing Vertical Line ABOVE Explore */}
         <div className="relative w-[2px] h-12 overflow-hidden mb-1">

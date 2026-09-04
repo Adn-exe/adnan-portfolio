@@ -25,8 +25,15 @@
     0 8px 24px rgba(0, 0, 0, 0.25);
   cursor: pointer;
   outline: none;
-  transition: transform 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.3s ease;
   overflow: hidden;
+}
+
+.light .specular-button {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 8px 24px rgba(180, 130, 20, 0.12);
+  border: 1px solid rgba(180, 130, 20, 0.25);
 }
 
 .specular-button:active {
