@@ -7,10 +7,8 @@ import About from './components/About';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
 import Loader from './components/Loader';
-import { TechIcon } from './components/Icons';
 import SmoothScroll from './components/SmoothScroll';
 import CustomCursor from './components/CustomCursor';
-import Magnetic from './components/Magnetic';
 import ScrollVelocityText from './components/ScrollVelocityText';
 import ScrollReveal from './components/ScrollReveal';
 import Contact from './components/Contact';
@@ -18,9 +16,7 @@ import { useAudio } from './hooks/useAudio';
 import ThemeToggle from './components/ThemeToggle';
 import Terminal from './components/Terminal';
 import TerminalFab from './components/TerminalFab';
-
 import Footer from './components/Footer';
-import ScrollTextReveal from './components/ScrollTextReveal';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(() => {

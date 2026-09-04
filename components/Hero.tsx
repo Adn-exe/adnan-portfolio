@@ -2,8 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import Magnetic from './Magnetic';
-import StarBorder from './StarBorder';
-
 import StrokeText from './StrokeText';
 import DarkVeil from './DarkVeil';
 // @ts-ignore

@@ -1,13 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-// Sound Assets (Using data URIs for portability/performance in this demo context, 
-// normally these would be files in /public)
-const SOUNDS = {
-    hover: 'data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=', // Placeholder - will replace with real short beep
-    click: 'data:audio/wav;base64,UklGRjQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=', // Placeholder
-};
-
-// Real minimal "high-tech" beep generation using Web Audio API to avoid external file dependencies
+// Minimal "high-tech" audio sound synthesis using Web Audio API
 const createOscillator = (ctx: AudioContext, type: OscillatorType, freq: number, duration: number, vol: number) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Lenis from 'lenis';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface SmoothScrollProps {
     children: React.ReactNode;
@@ -24,6 +25,7 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
         });
 
         lenis.scrollTo(0, { immediate: true });
+        lenis.on('scroll', ScrollTrigger.update);
 
         function raf(time: number) {
             lenis.raf(time);

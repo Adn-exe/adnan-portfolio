@@ -38,6 +38,10 @@ const Contact: React.FC = () => {
                     <div className="flex flex-col justify-center space-y-8">
                         <ScrollReveal>
                             <div className="space-y-4">
+                                <div className="flex items-center gap-4 mb-2">
+                                    <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
+                                    <span className="text-accent font-medium text-sm tracking-widest uppercase font-mono">Contact</span>
+                                </div>
                                 <span className="inline-block text-accent font-mono text-[10px] tracking-[0.2em] uppercase bg-accent/10 px-3.5 py-1 rounded-full border border-accent/30 font-bold">
                                     Get In Touch
                                 </span>

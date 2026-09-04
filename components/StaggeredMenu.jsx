@@ -10,7 +10,7 @@ export const StaggeredMenu = ({
   displaySocials = true,
   displayItemNumbering = true,
   className,
-  logoUrl,
+  logoUrl = '/image.png',
   menuButtonColor = 'var(--text-primary)',
   openMenuButtonColor = 'var(--accent)',
   accentColor = 'var(--accent)',
@@ -50,7 +50,7 @@ export const StaggeredMenu = ({
       const plusV = plusVRef.current;
       const icon = iconRef.current;
       const textInner = textInnerRef.current;
-      if (!panel || !plusH || !plusV || !icon || !textInner) return;
+      if (!panel) return;
 
       let preLayers = [];
       if (preContainer) {
@@ -63,10 +63,10 @@ export const StaggeredMenu = ({
       if (preContainer) {
         gsap.set(preContainer, { xPercent: 0, opacity: 1 });
       }
-      gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
-      gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
-      gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
-      gsap.set(textInner, { yPercent: 0 });
+      if (plusH) gsap.set(plusH, { transformOrigin: '50% 50%', rotate: 0 });
+      if (plusV) gsap.set(plusV, { transformOrigin: '50% 50%', rotate: 90 });
+      if (icon) gsap.set(icon, { rotate: 0, transformOrigin: '50% 50%' });
+      if (textInner) gsap.set(textInner, { yPercent: 0 });
       if (toggleBtnRef.current) gsap.set(toggleBtnRef.current, { color: menuButtonColor });
     });
     return () => ctx.revert();
@@ -303,7 +303,30 @@ export const StaggeredMenu = ({
     });
   }, []);
 
+  const leaveTimeoutRef = useRef(null);
+
+  const clearLeaveTimeout = useCallback(() => {
+    if (leaveTimeoutRef.current) {
+      clearTimeout(leaveTimeoutRef.current);
+      leaveTimeoutRef.current = null;
+    }
+  }, []);
+
+  const openMenu = useCallback(() => {
+    clearLeaveTimeout();
+    if (!openRef.current) {
+      openRef.current = true;
+      setOpen(true);
+      onMenuOpen?.();
+      playOpen();
+      animateIcon(true);
+      animateColor(true);
+      animateText(true);
+    }
+  }, [clearLeaveTimeout, playOpen, animateIcon, animateColor, animateText, onMenuOpen]);
+
   const toggleMenu = useCallback(() => {
+    clearLeaveTimeout();
     const target = !openRef.current;
     openRef.current = target;
     setOpen(target);
@@ -317,9 +340,10 @@ export const StaggeredMenu = ({
     animateIcon(target);
     animateColor(target);
     animateText(target);
-  }, [playOpen, playClose, animateIcon, animateColor, animateText, onMenuOpen, onMenuClose]);
+  }, [clearLeaveTimeout, playOpen, playClose, animateIcon, animateColor, animateText, onMenuOpen, onMenuClose]);
 
   const closeMenu = useCallback(() => {
+    clearLeaveTimeout();
     if (openRef.current) {
       openRef.current = false;
       setOpen(false);
@@ -329,7 +353,14 @@ export const StaggeredMenu = ({
       animateColor(false);
       animateText(false);
     }
-  }, [playClose, animateIcon, animateColor, animateText, onMenuClose]);
+  }, [clearLeaveTimeout, playClose, animateIcon, animateColor, animateText, onMenuClose]);
+
+  const scheduleClose = useCallback(() => {
+    clearLeaveTimeout();
+    leaveTimeoutRef.current = setTimeout(() => {
+      closeMenu();
+    }, 280);
+  }, [clearLeaveTimeout, closeMenu]);
 
   useEffect(() => {
     if (!closeOnClickAway || !open) return;
@@ -388,30 +419,33 @@ export const StaggeredMenu = ({
       <header className="staggered-menu-header" aria-label="Main navigation header">
         <button
           ref={toggleBtnRef}
-          className="sm-toggle"
+          className="sm-toggle group"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           aria-controls="staggered-menu-panel"
           onClick={toggleMenu}
+          onMouseEnter={openMenu}
+          onMouseLeave={scheduleClose}
           type="button"
         >
-          <span ref={textWrapRef} className="sm-toggle-textWrap" aria-hidden="true">
-            <span ref={textInnerRef} className="sm-toggle-textInner">
-              {textLines.map((l, i) => (
-                <span className="sm-toggle-line" key={i}>
-                  {l}
-                </span>
-              ))}
-            </span>
-          </span>
-          <span ref={iconRef} className="sm-icon" aria-hidden="true">
-            <span ref={plusHRef} className="sm-icon-line" />
-            <span ref={plusVRef} className="sm-icon-line sm-icon-line-v" />
-          </span>
+          <div ref={iconRef} className="sm-logo-icon-container relative flex items-center justify-center">
+            <img
+              src={logoUrl || '/image.png'}
+              alt="Portfolio Logo"
+              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 object-contain filter drop-shadow-[0_0_12px_rgba(0,209,255,0.4)] [.light_&]:drop-shadow-[0_0_12px_rgba(217,119,6,0.4)] [.light_&]:brightness-0 [.light_&]:invert-0 group-hover:scale-110 transition-all duration-300 select-none"
+            />
+          </div>
         </button>
       </header>
 
-      <aside id="staggered-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!open}>
+      <aside
+        id="staggered-menu-panel"
+        ref={panelRef}
+        className="staggered-menu-panel"
+        aria-hidden={!open}
+        onMouseEnter={clearLeaveTimeout}
+        onMouseLeave={scheduleClose}
+      >
         <div className="sm-panel-inner">
           <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
             {items && items.length ? (

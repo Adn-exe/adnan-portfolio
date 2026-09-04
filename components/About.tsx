@@ -1,18 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import ScrollTextReveal from './ScrollTextReveal';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import ScrollReveal from './ScrollTextReveal';
 
 export const About: React.FC = () => {
   const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
-  const aboutSectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress: aboutScrollProgress } = useScroll({
-    target: aboutSectionRef,
-    offset: ["start end", "end start"]
-  });
-
-  const chipsOpacity = useTransform(aboutScrollProgress, [0.30, 0.38], [0, 1]);
-  const chipsY = useTransform(aboutScrollProgress, [0.30, 0.38], [12, 0]);
 
   const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -31,56 +22,66 @@ export const About: React.FC = () => {
   };
 
   return (
-    <section id="about" ref={aboutSectionRef} className="relative z-10 min-h-[105vh] md:min-h-[115vh]">
-      <div className="sticky top-0 h-screen flex flex-col justify-center px-6 overflow-hidden">
-        <div className="container mx-auto max-w-7xl">
-          <div className="space-y-10 md:space-y-16">
-            {/* Section Title */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 mb-2">
-                <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
-                <span className="text-white font-medium text-xs md:text-sm tracking-widest uppercase font-mono">About Me</span>
-              </div>
-
-              <h2 className="text-5xl sm:text-6xl md:text-8xl font-display font-black leading-[0.9] tracking-tighter">
-                <span className="text-theme-text">Who I</span> <span className="text-gradient">Am</span>
-              </h2>
+    <section id="about" className="py-24 md:py-32 px-6 relative z-10 overflow-hidden">
+      <div className="container mx-auto max-w-7xl">
+        <div className="space-y-10 md:space-y-14">
+          {/* Section Title */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-4 mb-2">
+              <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
+              <span className="text-white font-medium text-xs md:text-sm tracking-widest uppercase font-mono">About Me</span>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20 items-center">
-              <div className="lg:col-span-8 space-y-8 md:space-y-10">
-                {/* Bio with ScrollTextReveal using Sora font */}
-                <ScrollTextReveal
-                  progress={aboutScrollProgress}
-                  className="text-lg sm:text-xl md:text-2xl lg:text-[1.65rem] font-light leading-[1.8] tracking-normal"
-                />
+            <h2 className="text-5xl sm:text-6xl md:text-8xl font-display font-black leading-[0.9] tracking-tighter">
+              <span className="text-theme-text">Who I</span> <span className="text-gradient">Am</span>
+            </h2>
+          </div>
 
-                {/* Metadata Chips - reveal smoothly as text finishes */}
-                <motion.div
-                  style={{ opacity: chipsOpacity, y: chipsY }}
-                  className="flex flex-wrap gap-8 md:gap-12 pt-6 md:pt-8 border-t border-theme-border"
-                >
-                  {[
-                    { label: 'Focus', val: 'AI & Machine Learning', icon: true, isAccent: false },
-                    { label: 'Status', val: 'Learning & Building', icon: false, isAccent: true },
-                    { label: 'Location', val: 'Open to Remote', icon: false, isAccent: false }
-                  ].map((item, i) => (
-                    <div key={i} className="flex flex-col gap-2">
-                      <span className="text-[10px] font-mono font-medium text-theme-secondary uppercase tracking-widest">{item.label}</span>
-                      <span className={`text-sm font-display font-bold ${item.isAccent ? 'text-accent [.light_&]:text-amber-600' : 'text-theme-text [.light_&]:text-amber-700'} flex items-center gap-3`}>
-                        {item.icon && <div className="w-2 h-2 rounded-full bg-accent [.light_&]:bg-amber-500 shadow-[0_0_8px_var(--accent)]"></div>}
-                        {item.val}
-                      </span>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <div className="lg:col-span-7 space-y-8 md:space-y-10">
+              {/* Bio with React Bits ScrollReveal */}
+              <ScrollReveal
+                baseOpacity={0.15}
+                enableBlur={true}
+                baseRotation={0}
+                blurStrength={6}
+                containerClassName="my-0"
+                textClassName="font-about text-lg sm:text-xl md:text-2xl lg:text-[1.5rem] font-light leading-[1.25] tracking-normal"
+                wordAnimationStart="top bottom-=20%"
+                wordAnimationEnd="top 48%"
+              >
+                I’m an AI/ML student passionate about understanding how intelligent systems work, with a focus on building strong foundations and turning ideas into practical solutions. I enjoy breaking down complex problems, building real-world AI projects, and exploring the intersection of AI and software. I’m always looking to learn, collaborate, and grow through meaningful hands-on work.
+              </ScrollReveal>
 
-              <div className="lg:col-span-4 relative w-full max-w-[240px] sm:max-w-[280px] lg:max-w-[320px] mx-auto lg:ml-auto lg:mr-0 -mt-6 lg:-mt-16">
+              {/* Metadata Chips */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex flex-wrap gap-8 md:gap-12 pt-6 md:pt-8 border-t border-theme-border"
+              >
+                {[
+                  { label: 'Focus', val: 'AI & Machine Learning', icon: true, isAccent: false },
+                  { label: 'Status', val: 'Learning & Building', icon: false, isAccent: true },
+                  { label: 'Location', val: 'Open to Remote', icon: false, isAccent: false }
+                ].map((item, i) => (
+                  <div key={i} className="flex flex-col gap-2">
+                    <span className="text-[10px] font-mono font-medium text-theme-secondary uppercase tracking-widest">{item.label}</span>
+                    <span className={`text-sm font-display font-bold ${item.isAccent ? 'text-accent [.light_&]:text-amber-600' : 'text-theme-text [.light_&]:text-amber-700'} flex items-center gap-3`}>
+                      {item.icon && <div className="w-2 h-2 rounded-full bg-accent [.light_&]:bg-amber-500 shadow-[0_0_8px_var(--accent)]"></div>}
+                      {item.val}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            <div className="lg:col-span-5 relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[360px] mx-auto lg:ml-auto lg:mr-0 -mt-6 sm:-mt-8 lg:-mt-14">
                 <div className="aspect-square relative flex items-center justify-center perspective-[2000px]">
-                  {/* Interactive 3D Photo Frame - Rounded Full */}
+                  {/* Interactive 3D Photo Frame */}
                   <div
-                    className="w-full aspect-square relative group cursor-none transition-all duration-700 ease-out"
+                    className="w-full aspect-square relative group cursor-pointer transition-all duration-700 ease-out"
                     onMouseMove={handlePhotoMove}
                     onMouseLeave={handlePhotoLeave}
                     style={{
@@ -89,35 +90,38 @@ export const About: React.FC = () => {
                     }}
                     data-cursor="CORE_MEM"
                   >
-                    <div className="absolute inset-0 rounded-full bg-accent/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10"></div>
+                    {/* Ambient Glow & Rotating Gradient Border */}
+                    <div className="absolute -inset-2 rounded-[2.5rem] bg-gradient-to-r from-accent/40 via-purple-500/30 to-amber-500/40 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000 -z-10 animate-pulse"></div>
+                    <div className="absolute -inset-[1px] rounded-[2.2rem] bg-gradient-to-tr from-accent/60 via-white/20 to-purple-500/60 opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                    <div className="w-full h-full relative overflow-hidden rounded-full border border-white/10 glass transition-all duration-1000 group-hover:border-accent/60 group-hover:shadow-[0_0_80px_rgba(56,189,248,0.25)]">
+                    {/* Main Image Container */}
+                    <div className="w-full h-full relative overflow-hidden rounded-[2.1rem] border border-white/15 bg-black/40 backdrop-blur-xl shadow-2xl transition-all duration-700 group-hover:border-accent/80 group-hover:shadow-[0_0_50px_rgba(56,189,248,0.35)]">
                       <div className="absolute inset-0 overflow-hidden">
                         <img
                           src="/profile.jpg"
-                          className="w-full h-full object-cover object-center grayscale brightness-50 transition-all duration-[2s] group-hover:grayscale-0 group-hover:scale-110 group-hover:brightness-90"
-                          alt="Profile"
+                          className="w-full h-full object-cover object-center scale-100 group-hover:scale-105 transition-all duration-700 ease-out filter grayscale brightness-85 contrast-110 saturate-50 group-hover:filter-none group-hover:grayscale-0 group-hover:brightness-105 group-hover:contrast-105 group-hover:saturate-125"
+                          alt="Mohammed Adnan"
                         />
                       </div>
 
-                      {/* Glitch Overlays */}
-                      <div className="absolute inset-0 bg-accent/20 mix-blend-overlay opacity-0 group-hover:animate-glitch-1 pointer-events-none" />
-                      <div className="absolute inset-0 bg-purple-500/20 mix-blend-overlay opacity-0 group-hover:animate-glitch-2 pointer-events-none" />
-                      
-                      {/* Scanline Effect */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-30 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] transition-opacity duration-700" />
+                      {/* Subtle Vignette & Gradient Overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10 opacity-70 group-hover:opacity-40 transition-opacity duration-700"></div>
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-                      <div className="absolute inset-x-0 bottom-8 translate-z-100 transform transition-all duration-1000 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-8 flex justify-center">
-                        <div className="glass px-6 py-3 rounded-full border border-white/10 backdrop-blur-md shadow-lg">
-                          <h4 className="text-[10px] font-display font-bold text-white tracking-[0.2em] uppercase">Mohammed Adnan</h4>
+                      {/* Name Tag Bottom Bar */}
+                      <div className="absolute inset-x-0 bottom-4 px-4 flex justify-between items-center z-20">
+                        <div className="glass px-4 py-2 rounded-xl border border-white/15 backdrop-blur-md shadow-lg w-full flex items-center justify-between">
+                          <div>
+                            <h4 className="text-xs font-display font-bold text-white tracking-wider uppercase">Mohammed Adnan</h4>
+                            <p className="text-[9px] font-mono text-accent">Student & Builder</p>
+                          </div>
+                          <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
+                            <span className="text-accent text-[10px]">✦</span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
