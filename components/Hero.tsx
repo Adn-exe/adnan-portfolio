@@ -116,10 +116,8 @@ const Hero: React.FC = () => {
           distance={15}
           className="max-w-5xl mx-auto w-full px-4 -mt-2 md:-mt-4"
         >
-          <p className="text-theme-secondary font-serif font-light text-lg md:text-xl leading-relaxed">
-            I'm an <span className="text-theme-text font-medium">AIML engineering student</span> with strong interest in AI and Quantum world
-            <br className="hidden md:block" />
-            driven by a deep fascination for how systems behave at their core.
+          <p className="text-[#B8C7D9] [.light_&]:text-theme-secondary font-helvetica font-normal text-xs md:text-sm tracking-[0.2em] leading-relaxed">
+            I LIVE SOMEWHERE BETWEEN LOGIC AND IMAGINATION, STILL EXPLORING
           </p>
         </ScrollReveal>
 
@@ -180,6 +178,7 @@ const Hero: React.FC = () => {
           thickness={1.5}
           speed={0.4}
           followMouse={true}
+          autoAnimate={true}
           proximity={300}
           onClick={scrollToContact}
           className="!px-9 !py-4.5 font-martel font-bold text-[17px] leading-none flex items-center justify-center rounded-full"

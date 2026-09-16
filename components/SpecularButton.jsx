@@ -151,21 +151,14 @@ const SpecularButton = ({
     resize();
 
     let isVisible = true;
-    let cachedRect = null;
-    const updateCachedRect = () => {
-      if (btn) cachedRect = btn.getBoundingClientRect();
-    };
-    updateCachedRect();
-    window.addEventListener('resize', updateCachedRect);
-    window.addEventListener('scroll', updateCachedRect, { passive: true });
 
     // Light angle steers toward the pointer (anywhere on the page) and falls
     // back to a slow sweep when the pointer hasn't moved yet.
     let pointerAngle = null;
     let proximityT = 0;
     const onPointerMove = e => {
-      if (!isVisible) return;
-      const rect = cachedRect || btn.getBoundingClientRect();
+      if (!isVisible || !btn) return;
+      const rect = btn.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
       const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
@@ -174,9 +167,9 @@ const SpecularButton = ({
       // Over the button itself the light settles on the diagonal (framing the
       // corners) and gently sways with the cursor position within the button.
       if (dist === 0) {
-        const nx = (e.clientX - cx) / (rect.width / 2);
-        const ny = (cy - e.clientY) / (rect.height / 2);
-        pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
+        const nx = (e.clientX - cx) / (rect.width / 2 || 1);
+        const ny = (cy - e.clientY) / (rect.height / 2 || 1);
+        pointerAngle = Math.atan2(2 / (rect.height || 1), -2 / (rect.width || 1)) + nx * 0.3 + ny * 0.15;
       } else {
         pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
       }
@@ -245,8 +238,6 @@ const SpecularButton = ({
       observer.disconnect();
       ro.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('resize', updateCachedRect);
-      window.removeEventListener('scroll', updateCachedRect);
       if (gl.canvas.parentNode === fx) fx.removeChild(gl.canvas);
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
