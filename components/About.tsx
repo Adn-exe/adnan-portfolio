@@ -62,13 +62,13 @@ export const About: React.FC = () => {
             {/* Freestanding Profile Photo - Mode-Specific Images */}
             <div className="lg:col-span-5 flex items-center justify-center -mt-6 sm:-mt-10 lg:-mt-16 xl:-mt-20">
               <img
-                src="/aboutmeDark.png"
+                src="/aboutmeDark.webp"
                 alt="Mohammed Adnan"
                 className="about-photo-dark w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] h-auto object-contain select-none mix-blend-screen"
                 loading="lazy"
               />
               <img
-                src="/aboutmeLight.png"
+                src="/aboutmeLight.webp"
                 alt="Mohammed Adnan"
                 className="about-photo-light w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] h-auto object-contain select-none mix-blend-multiply"
                 loading="lazy"

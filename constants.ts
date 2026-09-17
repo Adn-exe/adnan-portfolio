@@ -12,7 +12,7 @@ export const PROJECTS: Project[] = [
       'Calculates mathematically optimized split-store purchase strategies to maximize household grocery savings.'
     ],
     description: 'An AI-powered grocery optimizer for Norway.',
-    image: '/projectImages/smartHandel.png',
+    image: '/projectImages/smartHandel.webp',
     tags: ['React', 'TypeScript', 'Tailwind', 'Node.js', 'API'],
     link: '',
     github: 'https://github.com/Adn-exe/smarthandel-mvp',
@@ -28,7 +28,7 @@ export const PROJECTS: Project[] = [
       'Interactive loss landscape visualizer provides rapid feedback loops for parameter exploration and architectural tuning.'
     ],
     description: 'An interactive machine learning playground for visual pipeline construction.',
-    image: '/projectImages/vizaris.png',
+    image: '/projectImages/vizaris.webp',
     tags: ['React', 'TypeScript', 'Tailwind', 'ML'],
     link: 'https://vizaris.vercel.app',
     github: 'https://github.com/Adn-exe/Vizaris',
@@ -44,7 +44,7 @@ export const PROJECTS: Project[] = [
       'Equips authorities with geospatial risk heatmaps to dispatch targeted field inspections before minor damage escalates into disasters.'
     ],
     description: 'An AI-powered infrastructure safety platform for disaster prevention.',
-    image: '/projectImages/rakshak.png',
+    image: '/projectImages/rakshak.webp',
     tags: ['Next.js', 'Python', 'FastAPI', 'OpenCV', 'LLM'],
     link: '',
     github: 'https://github.com/Adn-exe/Rakshak',
@@ -60,7 +60,7 @@ export const PROJECTS: Project[] = [
       'Longitudinal mood equilibrium tracker visualizes emotional balance over time without intrusive notifications or gamification.'
     ],
     description: 'A reflective digital sanctuary fostering mindfulness through minimal aesthetics.',
-    image: '/projectImages/soulNest.png',
+    image: '/projectImages/soulNest.webp',
     tags: ['Python', 'Flask', 'SQLAlchemy', 'JS'],
     link: '',
     github: 'https://github.com/Adn-exe/soul_nest',

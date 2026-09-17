@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import TechBackground from './components/TechBackground';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -15,10 +14,12 @@ import ScrollReveal from './components/ScrollReveal';
 import Contact from './components/Contact';
 import { useAudio } from './hooks/useAudio';
 import ThemeToggle from './components/ThemeToggle';
-import Terminal from './components/Terminal';
 import TerminalFab from './components/TerminalFab';
 import Footer from './components/Footer';
 import SectionDivider from './components/SectionDivider';
+
+// Lazy-load Terminal so its ~30KB bundle and easter eggs are deferred until clicked
+const Terminal = React.lazy(() => import('./components/Terminal'));
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(() => {
@@ -86,11 +87,12 @@ const App: React.FC = () => {
 
         <CustomCursor />
 
-        <TechBackground />
         <ThemeToggle />
 
         <TerminalFab isOpen={isTerminalOpen} onToggle={() => setIsTerminalOpen(!isTerminalOpen)} />
-        <Terminal isOpen={isTerminalOpen} setIsOpen={setIsTerminalOpen} />
+        <Suspense fallback={null}>
+          <Terminal isOpen={isTerminalOpen} setIsOpen={setIsTerminalOpen} />
+        </Suspense>
         <Navbar />
 
         <motion.main 

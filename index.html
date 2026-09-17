@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@400;600;700;800&family=Fira+Sans:wght@400;500;600;700&family=Andika:wght@400;700&family=Mr+De+Haviland&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&family=Space+Grotesk:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Outfit:wght@300;400;500;600;700;800&family=Sora:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400..700;1,400..700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Martel+Sans:wght@400;600;700;800&family=Sora:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
   <script>
     // Listen for Hard Refresh hotkeys (Cmd+Shift+R or Ctrl+Shift+R) to clear loader session flag
@@ -39,16 +39,10 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'Plus Jakarta Sans', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
             display: ['Space Grotesk', 'sans-serif'],
             about: ['Sora', 'sans-serif'],
             martel: ['"Martel Sans"', 'sans-serif'],
-            fira: ['"Fira Sans"', 'sans-serif'],
-            andika: ['Andika', 'sans-serif'],
-            handwriting: ['Mr De Haviland', 'cursive'],
-            serif: ['"Libertinus Math"', 'Merriweather', 'serif'],
-            libertinus: ['"Libertinus Math"', 'serif'],
-            helvetica: ['"Helvetica World"', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
             lora: ['Lora', 'serif'],
           },
           colors: {
@@ -231,11 +225,6 @@
       scrollbar-width: none;
     }
 
-    /* Fluid Filter for Background Metaballs */
-    .fluid-filter {
-      filter: url('#fluid');
-    }
-
     .premium-spacing {
       word-spacing: 0.15rem;
     }
@@ -271,16 +260,6 @@
 </head>
 
 <body>
-  <!-- SVG Filter for Fluid Effects -->
-  <svg style="position: absolute; width: 0; height: 0;" xmlns="http://www.w3.org/2000/svg" version="1.1">
-    <defs>
-      <filter id="fluid">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="60" result="blur" />
-        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="fluid" />
-        <feComposite in="SourceGraphic" in2="fluid" operator="atop" />
-      </filter>
-    </defs>
-  </svg>
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

@@ -167,7 +167,7 @@ const ScrollStack = forwardRef(({
     cards.forEach((card, i) => {
       // z-index ensures cards stacked later in DOM layer strictly on top of earlier cards
       card.style.zIndex = `${i + 10}`;
-      card.style.willChange = 'transform, filter';
+      card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
       card.style.backfaceVisibility = 'hidden';
       card.style.transform = 'translate3d(0, 0, 0)';
