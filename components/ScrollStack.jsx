@@ -86,8 +86,8 @@ const ScrollStack = forwardRef(({
     const totalCards = metrics.length;
     const lastCard = metrics[totalCards - 1];
 
-    // The whole stack unpins after the last card has pinned and scrolled through
-    const pinEnd = lastCard.pinStart + containerHeight * 0.6;
+    // The whole stack unpins after the last card has pinned and scrolled through with generous duration
+    const pinEnd = lastCard.pinStart + containerHeight * 1.25;
 
     // Find which card is currently the active/topmost visible card
     let activeIndex = 0;

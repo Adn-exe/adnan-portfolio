@@ -5,8 +5,14 @@ export const PROJECTS: Project[] = [
   {
     id: '1',
     title: 'SmartHandel',
-    description: 'An AI-powered grocery optimizer for Norway. SmartHandel parses natural language shopping lists using Google Gemini AI and finds the cheapest store combinations in real-time via the Kassalapp API.',
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200',
+    solution: 'An AI-powered grocery optimizer that parses natural language shopping lists to calculate the cheapest multi-store route in real time.',
+    bulletPoints: [
+      'Transforms unstructured pantry notes and voice memos into structured shopping lists using Google Gemini AI.',
+      'Cross-references live product inventories and seasonal discounts across major Scandinavian supermarket chains via the Kassalapp API.',
+      'Calculates mathematically optimized split-store purchase strategies to maximize household grocery savings.'
+    ],
+    description: 'An AI-powered grocery optimizer for Norway.',
+    image: '/projectImages/smartHandel.png',
     tags: ['React', 'TypeScript', 'Tailwind', 'Node.js', 'API'],
     link: '',
     github: 'https://github.com/Adn-exe/smarthandel-mvp',
@@ -15,8 +21,14 @@ export const PROJECTS: Project[] = [
   {
     id: '2',
     title: 'Vizaris Studio',
-    description: 'An interactive machine learning playground for visual pipeline construction. It bridges the gap between theory and intuition by allowing users to explore data flow across the ML lifecycle in real-time through an architectural lens.',
-    image: 'https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?auto=format&fit=crop&q=80&w=1200',
+    solution: 'An interactive machine learning playground that bridges deep learning theory and spatial intuition through real-time visual pipeline execution.',
+    bulletPoints: [
+      'Visual computation canvas for assembling neural layers, data transforms, and model architectures via intuitive drag-and-drop nodes.',
+      'Live tensor inspection tool displays intermediate layer activations, dimension shifts, and gradient telemetry on the fly.',
+      'Interactive loss landscape visualizer provides rapid feedback loops for parameter exploration and architectural tuning.'
+    ],
+    description: 'An interactive machine learning playground for visual pipeline construction.',
+    image: '/projectImages/vizaris.png',
     tags: ['React', 'TypeScript', 'Tailwind', 'ML'],
     link: 'https://vizaris.vercel.app',
     github: 'https://github.com/Adn-exe/Vizaris',
@@ -25,8 +37,14 @@ export const PROJECTS: Project[] = [
   {
     id: '3',
     title: 'Rakshak',
-    description: 'Rakshak is an AI-powered infrastructure safety platform that lets citizens report visible damage to flood-prone and critical structures, analyzes the evidence, and generates an explainable 0–100 risk score. Authorities can then review these reports, prioritize high-risk locations, and conduct field inspections before potential failures become disasters.',
-    image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&q=80&w=1200',
+    solution: 'An AI-driven infrastructure risk platform that analyzes civic damage reports to generate explainable safety scores for disaster prevention.',
+    bulletPoints: [
+      'Citizen reporting interface identifies structural defects, cracks, and flood hazards from uploaded photos using OpenCV and computer vision.',
+      'Generates an explainable 0–100 risk index to categorize structural severity and prioritize urgent municipal intervention.',
+      'Equips authorities with geospatial risk heatmaps to dispatch targeted field inspections before minor damage escalates into disasters.'
+    ],
+    description: 'An AI-powered infrastructure safety platform for disaster prevention.',
+    image: '/projectImages/rakshak.png',
     tags: ['Next.js', 'Python', 'FastAPI', 'OpenCV', 'LLM'],
     link: '',
     github: 'https://github.com/Adn-exe/Rakshak',
@@ -35,8 +53,14 @@ export const PROJECTS: Project[] = [
   {
     id: '4',
     title: 'Soul Nest',
-    description: 'A reflective digital sanctuary fostering mindfulness through minimal aesthetics and gentle prompts. It prioritizes emotional clarity and user well-being over metrics-driven engagement, creating a unique human-centered UI.',
-    image: 'https://images.unsplash.com/photo-1528319725582-ddc096101511?auto=format&fit=crop&q=80&w=1200',
+    solution: 'A reflective digital sanctuary designed to foster mindfulness and emotional clarity through human-centered minimalism.',
+    bulletPoints: [
+      'Curates immersive binaural soundscapes and gentle, context-aware prompts that steer users away from metrics-driven digital fatigue.',
+      'Private thought journal backed by client-side encrypted local storage ensures personal reflections never leave the device.',
+      'Longitudinal mood equilibrium tracker visualizes emotional balance over time without intrusive notifications or gamification.'
+    ],
+    description: 'A reflective digital sanctuary fostering mindfulness through minimal aesthetics.',
+    image: '/projectImages/soulNest.png',
     tags: ['Python', 'Flask', 'SQLAlchemy', 'JS'],
     link: '',
     github: 'https://github.com/Adn-exe/soul_nest',

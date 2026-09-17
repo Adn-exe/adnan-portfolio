@@ -1,26 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAudio } from '../hooks/useAudio';
 
 interface TerminalFabProps {
   isOpen: boolean;
   onToggle: () => void;
+  hide?: boolean;
 }
 
-const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle }) => {
+const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = false }) => {
   const { playHover, playClick } = useAudio();
+  const [inProjectsSection, setInProjectsSection] = useState(false);
+
+  useEffect(() => {
+    const checkProjects = () => {
+      const el = document.getElementById('projects');
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setInProjectsSection(entry.isIntersecting);
+        },
+        { threshold: 0 }
+      );
+
+      observer.observe(el);
+      return observer;
+    };
+
+    let observer = checkProjects();
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    if (!observer) {
+      retryTimer = setTimeout(() => {
+        observer = checkProjects();
+      }, 200);
+    }
+
+    return () => {
+      if (retryTimer) clearTimeout(retryTimer);
+      observer?.disconnect();
+    };
+  }, []);
+
+  const shouldHide = hide || inProjectsSection;
 
   return (
     <motion.button
       initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      whileHover={{ scale: 1.06 }}
-      whileTap={{ scale: 0.94 }}
+      animate={{
+        scale: shouldHide ? 0 : 1,
+        opacity: shouldHide ? 0 : 1,
+      }}
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
+      whileHover={{ scale: shouldHide ? 0 : 1.06 }}
+      whileTap={{ scale: shouldHide ? 0 : 0.94 }}
       onClick={() => {
+        if (shouldHide) return;
         playClick();
         onToggle();
       }}
       onMouseEnter={playHover}
+      style={{
+        pointerEvents: shouldHide ? 'none' : 'auto',
+      }}
       className={`fixed bottom-6 left-6 md:bottom-8 md:left-8 z-[110] group select-none ${isOpen ? 'hidden md:block' : ''}`}
       aria-label="Toggle Terminal"
     >

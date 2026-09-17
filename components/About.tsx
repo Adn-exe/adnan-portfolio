@@ -1,28 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollTextReveal';
-// @ts-ignore
-import PixelSwap from './PixelSwap';
 
 export const About: React.FC = () => {
-  const [photoRotate, setPhotoRotate] = useState({ x: 0, y: 0 });
-
-  const handlePhotoMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    setPhotoRotate({
-      x: (y - centerY) / 10,
-      y: (centerX - x) / 10
-    });
-  };
-
-  const handlePhotoLeave = () => {
-    setPhotoRotate({ x: 0, y: 0 });
-  };
-
   return (
     <section id="about" className="py-24 md:py-32 px-6 relative z-10 overflow-hidden">
       <div className="container mx-auto max-w-7xl">
@@ -48,7 +28,7 @@ export const About: React.FC = () => {
                 baseRotation={0}
                 blurStrength={6}
                 containerClassName="my-0"
-                textClassName="font-about text-lg sm:text-xl md:text-2xl lg:text-[1.5rem] font-light leading-[1.25] tracking-normal"
+                textClassName="font-about text-lg sm:text-xl md:text-2xl lg:text-[1.5rem] font-light leading-[1.3] tracking-normal"
                 wordAnimationStart="top bottom-=20%"
                 wordAnimationEnd="top 48%"
               >
@@ -79,60 +59,20 @@ export const About: React.FC = () => {
               </motion.div>
             </div>
 
-            <div className="lg:col-span-5 relative w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[360px] mx-auto lg:ml-auto lg:mr-0 -mt-6 sm:-mt-8 lg:-mt-14">
-                <div className="aspect-square relative flex items-center justify-center perspective-[2000px]">
-                  {/* Interactive 3D Photo Frame */}
-                  <div
-                    className="w-full aspect-square relative group cursor-pointer transition-all duration-700 ease-out"
-                    onMouseMove={handlePhotoMove}
-                    onMouseLeave={handlePhotoLeave}
-                    style={{
-                      transform: `rotateX(${photoRotate.x}deg) rotateY(${photoRotate.y}deg)`,
-                      transformStyle: 'preserve-3d'
-                    }}
-                  >
-                    {/* Ambient Glow & Rotating Gradient Border */}
-                    <div className="absolute -inset-2 rounded-[2.5rem] bg-gradient-to-r from-accent/40 via-purple-500/30 to-amber-500/40 blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-1000 -z-10 animate-pulse"></div>
-                    <div className="absolute -inset-[1px] rounded-[2.2rem] bg-gradient-to-tr from-accent/60 via-white/20 to-purple-500/60 opacity-70 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    {/* Main Image Container with React Bits PixelSwap */}
-                    <div className="w-full h-full relative overflow-hidden rounded-[2.1rem] border border-white/15 bg-black/40 backdrop-blur-xl shadow-2xl transition-all duration-700 group-hover:border-accent/80 group-hover:shadow-[0_0_50px_rgba(56,189,248,0.35)]">
-                      <PixelSwap
-                        aspectRatio="1 / 1"
-                        pixelSize={42}
-                        gap={0}
-                        pixelRadius={0}
-                        pixelScale={0.3}
-                        duration={1100}
-                        pixelDuration={420}
-                        easing="cubic-bezier(0.16, 1, 0.3, 1)"
-                        pattern="random"
-                        fade={true}
-                        trigger="hover"
-                        firstContent={
-                          <div className="w-full h-full relative overflow-hidden">
-                            <img
-                              src="/profile.jpg"
-                              className="w-full h-full object-cover object-center filter contrast-105 brightness-95 transition-transform duration-700 group-hover:scale-105"
-                              alt="Mohammed Adnan Profile"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10 opacity-70 pointer-events-none" />
-                          </div>
-                        }
-                        secondContent={
-                          <div className="w-full h-full relative flex flex-col items-center justify-center bg-slate-950/95 backdrop-blur-xl p-6 select-none overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-accent/25 via-purple-500/15 to-amber-500/25 opacity-80" />
-                            <img
-                              src="/image.png"
-                              className="w-3/4 h-3/4 object-contain filter drop-shadow-[0_0_30px_rgba(56,189,248,0.6)] [.light_&]:drop-shadow-[0_0_30px_rgba(217,119,6,0.6)] relative z-10"
-                              alt="Portfolio Logo"
-                            />
-                          </div>
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
+            {/* Freestanding Profile Photo - Mode-Specific Images */}
+            <div className="lg:col-span-5 flex items-center justify-center -mt-6 sm:-mt-10 lg:-mt-16 xl:-mt-20">
+              <img
+                src="/aboutmeDark.png"
+                alt="Mohammed Adnan"
+                className="about-photo-dark w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] h-auto object-contain select-none mix-blend-screen"
+                loading="lazy"
+              />
+              <img
+                src="/aboutmeLight.png"
+                alt="Mohammed Adnan"
+                className="about-photo-light w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] h-auto object-contain select-none mix-blend-multiply"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>
