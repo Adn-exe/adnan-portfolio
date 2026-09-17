@@ -76,7 +76,7 @@ const Hero: React.FC = () => {
             delay={0.2}
             distance={15}
           >
-            <span className="inline-block text-accent font-sans text-sm tracking-widest uppercase font-medium mb-1">
+            <span className="inline-block text-accent font-sans text-sm tracking-widest uppercase font-medium mb-0">
               Hello, I'm
             </span>
           </ScrollReveal>
@@ -85,7 +85,7 @@ const Hero: React.FC = () => {
             animation="zoom-in"
             delay={0.4}
             distance={5}
-            className="relative z-10 w-full max-w-6xl mx-auto"
+            className="relative z-10 w-full max-w-6xl mx-auto -mt-2 md:-mt-4"
           >
             <div className="w-full">
               <StrokeText

@@ -68,6 +68,45 @@ export const PROJECTS: Project[] = [
   }
 ];
 
+export const RADAR_DOMAINS: RadarDomain[] = [
+  {
+    name: 'AI & Deep Learning',
+    angleDeg: -90, // Top
+    baseline: 92,
+    description: 'Neural networks, computer vision, mathematical modeling, and predictive architectures.'
+  },
+  {
+    name: 'Data Science & Analytics',
+    angleDeg: -30, // Top-Right
+    baseline: 89,
+    description: 'Statistical computing, multidimensional tensor operations, and exploratory data synthesis.'
+  },
+  {
+    name: 'Backend & APIs',
+    angleDeg: 30, // Bottom-Right
+    baseline: 87,
+    description: 'High-throughput asynchronous microservices, REST APIs, and database orchestration.'
+  },
+  {
+    name: 'Front-End Engineering',
+    angleDeg: 90, // Bottom
+    baseline: 88,
+    description: 'Component-driven interactive web applications, kinetic animations, and responsive layouts.'
+  },
+  {
+    name: 'LLM & Agent Systems',
+    angleDeg: 150, // Bottom-Left
+    baseline: 94,
+    description: 'Autonomous agent architectures, structured prompt engineering, and context pipelines.'
+  },
+  {
+    name: 'Systems & Architecture',
+    angleDeg: 210, // Top-Left
+    baseline: 85,
+    description: 'Low-level memory awareness, Linux environments, Git systems, and reproducible labs.'
+  }
+];
+
 export const SKILLS: Skill[] = [
   // Programming Languages
   {
@@ -75,28 +114,44 @@ export const SKILLS: Skill[] = [
     icon: 'python',
     category: 'Languages',
     color: '#3776AB',
-    description: 'My primary language for AI/ML development, data analysis, and backend logic. I leverage its vast ecosystem to build scalable, intelligent systems.',
+    level: 95,
+    proficiency: 'Mastery',
+    radarDomain: 'AI & Deep Learning',
+    domainIndex: 0,
+    description: 'Primary language for AI/ML development, tensor computation, data science pipelines, and backend service logic.',
   },
   {
     name: 'C Language',
     icon: 'c',
     category: 'Languages',
     color: '#A8B9CC',
-    description: 'The foundation of my understanding of memory management and low-level system architecture. Crucial for optimizing performance-critical components.',
+    level: 82,
+    proficiency: 'Advanced',
+    radarDomain: 'Systems & Architecture',
+    domainIndex: 5,
+    description: 'Foundational understanding of pointers, manual memory allocation, and low-level system architecture.',
   },
   {
     name: 'Java',
     icon: 'java',
     category: 'Languages',
     color: '#E76F00',
-    description: 'Object-oriented programming language widely used for building enterprise-grade backend systems, scalable architectures, and robust services.',
+    level: 68,
+    proficiency: 'Intermediate',
+    radarDomain: 'Backend & APIs',
+    domainIndex: 2,
+    description: 'Object-oriented programming language for designing enterprise-grade services and scalable architectures.',
   },
   {
     name: 'R Programming',
     icon: 'r',
     category: 'Languages',
     color: '#276DC3',
-    description: 'Used for specialized statistical analysis and data visualization. A powerful tool for uncovering deep insights from complex datasets.',
+    level: 80,
+    proficiency: 'Proficient',
+    radarDomain: 'Data Science & Analytics',
+    domainIndex: 1,
+    description: 'Statistical modeling, hypothesis testing, and exploratory visualization for research datasets.',
   },
 
   // Data Science / ML
@@ -105,44 +160,68 @@ export const SKILLS: Skill[] = [
     icon: 'numpy',
     category: 'Data Science',
     color: '#013243',
-    description: 'The core of my numerical computing stack. I use it for efficient matrix operations and handling large-dimensional arrays in ML pipelines.',
+    level: 90,
+    proficiency: 'Mastery',
+    radarDomain: 'Data Science & Analytics',
+    domainIndex: 1,
+    description: 'Vectorized computing, n-dimensional matrix operations, and numerical linear algebra for ML pipelines.',
   },
   {
     name: 'Pandas',
     icon: 'pandas',
     category: 'Data Science',
     color: '#150458',
-    description: 'My go-to tool for data manipulation and cleaning. It streamlines the process of transforming raw data into analysis-ready structures.',
+    level: 92,
+    proficiency: 'Mastery',
+    radarDomain: 'Data Science & Analytics',
+    domainIndex: 1,
+    description: 'Data transformation, cleaning, indexing, and tabular feature engineering for analytical models.',
   },
   {
     name: 'Scikit-learn',
     icon: 'sklearn',
     category: 'Data Science',
     color: '#F7931E',
-    description: 'Rapid prototyping and implementation of standard ML algorithms. Perfect for building baseline models and exploring feature importance.',
+    level: 72,
+    proficiency: 'Proficient',
+    radarDomain: 'AI & Deep Learning',
+    domainIndex: 0,
+    description: 'Supervised and unsupervised learning, regression, classification, clustering, and cross-validation workflows.',
   },
 
   // Backend & APIs
-  {
-    name: 'Flask',
-    icon: 'flask',
-    category: 'Frameworks',
-    color: '#FFFFFF',
-    description: 'A lightweight framework for deploying ML models as APIs. Its simplicity allows for quick integration of AI services into web applications.',
-  },
   {
     name: 'FastAPI',
     icon: 'fastapi',
     category: 'Frameworks',
     color: '#059669',
-    description: 'High-performance Python web framework for building modern APIs with asynchronous support and automatic OpenAPI documentation.',
+    level: 75,
+    proficiency: 'Proficient',
+    radarDomain: 'Backend & APIs',
+    domainIndex: 2,
+    description: 'High-speed asynchronous Python web APIs with automatic OpenAPI schema generation and pydantic validation.',
+  },
+  {
+    name: 'Flask',
+    icon: 'flask',
+    category: 'Frameworks',
+    color: '#FFFFFF',
+    level: 86,
+    proficiency: 'Advanced',
+    radarDomain: 'Backend & APIs',
+    domainIndex: 2,
+    description: 'Lightweight WSGI framework for rapid ML model endpoints, microservices, and prototype deployments.',
   },
   {
     name: 'Node.js',
     icon: 'node.js',
     category: 'Frameworks',
     color: '#539E43',
-    description: 'Asynchronous event-driven JavaScript runtime designed to build scalable, high-throughput network applications and backend APIs.',
+    level: 64,
+    proficiency: 'Intermediate',
+    radarDomain: 'Backend & APIs',
+    domainIndex: 2,
+    description: 'Non-blocking event-driven JavaScript runtime for scalable full-stack middleware and toolchains.',
   },
 
   // Frontend
@@ -151,67 +230,79 @@ export const SKILLS: Skill[] = [
     icon: 'react',
     category: 'Frameworks',
     color: '#61DAFB',
-    description: 'Building dynamic, responsive user interfaces. I love its component-based architecture for creating interactive dashboards and tools.',
+    level: 70,
+    proficiency: 'Proficient',
+    radarDomain: 'Front-End Engineering',
+    domainIndex: 3,
+    description: 'Component architecture, declarative UI state, custom hooks, and interactive dashboard interfaces.',
   },
   {
     name: 'JavaScript',
     icon: 'javascript',
     category: 'Core Web',
     color: '#F7DF1E',
-    description: 'The core scripting language of the web. Essential for creating dynamic interactions, animations, and frontend logic.',
+    level: 90,
+    proficiency: 'Mastery',
+    radarDomain: 'Front-End Engineering',
+    domainIndex: 3,
+    description: 'Modern ES6+ syntax, asynchronous control flow, DOM manipulation, and dynamic client-side mechanics.',
   },
   {
     name: 'HTML5',
     icon: 'html',
     category: 'Core Web',
     color: '#E34F26',
-    description: 'Structure and semantics. The backbone of the web, ensuring content is accessible and properly organized.',
+    level: 94,
+    proficiency: 'Mastery',
+    radarDomain: 'Front-End Engineering',
+    domainIndex: 3,
+    description: 'Accessible semantic markup, SEO-ready structure, audio/video elements, and modern DOM APIs.',
   },
   {
     name: 'CSS3',
     icon: 'css',
     category: 'Core Web',
     color: '#1572B6',
-    description: 'Styling and layout. I use modern CSS features to create visually engaging, responsive, and polished user experiences.',
+    level: 92,
+    proficiency: 'Mastery',
+    radarDomain: 'Front-End Engineering',
+    domainIndex: 3,
+    description: 'Advanced responsive design, Tailwind utilities, CSS variables, glassmorphism, and hardware-accelerated animations.',
   },
 
-  // AI
+  // AI & LLM Systems
   {
     name: 'Prompt Engineering',
     icon: 'prompt',
     category: 'AI',
     color: '#A855F7',
-    description: 'Crafting precise, structured prompts that guide LLMs toward accurate, contextually rich outputs for real-world applications.',
+    level: 96,
+    proficiency: 'Mastery',
+    radarDomain: 'LLM & Agent Systems',
+    domainIndex: 4,
+    description: 'Few-shot prompting, chain-of-thought orchestration, structured JSON outputs, and adversarial robustness.',
   },
   {
     name: 'Context Engineering',
     icon: 'context',
     category: 'AI',
     color: '#EC4899',
-    description: 'Designing information architectures and retrieval strategies that feed optimal context windows to AI systems.',
+    level: 94,
+    proficiency: 'Mastery',
+    radarDomain: 'LLM & Agent Systems',
+    domainIndex: 4,
+    description: 'Retrieval augmentation (RAG), chunking strategies, vector embeddings, and memory optimization.',
   },
   {
     name: 'LangChain',
     icon: 'langchain',
     category: 'AI',
     color: '#10B981',
-    description: 'Framework for developing dynamic LLM applications, retrieval-augmented generation (RAG) pipelines, and autonomous agent workflows.',
-  },
-
-  // Others
-  {
-    name: 'Jupyter',
-    icon: 'jupyter',
-    category: 'Others',
-    color: '#F37626',
-    description: 'My interactive laboratory for data exploration. It allows me to document my thought process, visualize results, and iterate quickly.',
-  },
-  {
-    name: 'Git Systems',
-    icon: 'git',
-    category: 'Others',
-    color: '#F05032',
-    description: 'Version control is non-negotiable. I use Git to track changes, collaborate efficiently, and maintain the integrity of my codebases.',
+    level: 89,
+    proficiency: 'Advanced',
+    radarDomain: 'LLM & Agent Systems',
+    domainIndex: 4,
+    description: 'Composing multi-step LLM chains, autonomous tool-use agents, and dynamic external API integrations.',
   },
 ];
 

@@ -33,8 +33,8 @@ export interface StrokeTextProps {
 
 const StrokeText: React.FC<StrokeTextProps> = ({
   text = DEFAULT_TEXT,
-  strokeColor = '#00D1FF',
-  fillColor = '#FFFFFF',
+  strokeColor = '#A78BFA',
+  fillColor = '#F8FAFC',
   fillGradient,
   strokeWidth = 1.4,
   drawDuration = 1.6,
@@ -62,7 +62,7 @@ const StrokeText: React.FC<StrokeTextProps> = ({
 
   const characters = useMemo(() => Array.from(String(text ?? '')), [text]);
 
-  const numericFontSize = typeof fontSize === 'number' ? fontSize : parseFloat(fontSize) || 128;
+  const numericFontSize = typeof fontSize === 'number' ? fontSize : parseFloat(String(fontSize)) || 128;
   const dash = Math.max(numericFontSize * 7, 200);
 
   const fontStyle = useMemo(
@@ -117,7 +117,7 @@ const StrokeText: React.FC<StrokeTextProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [characters, fontSize, fontWeight, fontFamily, letterSpacing, strokeWidth, numericFontSize]);
+  }, [characters, numericFontSize, fontWeight, fontFamily, letterSpacing, strokeWidth]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -135,25 +135,23 @@ const StrokeText: React.FC<StrokeTextProps> = ({
     const targets = [...strokes, ...fills, wipe].filter(Boolean);
 
     const setStart = () => {
-      gsap.killTweensOf([...targets, root]);
+      gsap.killTweensOf(targets);
       gsap.set(strokes, { strokeDasharray: dash, strokeDashoffset: dash });
       gsap.set(fills, { opacity: useWipe ? 1 : 0 });
-      gsap.set(root, { scale: 0.9, transformOrigin: 'center center' });
       if (wipe) gsap.set(wipe, { attr: { width: 0 } });
     };
 
     const setEnd = () => {
-      gsap.killTweensOf([...targets, root]);
+      gsap.killTweensOf(targets);
       gsap.set(strokes, { strokeDasharray: dash, strokeDashoffset: 0 });
       gsap.set(fills, { opacity: fillEnabled ? 1 : 0 });
-      gsap.set(root, { scale: 1 });
       if (wipe) gsap.set(wipe, { attr: { width: fillEnabled ? box.width : 0 } });
     };
 
     const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
       setEnd();
-      return () => { gsap.killTweensOf([...targets, root]); };
+      return () => gsap.killTweensOf(targets);
     }
 
     const build = () => {
@@ -164,13 +162,6 @@ const StrokeText: React.FC<StrokeTextProps> = ({
         repeatDelay: trigger === 'loop' ? 0.9 : 0,
         defaults: { overwrite: 'auto' }
       });
-
-      // Synchronized scale effect during stroke drawing
-      tl.to(
-        root,
-        { scale: 1.0, duration: drawDuration + fillDelay + fillDuration, ease: 'power2.out' },
-        0
-      );
 
       tl.to(strokes, { strokeDashoffset: 0, duration: drawDuration, ease, stagger: staggerConfig as any }, 0);
 
@@ -233,7 +224,7 @@ const StrokeText: React.FC<StrokeTextProps> = ({
     <span
       ref={rootRef}
       className={`stroke-text ${trigger === 'hover' ? 'stroke-text--hover' : ''} ${className}`.trim()}
-      style={{ ...style, '--stroke-text-height': box ? `${Math.round(box.height)}px` : 'auto' } as React.CSSProperties}
+      style={{ ...style, '--stroke-text-height': `${Math.round(numericFontSize * 1.3)}px` } as React.CSSProperties}
       role="img"
       aria-label={String(text ?? '')}
     >
