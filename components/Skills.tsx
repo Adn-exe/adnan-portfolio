@@ -149,8 +149,7 @@ const Skills: React.FC = () => {
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleHover = useCallback((id: string) => {
-    // Ignore hover when scrolling or on touch devices without fine pointers
-    if (typeof document !== 'undefined' && document.body.classList.contains('is-scrolling')) return;
+    // Ignore hover on touch devices without fine pointers
     if (typeof window !== 'undefined' && window.matchMedia && !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
       return;
     }

@@ -28,30 +28,26 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
   const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 60,
-    stiffness: 250
+    damping: 80,
+    stiffness: 120
   });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 2], {
+  const velocityFactor = useTransform(smoothVelocity, [-1500, 0, 1500], [-0.6, 0, 0.6], {
     clamp: true
   });
 
   // Wrap the position so the text loops infinitely
   const x = useTransform(baseX, (v) => `${wrap(-25, -50, v)}%`);
 
-  const directionFactor = useRef<number>(1);
   useAnimationFrame((t, delta) => {
     if (!isInView) return;
-    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+    const deltaSeconds = Math.min(delta / 1000, 0.05);
 
-    // Dynamic direction mapping based on velocity direction
-    if (velocityFactor.get() < 0) {
-      directionFactor.current = -1;
-    } else if (velocityFactor.get() > 0) {
-      directionFactor.current = 1;
-    }
+    // Base ambient movement
+    let moveBy = baseVelocity * deltaSeconds;
 
-    // Smooth subtle scroll speed increase
-    moveBy += directionFactor.current * (baseVelocity * 0.5) * Math.abs(velocityFactor.get());
+    // Gentle scroll velocity contribution
+    const vFactor = velocityFactor.get();
+    moveBy += (baseVelocity >= 0 ? 1 : -1) * Math.abs(vFactor) * baseVelocity * 0.8 * deltaSeconds;
 
     baseX.set(baseX.get() + moveBy);
   });
@@ -78,8 +74,8 @@ const MarqueeText: React.FC<MarqueeProps> = ({ children, baseVelocity }) => {
 const ScrollVelocityText: React.FC = () => {
   return (
     <section className="py-12 md:py-24 overflow-hidden relative z-0 pointer-events-none select-none flex flex-col gap-4">
-      <MarqueeText baseVelocity={1.2}>Innovation Intelligence Architecture</MarqueeText>
-      <MarqueeText baseVelocity={-1.2}>Design Engineering Systems</MarqueeText>
+      <MarqueeText baseVelocity={0.6}>Innovation Intelligence Architecture</MarqueeText>
+      <MarqueeText baseVelocity={-0.6}>Design Engineering Systems</MarqueeText>
     </section>
   );
 };

@@ -6,6 +6,7 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
 import Skills from './components/Skills';
+import Writings from './components/Writings';
 import Loader from './components/Loader';
 import SmoothScroll from './components/SmoothScroll';
 import CustomCursor from './components/CustomCursor';
@@ -144,7 +145,10 @@ const App: React.FC = () => {
 
           <Skills />
 
-          {/* Single Distinction Divider between Skills and Contact */}
+          {/* Writings Section */}
+          <Writings />
+
+          {/* Single Distinction Divider between Writings and Contact */}
           <SectionDivider />
 
           <Contact />
