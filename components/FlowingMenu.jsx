@@ -139,7 +139,7 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
   return (
     <div className="menu__item" ref={itemRef} style={{ borderColor }}>
       <a
-        className={`menu__item-link menu__item-link--${align}`}
+        className={`menu__item-link group menu__item-link--${align}`}
         href={link}
         target={isExternal ? '_blank' : undefined}
         rel={isExternal ? 'noopener noreferrer' : undefined}
@@ -153,8 +153,17 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
             {String(index + 1).padStart(2, '0')}
           </span>
           <span>{text}</span>
-          <svg className="w-5 h-5 opacity-40 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d={align === 'right' ? 'M15 18l-6-6 6-6' : 'M9 18l6-6-6-6'} />
+          <svg
+            className="w-5 h-5 md:w-6 md:h-6 opacity-40 transition-transform duration-300 group-hover:opacity-100 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
           </svg>
         </div>
       </a>

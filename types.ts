@@ -16,11 +16,11 @@ export interface Project {
 export interface Skill {
   name: string;
   icon: string;
-  category: 'Languages' | 'Data Science' | 'Frameworks' | 'Core Web' | 'ML' | 'Backend' | 'Frontend' | 'AI' | 'Others';
+  category: 'Languages' | 'Frameworks' | 'Tools' | 'Databases' | 'Soft Skills' | string;
   color?: string;
   description?: string;
   level?: number;
-  proficiency?: 'Mastery' | 'Advanced' | 'Proficient';
+  proficiency?: 'Mastery' | 'Advanced' | 'Proficient' | 'Intermediate' | 'Beginner' | string;
   radarDomain?: string;
   domainIndex?: number;
 }

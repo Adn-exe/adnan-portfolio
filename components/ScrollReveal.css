@@ -3,10 +3,10 @@
 }
 
 .scroll-reveal-text {
-  font-family: 'Sora', sans-serif !important;
-  font-size: clamp(1.15rem, 2.3vw, 1.58rem) !important;
-  line-height: 1.25 !important;
-  font-weight: 300;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 22px !important;
+  line-height: 1.4 !important;
+  font-weight: 450 !important;
 }
 
 .word {

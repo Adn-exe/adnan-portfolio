@@ -23,12 +23,12 @@ export const About: React.FC = () => {
             <div className="lg:col-span-7 space-y-8 md:space-y-10">
               {/* Bio with React Bits ScrollReveal */}
               <ScrollReveal
-                baseOpacity={0.15}
+                baseOpacity={0.25}
                 enableBlur={true}
                 baseRotation={0}
                 blurStrength={6}
                 containerClassName="my-0"
-                textClassName="font-about text-lg sm:text-xl md:text-2xl lg:text-[1.5rem] font-light leading-[1.3] tracking-normal"
+                textClassName="font-about text-[22px] font-[450] leading-[1.4] tracking-normal"
                 wordAnimationStart="top bottom-=20%"
                 wordAnimationEnd="top 48%"
               >

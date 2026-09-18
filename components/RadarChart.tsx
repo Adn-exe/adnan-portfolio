@@ -151,16 +151,16 @@ export const RadarChart: React.FC<RadarChartProps> = ({
         <defs>
           {/* Cyber Blue Gradient for Dark Mode */}
           <linearGradient id="radarFillDark" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00D1FF" stopOpacity="0.80" />
-            <stop offset="45%" stopColor="#0284C7" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#0369A1" stopOpacity="0.35" />
+            <stop offset="0%" stopColor="#00D1FF" stopOpacity="0.45" />
+            <stop offset="45%" stopColor="#0284C7" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#0369A1" stopOpacity="0.12" />
           </linearGradient>
 
           {/* Native Amber Gold Gradient for Light Mode */}
           <linearGradient id="radarFillLight" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#D97706" stopOpacity="0.75" />
-            <stop offset="45%" stopColor="#B45309" stopOpacity="0.50" />
-            <stop offset="100%" stopColor="#92400E" stopOpacity="0.30" />
+            <stop offset="0%" stopColor="#D97706" stopOpacity="0.50" />
+            <stop offset="45%" stopColor="#B45309" stopOpacity="0.30" />
+            <stop offset="100%" stopColor="#92400E" stopOpacity="0.15" />
           </linearGradient>
 
           {/* High-Tech Super Glow Filter */}
@@ -564,10 +564,10 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                   group/end-chip relative flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-none border transition-all duration-300 whitespace-nowrap shadow-xl cursor-grab active:cursor-grabbing
                   ${
                     isTargeted
-                      ? 'bg-accent text-black dark:text-black [.light_&]:text-white border-accent shadow-[0_0_35px_var(--accent)] ring-2 ring-white'
+                      ? 'bg-accent/25 text-white dark:text-white [.light_&]:text-amber-950 border-accent shadow-[0_0_30px_var(--accent)] ring-2 ring-accent'
                       : isSelected
-                      ? 'bg-accent text-black dark:text-black [.light_&]:text-white border-accent shadow-[0_0_30px_rgba(0,209,255,0.55)] [.light_&]:shadow-[0_0_25px_rgba(217,119,6,0.4)] ring-1 ring-accent'
-                      : 'bg-white dark:bg-[#0B0B14] text-zinc-900 dark:text-zinc-100 border-zinc-300/90 dark:border-zinc-800 hover:border-accent hover:scale-105 shadow-[0_4px_18px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_25px_rgba(0,0,0,0.6)] backdrop-blur-xl'
+                      ? 'bg-accent/20 dark:bg-accent/20 text-white dark:text-white [.light_&]:text-amber-950 border-accent shadow-[0_0_25px_rgba(0,209,255,0.35)] [.light_&]:shadow-[0_0_20px_rgba(217,119,6,0.3)] ring-1 ring-accent'
+                      : 'bg-zinc-900/90 dark:bg-[#161B26]/90 text-white dark:text-zinc-100 [.light_&]:bg-[#FAF8F2] [.light_&]:text-zinc-900 border-white/15 dark:border-white/20 [.light_&]:border-amber-600/30 hover:border-accent/70 hover:scale-105 shadow-[0_4px_20px_rgba(0,0,0,0.35)] backdrop-blur-xl'
                   }
                 `}
                 title={`${currentSkill.name} - ${currentSkill.level}% Proficiency (Drag to swap or drop onto another end)`}
@@ -581,8 +581,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                 <span
                   className={`text-xs sm:text-[13px] font-sans tracking-wide ${
                     isSelected || isTargeted
-                      ? 'font-black'
-                      : 'font-semibold text-zinc-900 dark:text-zinc-100'
+                      ? 'font-bold text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706]'
+                      : 'font-semibold text-white dark:text-zinc-100 [.light_&]:text-zinc-900'
                   }`}
                 >
                   {currentSkill.name}
@@ -594,7 +594,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                     text-[10px] sm:text-[11px] font-mono font-bold px-1.5 py-0.5 rounded-none tabular-nums
                     ${
                       isSelected || isTargeted
-                        ? 'bg-black/25 dark:bg-black/25 [.light_&]:bg-black/20 text-inherit'
+                        ? 'bg-accent/30 text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] border border-accent/60'
                         : 'bg-accent/15 text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] border border-accent/30'
                     }
                   `}

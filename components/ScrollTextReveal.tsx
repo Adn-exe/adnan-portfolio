@@ -37,23 +37,43 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   const splitText = useMemo(() => {
     const text = typeof children === 'string' ? children : '';
-    return text.split(/(\s+)/).map((word, index) => {
-      if (word.match(/^\s+$/)) return word;
+    if (!text) return null;
 
-      const cleanWord = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '');
-      const isAccent = ['strong', 'foundations', 'meaningful', 'hands-on', 'work'].includes(cleanWord);
-      const isPrimary = ['AI', 'ML', 'student', 'real-world', 'projects'].includes(cleanWord);
+    const targetPhrases = [
+      'AI/ML student',
+      'intelligent systems',
+      'practical solutions',
+      'real-world AI projects',
+      'intersection of AI and software',
+    ];
 
-      let highlightClass = 'text-theme-secondary font-light';
-      if (isAccent) {
-        highlightClass = 'text-accent [.light_&]:text-amber-600 font-semibold drop-shadow-[0_0_12px_rgba(56,189,248,0.25)] [.light_&]:drop-shadow-none';
-      } else if (isPrimary) {
-        highlightClass = 'text-theme-text font-semibold';
+    // Find [start, end] character ranges for each target phrase
+    const ranges: [number, number][] = [];
+    for (const phrase of targetPhrases) {
+      let startIndex = 0;
+      while ((startIndex = text.indexOf(phrase, startIndex)) !== -1) {
+        ranges.push([startIndex, startIndex + phrase.length]);
+        startIndex += phrase.length;
       }
+    }
+
+    let charCursor = 0;
+    return text.split(/(\s+)/).map((segment, index) => {
+      const segStart = charCursor;
+      const segEnd = charCursor + segment.length;
+      charCursor = segEnd;
+
+      if (segment.match(/^\s+$/)) return segment;
+
+      const isHighlighted = ranges.some(([start, end]) => segStart < end && segEnd > start);
+
+      const highlightClass = isHighlighted
+        ? 'text-accent [.light_&]:text-amber-600 font-semibold drop-shadow-[0_0_12px_rgba(56,189,248,0.25)] [.light_&]:drop-shadow-none'
+        : 'text-white/85 [.light_&]:text-stone-800 font-[450]';
 
       return (
         <span className={`word mr-[0.3em] ${highlightClass}`} key={index}>
-          {word}
+          {segment}
         </span>
       );
     });

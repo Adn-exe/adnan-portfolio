@@ -239,6 +239,206 @@ export const TechIcon: React.FC<{ name: string; className?: string }> = ({ name,
     </svg>
   );
 
+  // SQL Icon
+  if (n === 'sql') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <path fill="#00758F" d="M64 12c-28.7 0-52 6.3-52 14v76c0 7.7 23.3 14 52 14s52-6.3 52-14V26c0-7.7-23.3-14-52-14z"/>
+      <path fill="#0094B3" d="M64 16c26 0 46 5.4 46 10s-20 10-46 10-46-5.4-46-10 20-10 46-10z"/>
+      <path fill="#005B70" d="M18 48c6.6 4.3 26 8 46 8s39.4-3.7 46-8v16c-6.6 4.3-26 8-46 8s-39.4-3.7-46-8V48zm0 28c6.6 4.3 26 8 46 8s39.4-3.7 46-8v16c-6.6 4.3-26 8-46 8s-39.4-3.7-46-8V76z"/>
+      <text x="64" y="80" fill="#FFFFFF" fontFamily="monospace" fontWeight="900" fontSize="28" textAnchor="middle" letterSpacing="1">SQL</text>
+    </svg>
+  );
+
+  // Django Icon
+  if (n === 'django') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#092E20"/>
+      <path fill="#FFFFFF" d="M64 26h18v48.6c0 14.8-7.8 23.4-21.7 23.4-5.4 0-10.2-1.1-13.8-2.9l3.5-12.7c2.6 1.3 5.7 2 8.7 2 6.6 0 9.8-4.2 9.8-12.4V40H64V26zm-26.5 28.5h16.2v43.2H37.5V54.5zM45.6 28.4c5.4 0 9.2 3.8 9.2 8.6 0 4.9-3.8 8.6-9.2 8.6-5.3 0-9.2-3.7-9.2-8.6 0-4.8 3.9-8.6 9.2-8.6z"/>
+    </svg>
+  );
+
+  // Stitch Icon
+  if (n === 'stitch') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#1E1B4B"/>
+      <path fill="#6366F1" d="M34 38c0-5.5 4.5-10 10-10h40c5.5 0 10 4.5 10 10s-4.5 10-10 10H44c-5.5 0-10-4.5-10-10z"/>
+      <path fill="#818CF8" d="M34 64c0-5.5 4.5-10 10-10h40c5.5 0 10 4.5 10 10s-4.5 10-10 10H44c-5.5 0-10-4.5-10-10z"/>
+      <path fill="#A5B4FC" d="M34 90c0-5.5 4.5-10 10-10h40c5.5 0 10 4.5 10 10s-4.5 10-10 10H44c-5.5 0-10-4.5-10-10z"/>
+      <circle cx="44" cy="38" r="5" fill="#FFFFFF"/>
+      <circle cx="84" cy="64" r="5" fill="#FFFFFF"/>
+      <circle cx="44" cy="90" r="5" fill="#FFFFFF"/>
+    </svg>
+  );
+
+  // Codex Icon
+  if (n === 'codex') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#064E3B"/>
+      <path fill="#10B981" d="M42 36l-20 28 20 28 9-6.4L35 64l16-21.6L42 36zm44 0l-9 6.4L93 64l-16 21.6 9 6.4 20-28-20-28z"/>
+      <path fill="#34D399" d="M72 32l-20 64h8l20-64h-8z"/>
+    </svg>
+  );
+
+  // Antigravity Icon
+  if (n === 'antigravity') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#0B1120"/>
+      <path d="M64 16L108 41V91L64 116L20 91V41L64 16Z" fill="none" stroke="#00D1FF" strokeWidth="6"/>
+      <path d="M64 36L90 51V81L64 96L38 81V51L64 36Z" fill="#00D1FF" fillOpacity="0.2" stroke="#00D1FF" strokeWidth="4"/>
+      <circle cx="64" cy="66" r="10" fill="#00D1FF"/>
+      <circle cx="64" cy="66" r="18" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeDasharray="4 4"/>
+    </svg>
+  );
+
+  // Canva Icon
+  if (n === 'canva') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <defs>
+        <linearGradient id="canvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00C4CC"/>
+          <stop offset="50%" stopColor="#2E86DE"/>
+          <stop offset="100%" stopColor="#7D2AE8"/>
+        </linearGradient>
+      </defs>
+      <circle cx="64" cy="64" r="56" fill="url(#canvaGrad)"/>
+      <path fill="#FFFFFF" d="M78 48c-4-2-9.6-3-15.5-3-18.4 0-29.5 12.8-29.5 28.5 0 14.5 9.8 23.5 24.5 23.5 8.2 0 15.2-3.1 19.5-7.2l-5.6-6.2c-3.4 3.1-8.2 5.1-13.9 5.1-10.4 0-16.5-6.5-16.5-15.2 0-9.8 7.6-19.8 21.2-19.8 4.2 0 7.8.8 10.3 2l5.5-7.7z"/>
+    </svg>
+  );
+
+  // MySQL Icon
+  if (n === 'mysql') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#003B57"/>
+      <path fill="#00758F" d="M28 88c12-32 38-48 64-42 16 3 24 16 22 28-2 11-12 18-24 16-16-2-26-14-22-26-8 2-18 8-24 18-4 7-6 16-6 24-4-5-8-11-10-18z"/>
+      <path fill="#F29111" d="M72 44c10-2 20 4 22 14-6-6-14-10-22-14z"/>
+      <circle cx="86" cy="52" r="3" fill="#FFFFFF"/>
+      <text x="64" y="112" fill="#F29111" fontFamily="sans-serif" fontWeight="900" fontSize="18" textAnchor="middle">MySQL</text>
+    </svg>
+  );
+
+  // SQLite Icon
+  if (n === 'sqlite') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#0F273E"/>
+      <path fill="#003B57" d="M28 32h72v64H28z" rx="8"/>
+      <path fill="#00A2D9" d="M40 38c18-12 36-12 48 4 6 8 8 20 4 36-6 22-24 34-44 32-12-1-20-8-20-18 0-14 16-22 36-20-18-2-26 6-24 16-8-2-12-10-10-20 2-12 14-22 32-24 8-1 14 0 18 4-2-8-8-14-16-16-8-2-16 0-24 6z"/>
+      <text x="64" y="116" fill="#78C6E6" fontFamily="sans-serif" fontWeight="bold" fontSize="16" textAnchor="middle">SQLite</text>
+    </svg>
+  );
+
+  // MongoDB Icon
+  if (n === 'mongodb') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#112217"/>
+      <path fill="#47A248" d="M64 16c0 0-3 5-7 11-12 18-21 34-21 51 0 21 14 34 28 34 0 0 0-4.8 0-7.3-11.8-.4-20.7-9.5-20.7-22.3 0-14.7 9.8-29.2 19.7-44.5 0 0 0 0 1-1.9 0 0 0 0 0 0V16z"/>
+      <path fill="#499D4A" d="M64 16v94.7c0 2.5 0 7.3 0 7.3 14 0 28-13 28-34 0-17-9-33-21-51-4-6-7-11-7-11z"/>
+      <path fill="#3FA037" d="M64 96c-1.2 0-2.3 1-2.3 2.3v18.4c0 1.3 1 2.3 2.3 2.3s2.3-1 2.3-2.3V98.3c0-1.3-1-2.3-2.3-2.3z"/>
+    </svg>
+  );
+
+  // Supabase Icon
+  if (n === 'supabase') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#17221E"/>
+      <path fill="#3ECF8E" d="M68.5 18c1.3-2.2 4.5-2.2 5.8 0l37.8 62.5c1.4 2.3-.2 5.3-2.9 5.3H63.6l3.9-38.3-23.7 21.6L68.5 18z"/>
+      <path fill="#24B47E" d="M59.5 110c-1.3 2.2-4.5 2.2-5.8 0L15.9 47.5c-1.4-2.3.2-5.3 2.9-5.3h45.6l-3.9 38.3 23.7-21.6L59.5 110z"/>
+    </svg>
+  );
+
+  // Firebase Icon
+  if (n === 'firebase') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#1C1812"/>
+      <path fill="#FFA000" d="M26.5 95.8L47.7 21.3c.7-2.4 4-2.7 5.1-.4l15 28.5L26.5 95.8z"/>
+      <path fill="#F57C00" d="M72.2 55.4l8.2-15.6c1.1-2.1 4.2-2.1 5.3 0l15.8 56-29.3-40.4z"/>
+      <path fill="#FFCA28" d="M26.5 95.8l37.5 21c1.9 1 4.1 1 6 0l31.5-17.6-75-3.4z"/>
+      <path fill="#FFA000" d="M67.8 49.4L26.5 95.8l43.5 24.3c1.9 1 4.1 1 6 0L101.5 95.8 67.8 49.4z" opacity="0.3"/>
+    </svg>
+  );
+
+  // Teamwork Icon
+  if (n === 'teamwork') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#0C4A6E"/>
+      <circle cx="64" cy="42" r="16" fill="#38BDF8"/>
+      <circle cx="34" cy="52" r="12" fill="#7DD3FC"/>
+      <circle cx="94" cy="52" r="12" fill="#7DD3FC"/>
+      <path fill="#0284C7" d="M64 64c-17.7 0-32 12-32 26v6h64v-6c0-14-14.3-26-32-26z"/>
+      <path fill="#0369A1" d="M34 70c-11 0-20 8-20 18v6h16v-6c0-7 2-13 6-18h-2zm60 0c4 5 6 11 6 18v6h16v-6c0-10-9-18-20-18h-2z"/>
+    </svg>
+  );
+
+  // Problem Solving Icon
+  if (n === 'problem-solving' || n === 'problem solving') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#451A03"/>
+      <path fill="#F59E0B" d="M64 24c-17.7 0-32 14.3-32 32 0 11.2 5.8 21.1 14.6 26.8V90c0 3.3 2.7 6 6 6h22.8c3.3 0 6-2.7 6-6v-7.2C89.2 77.1 96 67.2 96 56c0-17.7-14.3-32-32-32z"/>
+      <path fill="#FDE68A" d="M52 102c0 2.2 1.8 4 4 4h20c2.2 0 4-1.8 4-4v-2H52v2z"/>
+      <path fill="#B45309" d="M58 54h12v18H58z"/>
+      <circle cx="64" cy="46" r="6" fill="#FFFFFF"/>
+    </svg>
+  );
+
+  // Critical Thinking Icon
+  if (n === 'critical-thinking' || n === 'critical thinking') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#2E1065"/>
+      <circle cx="64" cy="64" r="32" fill="none" stroke="#8B5CF6" strokeWidth="6"/>
+      <circle cx="64" cy="64" r="18" fill="none" stroke="#C4B5FD" strokeWidth="4" strokeDasharray="6 6"/>
+      <circle cx="64" cy="64" r="8" fill="#A855F7"/>
+      <circle cx="64" cy="24" r="6" fill="#A855F7"/>
+      <circle cx="64" cy="104" r="6" fill="#A855F7"/>
+      <circle cx="24" cy="64" r="6" fill="#A855F7"/>
+      <circle cx="104" cy="64" r="6" fill="#A855F7"/>
+      <line x1="64" y1="30" x2="64" y2="46" stroke="#8B5CF6" strokeWidth="4"/>
+      <line x1="64" y1="82" x2="64" y2="98" stroke="#8B5CF6" strokeWidth="4"/>
+      <line x1="30" y1="64" x2="46" y2="64" stroke="#8B5CF6" strokeWidth="4"/>
+      <line x1="82" y1="64" x2="98" y2="64" stroke="#8B5CF6" strokeWidth="4"/>
+    </svg>
+  );
+
+  // Time Management Icon
+  if (n === 'time-management' || n === 'time management') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#064E3B"/>
+      <circle cx="64" cy="64" r="42" fill="none" stroke="#10B981" strokeWidth="8"/>
+      <circle cx="64" cy="64" r="5" fill="#34D399"/>
+      <polyline points="64,36 64,64 82,76" fill="none" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="64" cy="22" r="3" fill="#34D399"/>
+      <circle cx="106" cy="64" r="3" fill="#34D399"/>
+      <circle cx="64" cy="106" r="3" fill="#34D399"/>
+      <circle cx="22" cy="64" r="3" fill="#34D399"/>
+    </svg>
+  );
+
+  // Adaptability Icon
+  if (n === 'adaptability') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#500724"/>
+      <path d="M64 26a38 38 0 0 1 35 24" fill="none" stroke="#EC4899" strokeWidth="7" strokeLinecap="round"/>
+      <polyline points="102,40 102,54 88,54" fill="none" stroke="#EC4899" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M64 102a38 38 0 0 1-35-24" fill="none" stroke="#F472B6" strokeWidth="7" strokeLinecap="round"/>
+      <polyline points="26,88 26,74 40,74" fill="none" stroke="#F472B6" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="64" cy="64" r="10" fill="#EC4899"/>
+    </svg>
+  );
+
+  // Creative Writing Icon
+  if (n === 'creative-writing' || n === 'creative writing') return (
+    <svg viewBox="0 0 128 128" className={className}>
+      <rect width="128" height="128" rx="20" fill="#3B0764"/>
+      {/* Pen nib */}
+      <path fill="#E879F9" d="M64 18l18 36-12 12-6-6-6 6-12-12 18-36z"/>
+      <path fill="#C026D3" d="M58 60l6 6 6-6 6 22H52l6-22z"/>
+      <line x1="64" y1="88" x2="64" y2="108" stroke="#F0ABFC" strokeWidth="6" strokeLinecap="round"/>
+      <circle cx="64" cy="62" r="3" fill="#3B0764"/>
+      {/* Writing sparkles */}
+      <path fill="#F472B6" d="M96 32l3 9 9 3-9 3-3 9-3-9-9-3 9-3 3-9z"/>
+      <circle cx="32" cy="78" r="4" fill="#F0ABFC"/>
+      <circle cx="98" cy="88" r="3" fill="#F0ABFC"/>
+    </svg>
+  );
+
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <circle cx="12" cy="12" r="10" />

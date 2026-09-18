@@ -6,7 +6,12 @@ import RadarChart from './RadarChart';
 import { Skill } from '../types';
 import { useAudio } from '../hooks/useAudio';
 
-type CategoryFilter = 'Languages' | 'AI & ML' | 'Backend' | 'Web & Systems';
+type CategoryFilter = 'Languages' | 'Frameworks' | 'Tools' | 'Databases' | 'Soft Skills';
+
+interface CategoryItem {
+  key: CategoryFilter;
+  label: string;
+}
 
 export const Skills: React.FC = () => {
   const { playClick, playHover } = useAudio();
@@ -14,12 +19,12 @@ export const Skills: React.FC = () => {
   // Initial 6 skills positioned at each of the 6 web ends (axes 0 to 5)
   const defaultEndSkills = useMemo(() => {
     return [
-      SKILLS.find((s) => s.name === 'Python') || SKILLS[0], // End 0: Top
-      SKILLS.find((s) => s.name === 'NumPy') || SKILLS[4],  // End 1: Top-Right
-      SKILLS.find((s) => s.name === 'FastAPI') || SKILLS[7], // End 2: Bottom-Right
-      SKILLS.find((s) => s.name === 'React') || SKILLS[10], // End 3: Bottom
-      SKILLS.find((s) => s.name === 'Prompt Engineering') || SKILLS[13], // End 4: Bottom-Left
-      SKILLS.find((s) => s.name === 'C Language') || SKILLS[1], // End 5: Top-Left
+      SKILLS.find((s) => s.name === 'Python') || SKILLS[1], // End 0: Top
+      SKILLS.find((s) => s.name === 'React') || SKILLS[5],  // End 1: Top-Right
+      SKILLS.find((s) => s.name === 'MongoDB') || SKILLS[17], // End 2: Bottom-Right
+      SKILLS.find((s) => s.name === 'Git') || SKILLS[9], // End 3: Bottom
+      SKILLS.find((s) => s.name === 'Teamwork') || SKILLS[20], // End 4: Bottom-Left
+      SKILLS.find((s) => s.name === 'Problem Solving') || SKILLS[21], // End 5: Top-Left
     ];
   }, []);
 
@@ -28,16 +33,18 @@ export const Skills: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('Languages');
   const [draggedSkill, setDraggedSkill] = useState<Skill | null>(null);
 
-  // Filter categories
-  const categories: CategoryFilter[] = ['Languages', 'AI & ML', 'Backend', 'Web & Systems'];
+  // Filter categories matching the resume breakdown
+  const categories: CategoryItem[] = [
+    { key: 'Languages', label: 'Languages' },
+    { key: 'Frameworks', label: 'Frameworks' },
+    { key: 'Tools', label: 'Tools & Platforms' },
+    { key: 'Databases', label: 'Databases' },
+    { key: 'Soft Skills', label: 'Soft Skills' },
+  ];
 
   // Filter skills based on active category
   const filteredSkills = useMemo(() => {
-    if (activeCategory === 'Languages') return SKILLS.filter((s) => s.category === 'Languages');
-    if (activeCategory === 'Backend') return SKILLS.filter((s) => s.category === 'Frameworks' && s.domainIndex === 2);
-    if (activeCategory === 'AI & ML') return SKILLS.filter((s) => s.category === 'AI' || s.category === 'Data Science');
-    if (activeCategory === 'Web & Systems') return SKILLS.filter((s) => s.category === 'Core Web' || s.category === 'Others' || s.name === 'React');
-    return SKILLS;
+    return SKILLS.filter((s) => s.category === activeCategory);
   }, [activeCategory]);
 
   // Guardrail: Ensure no two same cards can ever be on the web.
@@ -135,29 +142,29 @@ export const Skills: React.FC = () => {
           {/* ========================================================= */}
           {/* RIGHT COLUMN: Category Tabs + Interactive Chips Grid      */}
           {/* ========================================================= */}
-          <div className="lg:col-span-6 xl:col-span-5 flex flex-col h-[480px] p-5 sm:p-6 border border-theme-border bg-surface/40 dark:bg-surface/40 [.light_&]:bg-[#F3EEE3]/70 backdrop-blur-md relative self-center">
+          <div className="lg:col-span-6 xl:col-span-5 flex flex-col h-[480px] p-5 sm:p-6 border border-white/10 dark:border-white/15 bg-surface/70 dark:bg-[#121622]/80 [.light_&]:bg-[#F3EEE3]/85 [.light_&]:border-amber-600/20 backdrop-blur-md relative self-center shadow-2xl">
             {/* Top accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent via-accent/80 to-accent" />
 
             {/* 1. CATEGORY FILTER TABS (Stationary at top) */}
-            <div className="flex flex-wrap items-center gap-2 border-b border-theme-border pb-4 mb-4 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 border-b border-theme-border/60 pb-4 mb-4 shrink-0">
               {categories.map((cat) => {
-                const isActive = activeCategory === cat;
+                const isActive = activeCategory === cat.key;
 
                 return (
                   <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
+                    key={cat.key}
+                    onClick={() => setActiveCategory(cat.key)}
                     className={`
-                      px-3.5 py-1.5 text-xs font-mono font-semibold tracking-wider transition-all duration-200 border rounded-none cursor-pointer
+                      px-3 py-1.5 text-xs font-mono font-semibold tracking-wider transition-all duration-200 border rounded-none cursor-pointer
                       ${
                         isActive
-                          ? 'bg-accent text-black dark:text-black [.light_&]:text-white border-accent shadow-[0_0_15px_rgba(0,209,255,0.3)] [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.3)] font-bold'
-                          : 'bg-surface/60 text-theme-secondary border-theme-border hover:text-theme-text hover:bg-surface'
+                          ? 'bg-accent/20 text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] border-accent shadow-[0_0_15px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.25)] font-bold'
+                          : 'bg-surface/60 dark:bg-[#161B26]/70 text-theme-secondary border-theme-border/70 hover:text-theme-text hover:bg-surface dark:hover:bg-[#1C2230]'
                       }
                     `}
                   >
-                    {cat}
+                    {cat.label}
                   </button>
                 );
               })}
@@ -190,10 +197,10 @@ export const Skills: React.FC = () => {
                         isBeingDragged
                           ? 'opacity-40 scale-95 border-dashed border-accent ring-2 ring-accent/50 bg-accent/10'
                           : isSelected
-                          ? 'bg-accent/15 dark:bg-accent/20 border-accent shadow-[0_0_15px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.25)] ring-1 ring-accent'
+                          ? 'bg-accent/15 dark:bg-accent/20 border-accent shadow-[0_0_18px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_18px_rgba(217,119,6,0.25)] ring-1 ring-accent text-white'
                           : isMountedOnEnd
-                          ? 'bg-surface/90 border-accent/40 hover:border-accent'
-                          : 'bg-surface/60 border-theme-border hover:border-theme-border/80 hover:bg-surface/90'
+                          ? 'bg-surface/90 dark:bg-[#1C2230]/90 border-accent/40 hover:border-accent'
+                          : 'bg-surface/60 dark:bg-[#161B26]/90 border-white/10 dark:border-white/10 hover:border-accent/40 hover:bg-surface/90 dark:hover:bg-[#1E2536]'
                       }
                     `}
                     title={`${skill.name} - ${skill.level}% Proficiency (Click to mount or drag onto any web end)`}
@@ -219,7 +226,7 @@ export const Skills: React.FC = () => {
                       {/* Name */}
                       <span
                         className={`text-xs sm:text-sm font-sans font-medium truncate ${
-                          isSelected ? 'text-accent font-bold' : 'text-theme-text'
+                          isSelected ? 'text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] font-bold' : 'text-theme-text'
                         }`}
                       >
                         {skill.name}
@@ -230,8 +237,8 @@ export const Skills: React.FC = () => {
                     <span
                       className={`text-[11px] font-mono shrink-0 px-2 py-0.5 rounded-none tabular-nums font-semibold ${
                         isSelected
-                          ? 'bg-accent text-black dark:text-black [.light_&]:text-white font-bold'
-                          : 'bg-surface text-theme-secondary/80 border border-theme-border group-hover/chip:text-theme-text'
+                          ? 'bg-accent/25 text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] border border-accent/50 font-bold'
+                          : 'bg-surface/80 dark:bg-[#10141E] text-theme-secondary border border-theme-border/60 group-hover/chip:text-theme-text'
                       }`}
                     >
                       {skill.level}%
