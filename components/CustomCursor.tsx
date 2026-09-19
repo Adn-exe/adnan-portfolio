@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useVelocity } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
+    const [isVisible, setIsVisible] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [cursorText, setCursorText] = useState('');
     const [isClicked, setIsClicked] = useState(false);
@@ -51,6 +52,7 @@ const CustomCursor: React.FC = () => {
         const moveCursor = (e: MouseEvent) => {
             cursorX.set(e.clientX);
             cursorY.set(e.clientY);
+            setIsVisible(true);
         };
 
         const handleHover = (e: MouseEvent) => {
@@ -70,16 +72,52 @@ const CustomCursor: React.FC = () => {
         const handleMouseDown = () => setIsClicked(true);
         const handleMouseUp = () => setIsClicked(false);
 
+        const handleMouseLeave = (e: MouseEvent) => {
+            // Check if cursor exited the window boundaries
+            if (!e.relatedTarget && !('toElement' in e && (e as any).toElement)) {
+                setIsVisible(false);
+                setIsHovered(false);
+            }
+        };
+
+        const handleMouseEnter = () => {
+            setIsVisible(true);
+        };
+
+        const handleWindowBlur = () => {
+            setIsVisible(false);
+            setIsHovered(false);
+        };
+
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                setIsVisible(false);
+                setIsHovered(false);
+            }
+        };
+
         window.addEventListener('mousemove', moveCursor);
         window.addEventListener('mouseover', handleHover);
         window.addEventListener('mousedown', handleMouseDown);
         window.addEventListener('mouseup', handleMouseUp);
+        document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+        document.documentElement.addEventListener('mouseenter', handleMouseEnter);
+        document.addEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('blur', handleWindowBlur);
+        window.addEventListener('focus', handleMouseEnter);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
             window.removeEventListener('mousemove', moveCursor);
             window.removeEventListener('mouseover', handleHover);
             window.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mouseup', handleMouseUp);
+            document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+            document.documentElement.removeEventListener('mouseenter', handleMouseEnter);
+            document.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('blur', handleWindowBlur);
+            window.removeEventListener('focus', handleMouseEnter);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [cursorX, cursorY]);
 
@@ -87,7 +125,7 @@ const CustomCursor: React.FC = () => {
 
     return (
         <>
-            {/* Custom PNG Cursor - moves instantly */}
+            {/* Custom PNG Cursor - moves instantly and fades out where last used */}
             <motion.div
                 className="fixed top-0 left-0 w-6 h-6 pointer-events-none z-[9999]"
                 style={{
@@ -98,8 +136,12 @@ const CustomCursor: React.FC = () => {
                 }}
                 animate={{
                     scale: isClicked ? 0.85 : isHovered ? 1.25 : 1,
+                    opacity: isVisible ? 1 : 0,
                 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                transition={{
+                    scale: { type: 'spring', stiffness: 400, damping: 25 },
+                    opacity: { duration: 0.15, ease: 'easeOut' },
+                }}
             >
                 <img 
                     src="/cursor.png" 
@@ -121,13 +163,16 @@ const CustomCursor: React.FC = () => {
                 }}
                 animate={{
                     scale: isClicked ? 1.6 : isHovered ? 1.4 : 1,
-                    opacity: isHovered ? 0.4 : 1,
+                    opacity: isVisible ? (isHovered ? 0.4 : 1) : 0,
                     borderColor: isHovered ? 'rgba(0, 209, 255, 0.7)' : 'rgba(0, 209, 255, 0.3)',
                 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                transition={{
+                    scale: { type: 'spring', stiffness: 300, damping: 20 },
+                    opacity: { duration: 0.15, ease: 'easeOut' },
+                }}
             />
             {/* Hover text label */}
-            {isHovered && cursorText && (
+            {isVisible && isHovered && cursorText && (
                 <motion.div
                     className="fixed top-0 left-0 pointer-events-none z-[10000] text-[8px] font-mono text-white uppercase tracking-widest font-black"
                     style={{

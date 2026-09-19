@@ -259,6 +259,13 @@
     .font-lora {
       font-family: 'Lora', Georgia, serif;
     }
+
+    /* Enforce custom cursor across entire site and disable default browser hand/pointer cursors on desktop */
+    @media (pointer: fine) {
+      *, *::before, *::after {
+        cursor: none !important;
+      }
+    }
   </style>
 </head>
 
