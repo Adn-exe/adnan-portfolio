@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollReveal';
 import Magnetic from './Magnetic';
@@ -10,6 +10,8 @@ import SpecularButton from './SpecularButton';
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isLight, setIsLight] = useState(false);
+  const [textReady, setTextReady] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -21,6 +23,32 @@ const Hero: React.FC = () => {
     });
     setIsLight(document.documentElement.classList.contains('light'));
     return () => observer.disconnect();
+  }, []);
+
+  // Dispatch custom event when text animation completes so TerminalFab can listen
+  useEffect(() => {
+    if (textReady) {
+      window.dispatchEvent(new CustomEvent('heroTextReady'));
+    }
+  }, [textReady]);
+
+  // Observe hero section visibility for scroll-based button hiding
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleTextComplete = useCallback(() => {
+    setTextReady(true);
   }, []);
 
   const scrollToContact = (e?: React.MouseEvent) => {
@@ -43,6 +71,8 @@ const Hero: React.FC = () => {
       aboutSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  const buttonsVisible = textReady && heroVisible;
 
   return (
     <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none bg-primary">
@@ -104,6 +134,7 @@ const Hero: React.FC = () => {
                 fontWeight={400}
                 letterSpacing={-3}
                 className={isLight ? "w-full drop-shadow-[0_0_35px_rgba(217,119,6,0.3)]" : "w-full drop-shadow-[0_0_35px_rgba(0,209,255,0.4)]"}
+                onComplete={handleTextComplete}
               />
             </div>
           </ScrollReveal>
@@ -121,12 +152,20 @@ const Hero: React.FC = () => {
           </p>
         </ScrollReveal>
 
-        {/* Mobile Get in Touch CTA */}
-        <ScrollReveal
-          animation="fade-up"
-          delay={0.8}
-          distance={20}
+        {/* Mobile Get in Touch CTA — gated by text animation + hero visibility */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{
+            opacity: buttonsVisible ? 1 : 0,
+            y: buttonsVisible ? 0 : 20,
+          }}
+          transition={{
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+            delay: buttonsVisible ? 0.1 : 0,
+          }}
           className="md:hidden mt-6"
+          style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
         >
           <a
             href="#contact"
@@ -147,7 +186,7 @@ const Hero: React.FC = () => {
               </svg>
             </div>
           </a>
-        </ScrollReveal>
+        </motion.div>
 
         {/* Spacer */}
         <div className="h-8 md:h-16"></div>
@@ -155,14 +194,20 @@ const Hero: React.FC = () => {
 
       {/* Corner Socials - Left removed as per request */}
 
-      {/* Premium CTA - Right */}
-      <ScrollReveal
-        animation="fade-left"
-        delay={1.0}
-        distance={30}
-        once={true}
-        margin="0px"
+      {/* Premium CTA - Right — gated by text animation + hero visibility */}
+      <motion.div
+        initial={{ opacity: 0, x: 30 }}
+        animate={{
+          opacity: buttonsVisible ? 1 : 0,
+          x: buttonsVisible ? 0 : 30,
+        }}
+        transition={{
+          duration: 0.7,
+          ease: [0.22, 1, 0.36, 1],
+          delay: buttonsVisible ? 0.15 : 0,
+        }}
         className="absolute bottom-14 right-6 hidden md:block z-20"
+        style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
       >
         <SpecularButton
           size="lg"
@@ -185,7 +230,7 @@ const Hero: React.FC = () => {
         >
           <span className="leading-none pt-[1px]">Get In Touch</span>
         </SpecularButton>
-      </ScrollReveal>
+      </motion.div>
 
       {/* Scroll Indicator with Glowing Line Above */}
       <motion.div

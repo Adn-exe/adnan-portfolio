@@ -223,7 +223,7 @@ const SpecularButton = ({
         isVisible = entry.isIntersecting;
         if (isVisible && !wasVisible) {
           last = performance.now();
-          updateCachedRect();
+          resize();
           raf = requestAnimationFrame(update);
         }
       },

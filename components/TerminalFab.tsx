@@ -11,6 +11,45 @@ interface TerminalFabProps {
 const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = false }) => {
   const { playHover, playClick } = useAudio();
   const [inProjectsSection, setInProjectsSection] = useState(false);
+  const [heroReady, setHeroReady] = useState(false);
+  const [heroVisible, setHeroVisible] = useState(true);
+
+  // Listen for heroTextReady custom event from Hero.tsx
+  useEffect(() => {
+    const onReady = () => setHeroReady(true);
+    window.addEventListener('heroTextReady', onReady);
+    return () => window.removeEventListener('heroTextReady', onReady);
+  }, []);
+
+  // Observe hero section visibility
+  useEffect(() => {
+    const setupObserver = () => {
+      const el = document.getElementById('hero');
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setHeroVisible(entry.isIntersecting);
+        },
+        { threshold: 0.15 }
+      );
+      observer.observe(el);
+      return observer;
+    };
+
+    let observer = setupObserver();
+    let retryTimer: ReturnType<typeof setTimeout> | null = null;
+    if (!observer) {
+      retryTimer = setTimeout(() => {
+        observer = setupObserver();
+      }, 200);
+    }
+
+    return () => {
+      if (retryTimer) clearTimeout(retryTimer);
+      observer?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     const checkProjects = () => {
@@ -42,7 +81,7 @@ const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = fals
     };
   }, []);
 
-  const shouldHide = hide || inProjectsSection;
+  const shouldHide = hide || inProjectsSection || !heroReady || !heroVisible;
 
   return (
     <motion.button

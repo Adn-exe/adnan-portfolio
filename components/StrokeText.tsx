@@ -29,6 +29,7 @@ export interface StrokeTextProps {
   reverse?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  onComplete?: () => void;
 }
 
 const StrokeText: React.FC<StrokeTextProps> = ({
@@ -49,7 +50,8 @@ const StrokeText: React.FC<StrokeTextProps> = ({
   letterSpacing = -4,
   reverse = false,
   className = '',
-  style = {}
+  style = {},
+  onComplete
 }) => {
   const rootRef = useRef<HTMLSpanElement>(null);
   const strokeTextRef = useRef<SVGTextElement>(null);
@@ -205,6 +207,9 @@ const StrokeText: React.FC<StrokeTextProps> = ({
           onEnter: () => timeline?.play(0)
         });
       } else {
+        if (onComplete) {
+          timeline.eventCallback('onComplete', onComplete);
+        }
         timeline.play(0);
       }
     }
