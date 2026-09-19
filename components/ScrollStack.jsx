@@ -59,6 +59,7 @@ const ScrollStack = forwardRef(({
     const stackPositionPx = parsePercentage(stackPosition, containerHeight);
 
     cardMetricsRef.current = cards.map((card, i) => {
+      card.style.zIndex = `${i + 10}`;
       const staticTop = scrollerTop + card.offsetTop;
       const targetScreenY = stackPositionPx + itemStackDistance * i;
       const pinStart = staticTop - targetScreenY;
@@ -105,6 +106,9 @@ const ScrollStack = forwardRef(({
     metrics.forEach((metric, i) => {
       const { card, pinStart } = metric;
       if (!card) return;
+
+      // Strict stacking hierarchy: later cards in DOM are always layered above earlier cards
+      card.style.zIndex = `${i + 10}`;
 
       let translateY = 0;
       if (scrollTop >= pinStart && scrollTop <= pinEnd) {
@@ -190,6 +194,7 @@ const ScrollStack = forwardRef(({
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('load', onResize);
 
     // Sync with root Lenis if available
     const lenis = window.__lenis;
@@ -216,13 +221,14 @@ const ScrollStack = forwardRef(({
       }
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('load', onResize);
       if (lenis && typeof lenis.off === 'function') {
         lenis.off('scroll', onScroll);
       }
       cardMetricsRef.current = [];
       cardsRef.current = [];
     };
-  }, [measureCards, updateTransforms]);
+  }, [measureCards, updateTransforms, children]);
 
   return (
     <div className={`scroll-stack-scroller ${className}`.trim()} ref={scrollerRef}>

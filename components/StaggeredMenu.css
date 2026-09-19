@@ -180,6 +180,10 @@
   line-height: 1;
 }
 
+.sm-panel-itemWrap.sm-item-gap-top {
+  margin-top: clamp(1.25rem, 3vh, 2rem);
+}
+
 .sm-icon-line {
   position: absolute;
   left: 50%;

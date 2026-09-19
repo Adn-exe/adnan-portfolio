@@ -61,7 +61,7 @@ const Writings: React.FC = () => {
           <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
             <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full" />
             <span className="text-accent font-medium text-sm tracking-widest uppercase">
-              Stories, Essays & Blogs
+              Hobby
             </span>
           </div>
           <h2 className="text-5xl md:text-7xl font-display font-black text-theme-text tracking-tighter leading-tight text-center md:text-left">

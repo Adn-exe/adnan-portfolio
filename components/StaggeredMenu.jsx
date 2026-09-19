@@ -455,7 +455,11 @@ export const StaggeredMenu = ({
           <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
             {items && items.length ? (
               items.map((it, idx) => (
-                <li className="sm-panel-itemWrap" key={it.label + idx}>
+                <li
+                  className={`sm-panel-itemWrap${it.className ? ` ${it.className}` : ''}`}
+                  style={it.style}
+                  key={it.label + idx}
+                >
                   <a
                     className="sm-panel-item"
                     href={it.link || '#'}

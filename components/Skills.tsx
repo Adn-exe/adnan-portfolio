@@ -171,7 +171,7 @@ export const Skills: React.FC = () => {
             </div>
 
             {/* 2. INTERACTIVE CHIPS GRID (Stationary height, content-start) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 flex-1 content-start overflow-y-auto pr-1 scrollbar-hide">
+            <div className={`grid gap-2.5 flex-1 content-start overflow-y-auto pr-1 scrollbar-hide ${activeCategory === 'Soft Skills' ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
               {filteredSkills.map((skill) => {
                 const isSelected = selectedSkill.name === skill.name;
                 const isMountedOnEnd = endSkills.some((es) => es.name === skill.name);

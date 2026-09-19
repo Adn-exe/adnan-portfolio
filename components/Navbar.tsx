@@ -128,12 +128,14 @@ const Navbar: React.FC = () => {
     { label: 'Home', link: '#hero' },
     { label: 'About', link: '#about' },
     { label: 'Projects', link: '#projects' },
+    { label: 'Experience', link: '#experience' },
     { label: 'Skills', link: '#skills' },
     { label: 'Writings', link: '#writings' },
     { label: 'Contact', link: '#contact' },
     {
       label: 'Resume',
       link: '#',
+      className: 'sm-item-gap-top',
       onClick: () => {
         playClick();
         setIsResumeModalOpen(true);

@@ -5,63 +5,79 @@ export const PROJECTS: Project[] = [
   {
     id: '1',
     title: 'SmartHandel',
-    solution: 'An AI-powered grocery optimizer that parses natural language shopping lists to calculate the cheapest multi-store route in real time.',
+    solution: 'An AI-powered grocery shopping assistant that compares real-time prices and offers across stores and determines cost-efficient shopping routes.',
     bulletPoints: [
-      'Transforms unstructured pantry notes and voice memos into structured shopping lists using Google Gemini AI.',
-      'Cross-references live product inventories and seasonal discounts across major Scandinavian supermarket chains via the Kassalapp API.',
-      'Calculates mathematically optimized split-store purchase strategies to maximize household grocery savings.'
+      'Built an AI shopping-list parser using Google Gemini to convert natural-language requests into structured grocery items.',
+      'Integrated grocery pricing and promotional data with single- vs. multi-store price optimization.',
+      'Developed a mobile-first PWA with interactive maps, route visualization, caching, localization, and optimized shopping workflows.'
     ],
-    description: 'An AI-powered grocery optimizer for Norway.',
+    description: 'An AI-powered grocery shopping assistant that compares real-time prices and offers across stores.',
     image: '/projectImages/smartHandel.webp',
-    tags: ['React', 'TypeScript', 'Tailwind', 'Node.js', 'API'],
+    tags: ['React', 'TypeScript', 'Node.js', 'Express', 'Gemini API', 'Leaflet', 'PWA'],
     link: '',
     github: 'https://github.com/Adn-exe/smarthandel-mvp',
     role: 'Full Stack Dev'
   },
   {
     id: '2',
-    title: 'Vizaris Studio',
-    solution: 'An interactive machine learning playground that bridges deep learning theory and spatial intuition through real-time visual pipeline execution.',
+    title: 'Qubiq Academy',
+    solution: 'An interactive quantum computing learning platform combining quantum circuit building, simulation, visualization, coding challenges, and AI-assisted learning.',
     bulletPoints: [
-      'Visual computation canvas for assembling neural layers, data transforms, and model architectures via intuitive drag-and-drop nodes.',
-      'Live tensor inspection tool displays intermediate layer activations, dimension shifts, and gradient telemetry on the fly.',
-      'Interactive loss landscape visualizer provides rapid feedback loops for parameter exploration and architectural tuning.'
+      'Built an interactive quantum circuit composer supporting multiple quantum gates and circuit manipulation.',
+      'Implemented statevector simulation with probability sampling and quantum-state visualization.',
+      'Added 3D Bloch sphere visualizations, Qiskit code generation, interactive challenges, and a Gemini-powered AI tutor.'
     ],
-    description: 'An interactive machine learning playground for visual pipeline construction.',
+    description: 'An interactive quantum computing platform with visual simulation and AI tutoring.',
+    image: '/projectImages/qubicAcademy.png',
+    tags: ['React', 'TypeScript', 'Three.js', 'Qiskit', 'Supabase', 'Zustand'],
+    link: 'https://qubic-academy.vercel.app/',
+    github: 'https://github.com/Adn-exe/QubicAcademy/',
+    role: 'Lead Architect'
+  },
+  {
+    id: '3',
+    title: 'Vizaris Studio',
+    solution: 'A no-code machine learning learning platform that lets beginners explore data preprocessing, model training, visualization, and model interpretation through an interactive interface.',
+    bulletPoints: [
+      'Built a visual ML workflow for dataset cleaning, preprocessing, model training, and result analysis.',
+      'Added interactive visualizations for Logistic Regression, Decision Trees, and Random Forests.',
+      'Integrated Google Gemini as an AI learning assistant for contextual ML explanations.'
+    ],
+    description: 'A no-code machine learning platform for interactive workflow construction and model interpretation.',
     image: '/projectImages/vizaris.webp',
-    tags: ['React', 'TypeScript', 'Tailwind', 'ML'],
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'Recharts'],
     link: 'https://vizaris.vercel.app',
     github: 'https://github.com/Adn-exe/Vizaris',
     role: 'Lead Architect'
   },
   {
-    id: '3',
+    id: '4',
     title: 'Rakshak',
-    solution: 'An AI-driven infrastructure risk platform that analyzes civic damage reports to generate explainable safety scores for disaster prevention.',
+    solution: 'An AI-powered infrastructure safety platform that analyzes photographs of potentially damaged infrastructure and generates explainable risk assessments.',
     bulletPoints: [
-      'Citizen reporting interface identifies structural defects, cracks, and flood hazards from uploaded photos using OpenCV and computer vision.',
-      'Generates an explainable 0–100 risk index to categorize structural severity and prioritize urgent municipal intervention.',
-      'Equips authorities with geospatial risk heatmaps to dispatch targeted field inspections before minor damage escalates into disasters.'
+      'Built an AI vision pipeline for analyzing infrastructure images and generating risk assessments.',
+      'Designed citizen reporting and authority dashboards for submitting and reviewing infrastructure reports.',
+      'Added multilingual support, interactive maps, image-quality validation, and AI model failover.'
     ],
-    description: 'An AI-powered infrastructure safety platform for disaster prevention.',
+    description: 'An AI-powered infrastructure safety platform for explainable civic risk assessments.',
     image: '/projectImages/rakshak.webp',
-    tags: ['Next.js', 'Python', 'FastAPI', 'OpenCV', 'LLM'],
+    tags: ['Next.js', 'FastAPI', 'Python', 'OpenCV', 'Gemini Vision'],
     link: '',
     github: 'https://github.com/Adn-exe/Rakshak',
     role: 'Lead AI Engineer'
   },
   {
-    id: '4',
+    id: '5',
     title: 'Soul Nest',
-    solution: 'A reflective digital sanctuary designed to foster mindfulness and emotional clarity through human-centered minimalism.',
+    solution: 'A minimalist social journaling platform designed around sharing thoughts, expressing moods, and connecting through personal reflections.',
     bulletPoints: [
-      'Curates immersive binaural soundscapes and gentle, context-aware prompts that steer users away from metrics-driven digital fatigue.',
-      'Private thought journal backed by client-side encrypted local storage ensures personal reflections never leave the device.',
-      'Longitudinal mood equilibrium tracker visualizes emotional balance over time without intrusive notifications or gamification.'
+      'Developed a Flask-based platform for creating, managing, and sharing thoughts.',
+      'Implemented user feeds, comments, mood selection, and social interactions.',
+      'Built the backend using Flask and SQLAlchemy with persistent data storage and a responsive interface.'
     ],
-    description: 'A reflective digital sanctuary fostering mindfulness through minimal aesthetics.',
+    description: 'A minimalist social journaling platform for sharing thoughts and reflections.',
     image: '/projectImages/soulNest.webp',
-    tags: ['Python', 'Flask', 'SQLAlchemy', 'JS'],
+    tags: ['Python', 'Flask', 'SQLAlchemy', 'SQLite', 'Bootstrap'],
     link: '',
     github: 'https://github.com/Adn-exe/soul_nest',
     role: 'Full Stack Dev'
@@ -73,7 +89,7 @@ export const RADAR_DOMAINS: RadarDomain[] = [
     name: 'Programming Languages',
     angleDeg: -90, // Top
     baseline: 78,
-    description: 'C, Python, R, SQL, and JavaScript proficiency for algorithm design and systems execution.',
+    description: 'C, Python, R, and JavaScript proficiency for algorithm design and systems execution.',
   },
   {
     name: 'Frameworks & Libraries',
@@ -136,33 +152,23 @@ export const SKILLS: Skill[] = [
     icon: 'r',
     category: 'Languages',
     color: '#276DC3',
-    level: 70,
-    proficiency: 'Intermediate',
+    level: 30,
+    proficiency: 'Beginner',
     radarDomain: 'Programming Languages',
     domainIndex: 0,
-    description: 'Statistical modeling, hypothesis testing, data analysis, and exploratory scientific visualization.',
+    description: 'Basic familiarity with statistical functions, simple data frames, and introductory plotting.',
   },
-  {
-    name: 'SQL',
-    icon: 'sql',
-    category: 'Languages',
-    color: '#00758F',
-    level: 72,
-    proficiency: 'Intermediate',
-    radarDomain: 'Programming Languages',
-    domainIndex: 0,
-    description: 'Relational queries, complex joins, indexing strategies, schema modeling, and aggregate data transformations.',
-  },
+
   {
     name: 'JavaScript',
     icon: 'javascript',
     category: 'Languages',
     color: '#F7DF1E',
-    level: 56,
+    level: 30,
     proficiency: 'Beginner',
     radarDomain: 'Programming Languages',
     domainIndex: 0,
-    description: 'Fundamental syntax, basic DOM manipulation, simple functions, and core programming concepts.',
+    description: 'Very basic syntax familiarity, simple console output, and introductory programming concepts.',
   },
 
   // Frameworks & Libraries
@@ -182,11 +188,11 @@ export const SKILLS: Skill[] = [
     icon: 'node.js',
     category: 'Frameworks',
     color: '#539E43',
-    level: 70,
-    proficiency: 'Intermediate',
+    level: 40,
+    proficiency: 'Beginner',
     radarDomain: 'Frameworks & Libraries',
     domainIndex: 1,
-    description: 'Non-blocking event-driven JavaScript runtime for scalable backend services, REST APIs, and middleware.',
+    description: 'Basic server setup, simple route handling, and introductory middleware concepts.',
   },
   {
     name: 'Flask',
@@ -296,8 +302,8 @@ export const SKILLS: Skill[] = [
     icon: 'supabase',
     category: 'Databases',
     color: '#3ECF8E',
-    level: 70,
-    proficiency: 'Intermediate',
+    level: 80,
+    proficiency: 'Advanced',
     radarDomain: 'Databases & Storage',
     domainIndex: 2,
     description: 'Open-source backend-as-a-service powered by PostgreSQL with instant REST APIs, auth, and real-time streams.',
@@ -394,7 +400,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     id: 'languages',
     title: 'Programming Languages',
-    skills: ['C', 'Python', 'R', 'SQL', 'JavaScript'],
+    skills: ['C', 'Python', 'R', 'JavaScript'],
     alignment: 'right',
   },
   {

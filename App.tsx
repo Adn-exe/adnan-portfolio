@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
+import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Writings from './components/Writings';
 import Loader from './components/Loader';
@@ -117,7 +118,7 @@ const App: React.FC = () => {
             <div className="container mx-auto px-6">
               <ScrollReveal isContainer className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {[
-                  { val: '4+', label: 'Projects Built' },
+                  { val: '5+', label: 'Projects Built' },
                   { val: 'AI/ML', label: 'Core Focus' },
                   { val: 'Creator', label: 'Mindset' },
                   { val: 'Open', label: 'To Collaborate' }
@@ -144,6 +145,9 @@ const App: React.FC = () => {
           <About />
 
           <Projects />
+
+          {/* Experience Section */}
+          <Experience />
 
           <Skills />
 

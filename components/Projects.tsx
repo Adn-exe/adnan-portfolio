@@ -13,31 +13,39 @@ const projectAccents: Record<string, { border: string; glow: string; text: strin
     text: 'text-[#00D1FF]',
     bg: 'bg-[#00D1FF]/10',
     stroke: '#00D1FF',
-    date: '2024'
+    date: '2025'
   },
   '2': {
+    border: 'border-[#6366F1]/40',
+    glow: 'rgba(99, 102, 241, 0.18)',
+    text: 'text-[#6366F1]',
+    bg: 'bg-[#6366F1]/10',
+    stroke: '#6366F1',
+    date: '2026'
+  },
+  '3': {
     border: 'border-[#A855F7]/40',
     glow: 'rgba(168, 85, 247, 0.18)',
     text: 'text-[#A855F7]',
     bg: 'bg-[#A855F7]/10',
     stroke: '#A855F7',
-    date: '2024'
+    date: '2025'
   },
-  '3': {
+  '4': {
     border: 'border-[#F59E0B]/40',
     glow: 'rgba(245, 158, 11, 0.18)',
     text: 'text-[#F59E0B]',
     bg: 'bg-[#F59E0B]/10',
     stroke: '#F59E0B',
-    date: '2023'
+    date: '2026'
   },
-  '4': {
+  '5': {
     border: 'border-[#10B981]/40',
     glow: 'rgba(16, 185, 129, 0.18)',
     text: 'text-[#10B981]',
     bg: 'bg-[#10B981]/10',
     stroke: '#10B981',
-    date: '2023'
+    date: '2026'
   },
 };
 
@@ -86,6 +94,7 @@ const Projects: React.FC = () => {
               <ScrollStackItem
                 key={project.id}
                 itemClassName="w-full"
+                style={{ zIndex: idx + 10 }}
               >
                 <div
                   className={`
@@ -215,6 +224,7 @@ const Projects: React.FC = () => {
                         alt={project.title}
                         className="w-full max-w-[480px] sm:max-w-[540px] lg:max-w-[580px] xl:max-w-[620px] max-h-[480px] md:max-h-[520px] h-auto object-contain select-none block"
                         loading="lazy"
+                        onLoad={() => scrollStackRef.current?.measureCards()}
                       />
                     </div>
                   </div>
