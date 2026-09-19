@@ -7,21 +7,25 @@ const WRITING_ITEMS = [
   {
     link: 'https://eniax-space.vercel.app/read/the-pace-of-the-heart',
     text: 'Pace of the Heart',
+    genre: 'Blog',
     image: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=800&auto=format&fit=crop'
   },
   {
     link: 'https://eniax-space.vercel.app/read/sense-of-call',
     text: 'Sense of Call',
+    genre: 'Story',
     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop'
   },
   {
     link: 'https://eniax-space.vercel.app/read/orange-seat-1019',
     text: 'Orange Seat',
+    genre: 'Story',
     image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop'
   },
   {
     link: 'https://eniax-space.vercel.app/read/writing-back',
     text: '3rd Passion',
+    genre: 'Essay',
     image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=800&auto=format&fit=crop'
   }
 ];

@@ -3,6 +3,12 @@ import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollTextReveal';
 
 export const About: React.FC = () => {
+  React.useEffect(() => {
+    // Eagerly warm up the light mode image in browser cache immediately
+    const img = new Image();
+    img.src = '/aboutmeLight.webp';
+  }, []);
+
   return (
     <section id="about" className="py-24 md:py-32 px-6 relative z-10 overflow-hidden">
       <div className="container mx-auto max-w-7xl">
@@ -23,10 +29,10 @@ export const About: React.FC = () => {
             <div className="lg:col-span-7 space-y-8 md:space-y-10">
               {/* Bio with React Bits ScrollReveal */}
               <ScrollReveal
-                baseOpacity={0.25}
-                enableBlur={true}
+                baseOpacity={0}
+                enableBlur={false}
                 baseRotation={0}
-                blurStrength={6}
+                blurStrength={0}
                 containerClassName="my-0"
                 textClassName="font-about text-[22px] font-[450] leading-[1.4] tracking-normal"
                 wordAnimationStart="top bottom-=20%"
@@ -65,13 +71,15 @@ export const About: React.FC = () => {
                 src="/aboutmeDark.webp"
                 alt="Mohammed Adnan"
                 className="about-photo-dark w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] h-auto object-contain select-none mix-blend-screen"
-                loading="lazy"
+                loading="eager"
+                decoding="async"
               />
               <img
                 src="/aboutmeLight.webp"
                 alt="Mohammed Adnan"
                 className="about-photo-light w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] h-auto object-contain select-none mix-blend-multiply"
-                loading="lazy"
+                loading="eager"
+                decoding="async"
               />
             </div>
           </div>

@@ -142,12 +142,12 @@ export const Skills: React.FC = () => {
           {/* ========================================================= */}
           {/* RIGHT COLUMN: Category Tabs + Interactive Chips Grid      */}
           {/* ========================================================= */}
-          <div className="lg:col-span-6 xl:col-span-5 flex flex-col h-[480px] p-5 sm:p-6 border border-white/10 dark:border-white/15 bg-surface/70 dark:bg-[#121622]/80 [.light_&]:bg-[#F3EEE3]/85 [.light_&]:border-amber-600/20 backdrop-blur-md relative self-center shadow-2xl">
+          <div className="lg:col-span-6 xl:col-span-5 flex flex-col h-[480px] p-5 sm:p-6 border border-white/10 dark:border-white/15 [.light_&]:border-stone-300/80 bg-surface/70 dark:bg-[#121622]/80 [.light_&]:bg-[#F4EFE6] backdrop-blur-md relative self-center shadow-2xl [.light_&]:shadow-lg">
             {/* Top accent line */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-accent via-accent/80 to-accent" />
 
             {/* 1. CATEGORY FILTER TABS (Stationary at top) */}
-            <div className="flex flex-wrap items-center gap-2 border-b border-theme-border/60 pb-4 mb-4 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 border-b border-theme-border/60 [.light_&]:border-stone-300/80 pb-4 mb-4 shrink-0">
               {categories.map((cat) => {
                 const isActive = activeCategory === cat.key;
 
@@ -159,8 +159,8 @@ export const Skills: React.FC = () => {
                       px-3 py-1.5 text-xs font-mono font-semibold tracking-wider transition-all duration-200 border rounded-none cursor-pointer
                       ${
                         isActive
-                          ? 'bg-accent/20 text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] border-accent shadow-[0_0_15px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.25)] font-bold'
-                          : 'bg-surface/60 dark:bg-[#161B26]/70 text-theme-secondary border-theme-border/70 hover:text-theme-text hover:bg-surface dark:hover:bg-[#1C2230]'
+                          ? 'bg-accent/20 text-accent dark:text-[#00D1FF] [.light_&]:bg-amber-600/15 [.light_&]:text-amber-900 border-accent [.light_&]:border-amber-600 shadow-[0_0_15px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.25)] font-bold'
+                          : 'bg-surface/60 dark:bg-[#161B26]/70 [.light_&]:bg-white/80 text-theme-secondary [.light_&]:text-stone-700 border-theme-border/70 [.light_&]:border-stone-300 hover:text-theme-text hover:bg-surface dark:hover:bg-[#1C2230] [.light_&]:hover:bg-white [.light_&]:hover:text-stone-950'
                       }
                     `}
                   >
@@ -197,17 +197,17 @@ export const Skills: React.FC = () => {
                         isBeingDragged
                           ? 'opacity-40 scale-95 border-dashed border-accent ring-2 ring-accent/50 bg-accent/10'
                           : isSelected
-                          ? 'bg-accent/15 dark:bg-accent/20 border-accent shadow-[0_0_18px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_18px_rgba(217,119,6,0.25)] ring-1 ring-accent text-white'
+                          ? 'bg-accent/15 dark:bg-accent/20 [.light_&]:bg-amber-500/15 border-accent [.light_&]:border-amber-600 shadow-[0_0_18px_rgba(0,209,255,0.25)] [.light_&]:shadow-[0_0_16px_rgba(217,119,6,0.2)] ring-1 ring-accent [.light_&]:ring-amber-500/50'
                           : isMountedOnEnd
-                          ? 'bg-surface/90 dark:bg-[#1C2230]/90 border-accent/40 hover:border-accent'
-                          : 'bg-surface/60 dark:bg-[#161B26]/90 border-white/10 dark:border-white/10 hover:border-accent/40 hover:bg-surface/90 dark:hover:bg-[#1E2536]'
+                          ? 'bg-surface/90 dark:bg-[#1C2230]/90 [.light_&]:bg-amber-50/80 border-accent/40 [.light_&]:border-amber-600/40 hover:border-accent [.light_&]:hover:border-amber-600 [.light_&]:shadow-sm'
+                          : 'bg-surface/60 dark:bg-[#161B26]/90 [.light_&]:bg-white/85 border-white/10 dark:border-white/10 [.light_&]:border-stone-300/80 hover:border-accent/40 hover:bg-surface/90 dark:hover:bg-[#1E2536] [.light_&]:hover:border-amber-600/50 [.light_&]:hover:bg-white [.light_&]:shadow-sm'
                       }
                     `}
                     title={`${skill.name} - ${skill.level}% Proficiency (Click to mount or drag onto any web end)`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       {/* Grip dots indicator */}
-                      <div className="flex flex-col gap-0.5 opacity-25 group-hover/chip:opacity-80 transition-opacity shrink-0">
+                      <div className="flex flex-col gap-0.5 opacity-25 [.light_&]:opacity-35 group-hover/chip:opacity-80 transition-opacity shrink-0">
                         <div className="flex gap-0.5">
                           <span className="w-0.5 h-0.5 rounded-full bg-current" />
                           <span className="w-0.5 h-0.5 rounded-full bg-current" />
@@ -225,8 +225,10 @@ export const Skills: React.FC = () => {
 
                       {/* Name */}
                       <span
-                        className={`text-xs sm:text-sm font-sans font-medium truncate ${
-                          isSelected ? 'text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] font-bold' : 'text-theme-text'
+                        className={`text-xs sm:text-sm font-sans truncate ${
+                          isSelected
+                            ? 'text-accent dark:text-[#00D1FF] [.light_&]:text-amber-800 font-bold'
+                            : 'text-theme-text [.light_&]:text-stone-900 font-medium'
                         }`}
                       >
                         {skill.name}
@@ -237,8 +239,8 @@ export const Skills: React.FC = () => {
                     <span
                       className={`text-[11px] font-mono shrink-0 px-2 py-0.5 rounded-none tabular-nums font-semibold ${
                         isSelected
-                          ? 'bg-accent/25 text-accent dark:text-[#00D1FF] [.light_&]:text-[#D97706] border border-accent/50 font-bold'
-                          : 'bg-surface/80 dark:bg-[#10141E] text-theme-secondary border border-theme-border/60 group-hover/chip:text-theme-text'
+                          ? 'bg-accent/25 text-accent dark:text-[#00D1FF] [.light_&]:bg-amber-100 [.light_&]:text-amber-900 border border-accent/50 [.light_&]:border-amber-400 font-bold'
+                          : 'bg-surface/80 dark:bg-[#10141E] [.light_&]:bg-stone-100 text-theme-secondary [.light_&]:text-stone-700 border border-theme-border/60 [.light_&]:border-stone-300 group-hover/chip:text-theme-text [.light_&]:group-hover/chip:text-stone-950'
                       }`}
                     >
                       {skill.level}%

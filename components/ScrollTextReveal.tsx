@@ -23,10 +23,10 @@ export interface ScrollRevealProps {
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   scrollContainerRef,
-  enableBlur = true,
-  baseOpacity = 0.15,
+  enableBlur = false,
+  baseOpacity = 0,
   baseRotation = 0,
-  blurStrength = 6,
+  blurStrength = 0,
   containerClassName = '',
   textClassName = '',
   rotationEnd = 'bottom bottom',
@@ -72,12 +72,16 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
         : 'text-white/85 [.light_&]:text-stone-800 font-[450]';
 
       return (
-        <span className={`word mr-[0.3em] ${highlightClass}`} key={index}>
+        <span
+          className={`word mr-[0.3em] ${highlightClass}`}
+          key={index}
+          style={{ opacity: baseOpacity }}
+        >
           {segment}
         </span>
       );
     });
-  }, [children]);
+  }, [children, baseOpacity]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -108,11 +112,14 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
       gsap.fromTo(
         wordElements,
-        { opacity: baseOpacity, filter: enableBlur ? `blur(${blurStrength}px)` : 'none' },
+        {
+          opacity: baseOpacity,
+          filter: enableBlur && blurStrength > 0 ? `blur(${blurStrength}px)` : 'none'
+        },
         {
           ease: 'none',
           opacity: 1,
-          filter: 'blur(0px)',
+          filter: 'none',
           stagger: 0.04,
           scrollTrigger: {
             trigger: el,

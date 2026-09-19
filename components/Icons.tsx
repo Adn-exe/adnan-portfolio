@@ -25,11 +25,7 @@ export const TechIcon: React.FC<{ name: string; className?: string }> = ({ name,
 
   // Official C Language Logo
   if (n === 'c' || n === 'c language') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <path fill="#00599C" d="M64 0l55.4 32v64L64 128 8.6 96V32z" />
-      <path fill="#004481" d="M64 0l55.4 32v64L64 128z" opacity="0.3" />
-      <path fill="#FFFFFF" d="M63.7 34c-17.5 0-31.7 14.2-31.7 31.7s14.2 31.7 31.7 31.7c11.8 0 22.1-6.5 27.5-16.1l-11.8-6.8c-3.1 6.3-9.5 10.6-16.7 10.6-10.5 0-19-8.5-19-19s8.5-19 19-19c7.2 0 13.6 4.3 16.7 10.6l11.8-6.8C85.8 40.5 75.5 34 63.7 34z" />
-    </svg>
+    <img src="/logos/c.png" alt="C" className={`${className} object-contain`} />
   );
 
   if (n === 'c++') return (
@@ -123,9 +119,7 @@ export const TechIcon: React.FC<{ name: string; className?: string }> = ({ name,
 
   // Official Flask Logo
   if (n === 'flask') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <path fill="currentColor" d="M72 16h-4V8h8a4 4 0 000-8H52a4 4 0 000 8h8v8h-4c-4.4 0-8 3.6-8 8v36.8L20.8 98.4A24 24 0 0039.6 128h48.8a24 24 0 0018.8-29.6L80 62.8V24c0-4.4-3.6-8-8-8zm-8 56a6 6 0 110-12 6 6 0 010 12zm16 26a8 8 0 110-16 8 8 0 010 16z" />
-    </svg>
+    <img src="/logos/flask.png" alt="Flask" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // Professional REST API Logo
@@ -164,10 +158,7 @@ export const TechIcon: React.FC<{ name: string; className?: string }> = ({ name,
   );
 
   if (n === 'js' || n === 'javascript') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="16" fill="#F7DF1E" />
-      <path fill="#000000" d="M67.3 100.3c3.5 2 7.6 3.3 11.8 3.3 6.9 0 11.2-3.4 11.2-8.5 0-5.8-4.7-8-12.7-11.4-11.6-4.9-19.1-11.1-19.1-23.4 0-13 10-22.9 25.8-22.9 7.6 0 13.5 1.8 17.5 4.1l-4.7 11.9c-3.2-1.8-7.3-3.2-12.3-3.2-6.5 0-10.2 3.3-10.2 7.7 0 5.4 4.3 7.5 12.3 10.9 12.5 5.3 19.6 11.5 19.6 24 0 13.4-10.4 23.9-27.7 23.9-8.7 0-16.1-2.4-20.2-5.1l4.7-11.3zM25.7 101.4l14.2-2.3c.7 4.1 2.5 6.9 7.3 6.9 4.3 0 7.1-2 7.1-9.9V39.4h15.2v56.7c0 16.1-9.3 22.4-22.3 22.4-11.8 0-19.6-6-21.5-17.1z" />
-    </svg>
+    <img src="/logos/javascript.png" alt="JavaScript" className={`${className} object-contain rounded-[3px]`} />
   );
 
   if (n === 'email') return (
@@ -251,89 +242,37 @@ export const TechIcon: React.FC<{ name: string; className?: string }> = ({ name,
 
   // Django Icon
   if (n === 'django') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#092E20"/>
-      <path fill="#FFFFFF" d="M64 26h18v48.6c0 14.8-7.8 23.4-21.7 23.4-5.4 0-10.2-1.1-13.8-2.9l3.5-12.7c2.6 1.3 5.7 2 8.7 2 6.6 0 9.8-4.2 9.8-12.4V40H64V26zm-26.5 28.5h16.2v43.2H37.5V54.5zM45.6 28.4c5.4 0 9.2 3.8 9.2 8.6 0 4.9-3.8 8.6-9.2 8.6-5.3 0-9.2-3.7-9.2-8.6 0-4.8 3.9-8.6 9.2-8.6z"/>
-    </svg>
+    <img src="/logos/django.png" alt="Django" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // Stitch Icon
   if (n === 'stitch') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#1E1B4B"/>
-      <path fill="#6366F1" d="M34 38c0-5.5 4.5-10 10-10h40c5.5 0 10 4.5 10 10s-4.5 10-10 10H44c-5.5 0-10-4.5-10-10z"/>
-      <path fill="#818CF8" d="M34 64c0-5.5 4.5-10 10-10h40c5.5 0 10 4.5 10 10s-4.5 10-10 10H44c-5.5 0-10-4.5-10-10z"/>
-      <path fill="#A5B4FC" d="M34 90c0-5.5 4.5-10 10-10h40c5.5 0 10 4.5 10 10s-4.5 10-10 10H44c-5.5 0-10-4.5-10-10z"/>
-      <circle cx="44" cy="38" r="5" fill="#FFFFFF"/>
-      <circle cx="84" cy="64" r="5" fill="#FFFFFF"/>
-      <circle cx="44" cy="90" r="5" fill="#FFFFFF"/>
-    </svg>
+    <img src="/logos/stitch.png" alt="Stitch" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // Codex Icon
   if (n === 'codex') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#064E3B"/>
-      <path fill="#10B981" d="M42 36l-20 28 20 28 9-6.4L35 64l16-21.6L42 36zm44 0l-9 6.4L93 64l-16 21.6 9 6.4 20-28-20-28z"/>
-      <path fill="#34D399" d="M72 32l-20 64h8l20-64h-8z"/>
-    </svg>
+    <img src="/logos/codex.png" alt="Codex" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // Antigravity Icon
   if (n === 'antigravity') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#0B1120"/>
-      <path d="M64 16L108 41V91L64 116L20 91V41L64 16Z" fill="none" stroke="#00D1FF" strokeWidth="6"/>
-      <path d="M64 36L90 51V81L64 96L38 81V51L64 36Z" fill="#00D1FF" fillOpacity="0.2" stroke="#00D1FF" strokeWidth="4"/>
-      <circle cx="64" cy="66" r="10" fill="#00D1FF"/>
-      <circle cx="64" cy="66" r="18" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeDasharray="4 4"/>
-    </svg>
+    <img src="/logos/antigravity.png" alt="Antigravity" className={`${className} object-contain`} />
   );
 
   // Canva Icon
   if (n === 'canva') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <defs>
-        <linearGradient id="canvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00C4CC"/>
-          <stop offset="50%" stopColor="#2E86DE"/>
-          <stop offset="100%" stopColor="#7D2AE8"/>
-        </linearGradient>
-      </defs>
-      <circle cx="64" cy="64" r="56" fill="url(#canvaGrad)"/>
-      <path fill="#FFFFFF" d="M78 48c-4-2-9.6-3-15.5-3-18.4 0-29.5 12.8-29.5 28.5 0 14.5 9.8 23.5 24.5 23.5 8.2 0 15.2-3.1 19.5-7.2l-5.6-6.2c-3.4 3.1-8.2 5.1-13.9 5.1-10.4 0-16.5-6.5-16.5-15.2 0-9.8 7.6-19.8 21.2-19.8 4.2 0 7.8.8 10.3 2l5.5-7.7z"/>
-    </svg>
+    <img src="/logos/canva.png" alt="Canva" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // MySQL Icon
   if (n === 'mysql') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#003B57"/>
-      <path fill="#00758F" d="M28 88c12-32 38-48 64-42 16 3 24 16 22 28-2 11-12 18-24 16-16-2-26-14-22-26-8 2-18 8-24 18-4 7-6 16-6 24-4-5-8-11-10-18z"/>
-      <path fill="#F29111" d="M72 44c10-2 20 4 22 14-6-6-14-10-22-14z"/>
-      <circle cx="86" cy="52" r="3" fill="#FFFFFF"/>
-      <text x="64" y="112" fill="#F29111" fontFamily="sans-serif" fontWeight="900" fontSize="18" textAnchor="middle">MySQL</text>
-    </svg>
-  );
-
-  // SQLite Icon
-  if (n === 'sqlite') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#0F273E"/>
-      <path fill="#003B57" d="M28 32h72v64H28z" rx="8"/>
-      <path fill="#00A2D9" d="M40 38c18-12 36-12 48 4 6 8 8 20 4 36-6 22-24 34-44 32-12-1-20-8-20-18 0-14 16-22 36-20-18-2-26 6-24 16-8-2-12-10-10-20 2-12 14-22 32-24 8-1 14 0 18 4-2-8-8-14-16-16-8-2-16 0-24 6z"/>
-      <text x="64" y="116" fill="#78C6E6" fontFamily="sans-serif" fontWeight="bold" fontSize="16" textAnchor="middle">SQLite</text>
-    </svg>
+    <img src="/logos/mysql.png" alt="MySQL" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // MongoDB Icon
-  if (n === 'mongodb') return (
-    <svg viewBox="0 0 128 128" className={className}>
-      <rect width="128" height="128" rx="20" fill="#112217"/>
-      <path fill="#47A248" d="M64 16c0 0-3 5-7 11-12 18-21 34-21 51 0 21 14 34 28 34 0 0 0-4.8 0-7.3-11.8-.4-20.7-9.5-20.7-22.3 0-14.7 9.8-29.2 19.7-44.5 0 0 0 0 1-1.9 0 0 0 0 0 0V16z"/>
-      <path fill="#499D4A" d="M64 16v94.7c0 2.5 0 7.3 0 7.3 14 0 28-13 28-34 0-17-9-33-21-51-4-6-7-11-7-11z"/>
-      <path fill="#3FA037" d="M64 96c-1.2 0-2.3 1-2.3 2.3v18.4c0 1.3 1 2.3 2.3 2.3s2.3-1 2.3-2.3V98.3c0-1.3-1-2.3-2.3-2.3z"/>
-    </svg>
+  if (n === 'mongodb' || n === 'mangodb') return (
+    <img src="/logos/mangoDB.png" alt="MongoDB" className={`${className} object-contain rounded-[3px]`} />
   );
 
   // Supabase Icon

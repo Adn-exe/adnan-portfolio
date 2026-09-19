@@ -33,7 +33,7 @@ function FlowingMenu({
   );
 }
 
-function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marqueeTextColor, borderColor, align = 'left', index = 0 }) {
+function MenuItem({ link, text, image, genre, speed, textColor, marqueeBgColor, marqueeTextColor, borderColor, align = 'left', index = 0 }) {
   const itemRef = useRef(null);
   const marqueeRef = useRef(null);
   const marqueeInnerRef = useRef(null);
@@ -136,6 +136,33 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
 
   const isExternal = link && (link.startsWith('http://') || link.startsWith('https://'));
 
+  const titleBlock = (
+    <div className={`inline-flex items-center gap-3 md:gap-5 ${align === 'right' ? 'flex-row-reverse' : 'flex-row'}`}>
+      <span className="text-xs md:text-sm font-mono opacity-40 tabular-nums font-normal">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+      <span>{text}</span>
+      <svg
+        className="w-5 h-5 md:w-6 md:h-6 opacity-40 transition-transform duration-300 group-hover:opacity-100 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <line x1="7" y1="17" x2="17" y2="7" />
+        <polyline points="7 7 17 7 17 17" />
+      </svg>
+    </div>
+  );
+
+  const genreBadge = genre ? (
+    <span className="genre-badge uppercase px-3 py-1 md:px-3.5 md:py-1 rounded-full border border-current/25 bg-current/[0.04] opacity-45 group-hover:opacity-85 transition-opacity duration-300 shrink-0 select-none">
+      {genre}
+    </span>
+  ) : null;
+
   return (
     <div className="menu__item" ref={itemRef} style={{ borderColor }}>
       <a
@@ -148,24 +175,17 @@ function MenuItem({ link, text, image, speed, textColor, marqueeBgColor, marquee
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}
       >
-        <div className={`inline-flex items-center gap-3 md:gap-5 ${align === 'right' ? 'flex-row-reverse' : 'flex-row'}`}>
-          <span className="text-xs md:text-sm font-mono opacity-40 tabular-nums font-normal">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-          <span>{text}</span>
-          <svg
-            className="w-5 h-5 md:w-6 md:h-6 opacity-40 transition-transform duration-300 group-hover:opacity-100 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="7" y1="17" x2="17" y2="7" />
-            <polyline points="7 7 17 7 17 17" />
-          </svg>
-        </div>
+        {align === 'right' ? (
+          <>
+            {genreBadge}
+            {titleBlock}
+          </>
+        ) : (
+          <>
+            {titleBlock}
+            {genreBadge}
+          </>
+        )}
       </a>
       <div className="marquee" ref={marqueeRef} style={{ backgroundColor: marqueeBgColor }}>
         <div className="marquee__inner-wrap">

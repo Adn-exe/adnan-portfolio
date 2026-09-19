@@ -85,7 +85,7 @@ export const RADAR_DOMAINS: RadarDomain[] = [
     name: 'Databases & Storage',
     angleDeg: 30, // Bottom-Right
     baseline: 70,
-    description: 'Relational and document databases: MySQL, SQLite, MongoDB, Supabase, and Firebase.',
+    description: 'Relational and document databases: MySQL, MongoDB, Supabase, and Firebase.',
   },
   {
     name: 'Tools & Platforms',
@@ -281,17 +281,6 @@ export const SKILLS: Skill[] = [
     description: 'Foundational SQL queries, basic table structures, simple SELECT queries, and basic CRUD operations.',
   },
   {
-    name: 'SQLite',
-    icon: 'sqlite',
-    category: 'Databases',
-    color: '#003B57',
-    level: 72,
-    proficiency: 'Intermediate',
-    radarDomain: 'Databases & Storage',
-    domainIndex: 2,
-    description: 'Lightweight serverless SQL database engine embedded in client applications, prototypes, and tests.',
-  },
-  {
     name: 'MongoDB',
     icon: 'mongodb',
     category: 'Databases',
@@ -423,7 +412,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     id: 'databases',
     title: 'Databases',
-    skills: ['MySQL', 'SQLite', 'MongoDB', 'Supabase', 'Firebase'],
+    skills: ['MySQL', 'MongoDB', 'Supabase', 'Firebase'],
     alignment: 'left',
   },
   {
