@@ -45,7 +45,7 @@ export const useAudio = () => {
         const ctx = getAudioContext();
         if (!ctx) return;
 
-        const duration = 0.55;
+        const duration = direction === 'expand' ? 1.05 : 0.80;
         const now = ctx.currentTime;
 
         try {
