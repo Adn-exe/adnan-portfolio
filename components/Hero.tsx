@@ -9,7 +9,9 @@ import SpecularButton from './SpecularButton';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const [isLight, setIsLight] = useState(false);
+  const [isLight, setIsLight] = useState(() =>
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+  );
   const [textReady, setTextReady] = useState(false);
   const [heroVisible, setHeroVisible] = useState(true);
 

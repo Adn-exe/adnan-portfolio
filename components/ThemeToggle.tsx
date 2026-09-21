@@ -3,7 +3,10 @@ import { motion, useDragControls } from 'framer-motion';
 import { useAudio } from '../hooks/useAudio';
 
 const ThemeToggle: React.FC = () => {
-    const [isLight, setIsLight] = useState(false);
+    const [isLight, setIsLight] = useState(() => {
+        if (typeof window === 'undefined') return false;
+        return localStorage.getItem('portfolio-theme') === 'light' || document.documentElement.classList.contains('light');
+    });
     const [isMobile, setIsMobile] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isStretched, setIsStretched] = useState(false);
@@ -11,12 +14,6 @@ const ThemeToggle: React.FC = () => {
     const { playSwoop } = useAudio();
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem('portfolio-theme');
-        if (savedTheme === 'light' || document.documentElement.classList.contains('light')) {
-            document.documentElement.classList.add('light');
-            setIsLight(true);
-        }
-
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         };
@@ -67,6 +64,10 @@ const ThemeToggle: React.FC = () => {
             return;
         }
 
+        // Set CSS custom properties on root before taking snapshot so pseudo-elements are instantly clipped
+        document.documentElement.style.setProperty('--bulb-x', `${Math.round(x)}px`);
+        document.documentElement.style.setProperty('--bulb-y', `${Math.round(y)}px`);
+        document.documentElement.style.setProperty('--end-radius', `${Math.ceil(endRadius)}px`);
         document.documentElement.dataset.themeTransition = newStatus ? 'expand' : 'contract';
 
         const transition = doc.startViewTransition(() => {
@@ -86,6 +87,7 @@ const ThemeToggle: React.FC = () => {
                     {
                         duration: 650,
                         easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                        fill: 'forwards',
                         pseudoElement: '::view-transition-new(root)'
                     }
                 );
@@ -101,6 +103,7 @@ const ThemeToggle: React.FC = () => {
                     {
                         duration: 650,
                         easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                        fill: 'forwards',
                         pseudoElement: '::view-transition-old(root)'
                     }
                 );
@@ -109,6 +112,9 @@ const ThemeToggle: React.FC = () => {
 
         transition.finished.finally(() => {
             delete document.documentElement.dataset.themeTransition;
+            document.documentElement.style.removeProperty('--bulb-x');
+            document.documentElement.style.removeProperty('--bulb-y');
+            document.documentElement.style.removeProperty('--end-radius');
         });
     };
 

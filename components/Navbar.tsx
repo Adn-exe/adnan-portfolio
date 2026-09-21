@@ -103,7 +103,9 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
 
 const Navbar: React.FC = () => {
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
-  const [isLight, setIsLight] = useState(false);
+  const [isLight, setIsLight] = useState(() =>
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+  );
 
   React.useEffect(() => {
     const updateTheme = () => {

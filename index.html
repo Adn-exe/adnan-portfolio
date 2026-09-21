@@ -248,22 +248,32 @@
       font-family: 'Lora', Georgia, serif;
     }
 
+    /* Disable property transitions during theme switch so snapshots are pristine and instant */
+    html[data-theme-transition],
+    html[data-theme-transition] *,
+    html[data-theme-transition] *::before,
+    html[data-theme-transition] *::after {
+      transition: none !important;
+    }
+
     /* Circular View Transition for Theme Wave */
     ::view-transition-old(root),
     ::view-transition-new(root) {
       animation: none;
       mix-blend-mode: normal;
     }
-    /* Dark -> Light: Incoming Light layer on top expanding outward */
+    /* Dark -> Light: Incoming Light layer on top expanding outward (initially clipped to 0px to prevent flash) */
     html[data-theme-transition="expand"]::view-transition-old(root) {
       z-index: 1;
     }
     html[data-theme-transition="expand"]::view-transition-new(root) {
       z-index: 9999;
+      clip-path: circle(0px at var(--bulb-x, 90%) var(--bulb-y, 80px));
     }
     /* Light -> Dark: Outgoing Light layer on top contracting inward */
     html[data-theme-transition="contract"]::view-transition-old(root) {
       z-index: 9999;
+      clip-path: circle(var(--end-radius, 2500px) at var(--bulb-x, 90%) var(--bulb-y, 80px));
     }
     html[data-theme-transition="contract"]::view-transition-new(root) {
       z-index: 1;
