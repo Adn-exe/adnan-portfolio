@@ -64,26 +64,48 @@ const ThemeToggle: React.FC = () => {
             return;
         }
 
+        document.documentElement.dataset.themeTransition = newStatus ? 'expand' : 'contract';
+
         const transition = doc.startViewTransition(() => {
             updateDOMTheme();
         });
 
         transition.ready.then(() => {
-            const clipPath = [
-                `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`,
-                `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`
-            ];
+            if (newStatus) {
+                // Expanding light outward from bulb across entire screen
+                document.documentElement.animate(
+                    {
+                        clipPath: [
+                            `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`,
+                            `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`
+                        ]
+                    },
+                    {
+                        duration: 650,
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                        pseudoElement: '::view-transition-new(root)'
+                    }
+                );
+            } else {
+                // Contracting light backwards into the bulb coordinates
+                document.documentElement.animate(
+                    {
+                        clipPath: [
+                            `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`,
+                            `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`
+                        ]
+                    },
+                    {
+                        duration: 650,
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                        pseudoElement: '::view-transition-old(root)'
+                    }
+                );
+            }
+        });
 
-            document.documentElement.animate(
-                {
-                    clipPath
-                },
-                {
-                    duration: 650,
-                    easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-                    pseudoElement: '::view-transition-new(root)'
-                }
-            );
+        transition.finished.finally(() => {
+            delete document.documentElement.dataset.themeTransition;
         });
     };
 
@@ -237,27 +259,7 @@ const ThemeToggle: React.FC = () => {
                     </svg>
                 </div>
 
-                {/* Floating Interactive Funny Tooltip */}
-                <motion.div
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{
-                        opacity: isHovered || isStretched ? 1 : 0,
-                        y: isHovered || isStretched ? 6 : -4,
-                        scale: isStretched ? [1, 1.05, 1] : 1
-                    }}
-                    transition={{ duration: 0.2 }}
-                    className={`absolute -bottom-8 whitespace-nowrap px-2.5 py-1 rounded-md border text-[9px] font-mono tracking-wider uppercase backdrop-blur-md shadow-2xl pointer-events-none transition-colors duration-300 ${
-                        isStretched
-                            ? 'bg-red-950/90 border-red-500 text-red-300 animate-bounce'
-                            : 'bg-slate-900/90 border-slate-700 text-amber-300'
-                    }`}
-                >
-                    {isStretched
-                        ? '⚡️ Easy! Don’t break my wire!'
-                        : isLight
-                        ? '💡 Click or Pull to Dim'
-                        : '💡 Click or Pull to Light'}
-                </motion.div>
+
             </motion.div>
         </div>
     );

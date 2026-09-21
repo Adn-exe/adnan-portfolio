@@ -254,11 +254,19 @@
       animation: none;
       mix-blend-mode: normal;
     }
-    ::view-transition-old(root) {
+    /* Dark -> Light: Incoming Light layer on top expanding outward */
+    html[data-theme-transition="expand"]::view-transition-old(root) {
       z-index: 1;
     }
-    ::view-transition-new(root) {
+    html[data-theme-transition="expand"]::view-transition-new(root) {
       z-index: 9999;
+    }
+    /* Light -> Dark: Outgoing Light layer on top contracting inward */
+    html[data-theme-transition="contract"]::view-transition-old(root) {
+      z-index: 9999;
+    }
+    html[data-theme-transition="contract"]::view-transition-new(root) {
+      z-index: 1;
     }
 
     /* Enforce custom cursor across entire site and disable default browser hand/pointer cursors on desktop */
