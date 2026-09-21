@@ -59,17 +59,28 @@ export const About: React.FC = () => {
               </motion.div>
             </div>
 
-            {/* Freestanding Profile Photo - Shared for both dark & light modes */}
+            {/* Freestanding Profile Photo - Mode-Specific Images */}
             <div className="lg:col-span-5 flex items-center justify-center -mt-6 sm:-mt-10 lg:-mt-16 xl:-mt-20">
               <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] aspect-[3/2] flex items-center justify-center">
+                {/* Dark Mode Photo */}
                 <img
                   src="/aboutmeDark.webp"
                   alt="Mohammed Adnan"
-                  width={430}
-                  height={287}
-                  className="w-full h-full object-contain select-none mix-blend-screen [.light_&]:mix-blend-normal"
+                  width={1536}
+                  height={1024}
+                  className="absolute inset-0 w-full h-full object-contain select-none mix-blend-screen transition-opacity duration-300 opacity-100 [.light_&]:opacity-0 pointer-events-none"
                   loading="eager"
-                  decoding="async"
+                  decoding="sync"
+                />
+                {/* Light Mode Photo */}
+                <img
+                  src="/aboutmeLight.webp"
+                  alt="Mohammed Adnan"
+                  width={1536}
+                  height={1024}
+                  className="absolute inset-0 w-full h-full object-contain select-none mix-blend-multiply transition-opacity duration-300 opacity-0 [.light_&]:opacity-100 pointer-events-none"
+                  loading="eager"
+                  decoding="sync"
                 />
               </div>
             </div>
