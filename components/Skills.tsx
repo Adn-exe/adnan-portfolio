@@ -4,7 +4,6 @@ import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
 import RadarChart from './RadarChart';
 import { Skill } from '../types';
-import { useAudio } from '../hooks/useAudio';
 
 type CategoryFilter = 'Languages' | 'Frameworks' | 'Tools' | 'Databases' | 'Soft Skills';
 
@@ -14,7 +13,6 @@ interface CategoryItem {
 }
 
 export const Skills: React.FC = () => {
-  const { playClick, playHover } = useAudio();
 
   // Initial 6 skills positioned at each of the 6 web ends (axes 0 to 5)
   const defaultEndSkills = useMemo(() => {
@@ -72,7 +70,6 @@ export const Skills: React.FC = () => {
   // 1. That skill replaces (or swaps into) the corresponding web end
   // 2. That skill becomes the selected skill
   const handleSelectSkill = (skill: Skill) => {
-    playClick();
     setSelectedSkill(skill);
 
     const targetIndex =
@@ -85,7 +82,6 @@ export const Skills: React.FC = () => {
 
   // When a chip is dropped directly onto a specific web end (0 to 5)
   const handleDropOnEnd = (skill: Skill, targetIndex: number) => {
-    playClick();
     setSelectedSkill(skill);
     equipSkillAtEnd(skill, targetIndex);
     setDraggedSkill(null);
@@ -93,7 +89,6 @@ export const Skills: React.FC = () => {
 
   // When a chip is dropped anywhere onto the web surface
   const handleDropOnWeb = (skill: Skill) => {
-    playClick();
     handleSelectSkill(skill);
     setDraggedSkill(null);
   };
@@ -186,7 +181,6 @@ export const Skills: React.FC = () => {
                       e.dataTransfer.setData('text/plain', skill.name);
                       e.dataTransfer.effectAllowed = 'copyMove';
                       setDraggedSkill(skill);
-                      playHover();
                     }}
                     onDragEnd={() => {
                       setDraggedSkill(null);

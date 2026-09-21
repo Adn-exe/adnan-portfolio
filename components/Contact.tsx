@@ -8,7 +8,7 @@ const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
-    const { playHover, playClick } = useAudio();
+    const { playClick } = useAudio();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -124,7 +124,6 @@ const Contact: React.FC = () => {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting || status === 'success'}
-                                        onMouseEnter={playHover}
                                         onClick={() => {
                                             if (!isSubmitting && status === 'idle') playClick();
                                         }}

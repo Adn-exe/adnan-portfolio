@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAudio } from '../hooks/useAudio';
 // @ts-ignore
 import StaggeredMenu from './StaggeredMenu';
 
@@ -10,7 +9,6 @@ interface ResumeModalProps {
 }
 
 const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
-  const { playHover, playClick } = useAudio();
   const viewLink = "https://drive.google.com/file/d/1UTLmV5K6b1z0jgcAhCU-qIW2rwdiD1RN/view?usp=drive_link";
   const downloadLink = "https://drive.google.com/uc?export=download&id=1UTLmV5K6b1z0jgcAhCU-qIW2rwdiD1RN";
 
@@ -24,7 +22,6 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => {
-              playClick();
               onClose();
             }}
             className="absolute inset-0 bg-black/70 backdrop-blur-md"
@@ -41,7 +38,6 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
             {/* Close button top right */}
             <button
               onClick={() => {
-                playClick();
                 onClose();
               }}
               className="absolute top-4 right-4 p-2 rounded-full text-theme-secondary hover:text-accent hover:bg-accent/10 transition-all duration-300"
@@ -74,10 +70,8 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => {
-                  playClick();
                   onClose();
                 }}
-                onMouseEnter={playHover}
                 className="flex-1 inline-flex justify-center items-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold tracking-wide border border-accent/30 text-accent bg-accent/5 hover:bg-accent hover:text-primary hover:border-accent hover:shadow-[0_0_20px_rgba(0,209,255,0.2)] transition-all duration-300"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,10 +84,8 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
               <a
                 href={downloadLink}
                 onClick={() => {
-                  playClick();
                   onClose();
                 }}
-                onMouseEnter={playHover}
                 className="flex-1 inline-flex justify-center items-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-semibold tracking-wide bg-accent text-primary hover:shadow-[0_0_20px_rgba(0,209,255,0.35)] hover:scale-[1.02] transition-all duration-300"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +104,6 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
 const Navbar: React.FC = () => {
   const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
   const [isLight, setIsLight] = useState(false);
-  const { playClick } = useAudio();
 
   React.useEffect(() => {
     const updateTheme = () => {
@@ -137,7 +128,6 @@ const Navbar: React.FC = () => {
       link: '#',
       className: 'sm-item-gap-top',
       onClick: () => {
-        playClick();
         setIsResumeModalOpen(true);
       }
     }
@@ -161,8 +151,6 @@ const Navbar: React.FC = () => {
         accentColor={isLight ? '#D97706' : '#00D1FF'}
         colors={isLight ? ['#B45309', '#D97706'] : ['#0284C7', '#00D1FF']}
         isFixed={true}
-        onMenuOpen={() => playClick()}
-        onMenuClose={() => playClick()}
       />
 
       <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />

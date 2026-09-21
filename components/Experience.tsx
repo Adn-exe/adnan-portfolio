@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import ScrollReveal from './ScrollReveal';
-import { useAudio } from '../hooks/useAudio';
 import { TechIcon } from './Icons';
 
 const PIPELINE_STEPS = [
@@ -11,7 +10,6 @@ const PIPELINE_STEPS = [
 ];
 
 export const Experience: React.FC = () => {
-  const { playClick, playHover } = useAudio();
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const [hoveredNode, setHoveredNode] = useState<number | null>(null);
@@ -143,7 +141,7 @@ export const Experience: React.FC = () => {
                           {/* Node */}
                           <div
                             className="flex flex-col items-center gap-1.5 cursor-default"
-                            onMouseEnter={() => { setHoveredNode(idx); playHover(); }}
+                            onMouseEnter={() => setHoveredNode(idx)}
                             onMouseLeave={() => setHoveredNode(null)}
                           >
                             <div
@@ -241,9 +239,7 @@ export const Experience: React.FC = () => {
                     href="https://github.com/Adn-exe/smarthandel-mvp"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={playClick}
-                    onMouseEnter={playHover}
-                    className="inline-flex items-center gap-2.5 px-6 py-3 rounded-none text-xs sm:text-sm font-mono font-bold tracking-wider text-primary bg-accent hover:scale-[1.03] transition-all duration-300 shadow-[0_0_20px_rgba(0,209,255,0.2)] [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.25)] hover:shadow-[0_0_30px_rgba(0,209,255,0.35)] [.light_&]:hover:shadow-[0_0_25px_rgba(217,119,6,0.35)]"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-none text-xs font-mono tracking-wider font-semibold uppercase transition-all duration-300 text-accent border border-accent/40 hover:bg-accent/10 hover:border-accent hover:shadow-[0_0_20px_rgba(0,209,255,0.2)] focus:outline-none focus:ring-1 focus:ring-accent [.light_&]:shadow-[0_0_15px_rgba(217,119,6,0.25)] hover:shadow-[0_0_30px_rgba(0,209,255,0.35)] [.light_&]:hover:shadow-[0_0_25px_rgba(217,119,6,0.35)]"
                   >
                     <TechIcon name="github" className="w-4 h-4" />
                     <span>View project ↗</span>

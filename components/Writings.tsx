@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
 // @ts-ignore
 import FlowingMenu from './FlowingMenu';
-import { useAudio } from '../hooks/useAudio';
 
 const WRITING_ITEMS = [
   {
@@ -33,7 +32,6 @@ const WRITING_ITEMS = [
 
 const Writings: React.FC = () => {
   const [isLight, setIsLight] = useState(false);
-  const { playHover, playClick } = useAudio();
 
   useEffect(() => {
     const updateTheme = () => {
@@ -100,9 +98,7 @@ const Writings: React.FC = () => {
             href="https://eniax-space.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={playClick}
-            onMouseEnter={playHover}
-            className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-none text-xs sm:text-sm font-semibold tracking-wider uppercase font-mono border border-accent/40 text-accent hover:bg-accent hover:text-primary transition-all duration-300 shadow-[0_0_25px_rgba(0,209,255,0.15)] [.light_&]:shadow-[0_0_20px_rgba(217,119,6,0.15)] hover:scale-[1.02] active:scale-95 group"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-none text-xs sm:text-sm font-mono tracking-widest font-semibold uppercase transition-all duration-300 border border-accent/40 bg-accent/5 hover:bg-accent/15 text-accent hover:border-accent hover:shadow-[0_0_25px_rgba(0,209,255,0.25)] [.light_&]:hover:shadow-[0_0_20px_rgba(217,119,6,0.3)] hover:scale-[1.02] active:scale-[0.98] group"
             title="Visit Eniax Space"
           >
             <span>Eniax Space</span>

@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
 import { gsap } from 'gsap';
-import { useAudio } from '../hooks/useAudio';
 import './FlowingMenu.css';
 
 function FlowingMenu({
@@ -39,7 +38,6 @@ function MenuItem({ link, text, image, genre, speed, textColor, marqueeBgColor, 
   const marqueeInnerRef = useRef(null);
   const animationRef = useRef(null);
   const [repetitions, setRepetitions] = useState(4);
-  const { playHover, playClick } = useAudio();
 
   const animationDefaults = { duration: 0.6, ease: 'expo.out' };
 
@@ -170,7 +168,6 @@ function MenuItem({ link, text, image, genre, speed, textColor, marqueeBgColor, 
         href={link}
         target={isExternal ? '_blank' : undefined}
         rel={isExternal ? 'noopener noreferrer' : undefined}
-        onClick={() => playClick()}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}

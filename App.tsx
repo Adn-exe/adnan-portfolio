@@ -13,7 +13,6 @@ import CustomCursor from './components/CustomCursor';
 import ScrollVelocityText from './components/ScrollVelocityText';
 import ScrollReveal from './components/ScrollReveal';
 import Contact from './components/Contact';
-import { useAudio } from './hooks/useAudio';
 import ThemeToggle from './components/ThemeToggle';
 import TerminalFab from './components/TerminalFab';
 import Footer from './components/Footer';
@@ -33,7 +32,6 @@ const App: React.FC = () => {
     }
   });
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const { playHover, playClick } = useAudio();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {

@@ -9,7 +9,7 @@ interface TerminalFabProps {
 }
 
 const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = false }) => {
-  const { playHover, playClick } = useAudio();
+  const { playClick } = useAudio();
   const [inProjectsSection, setInProjectsSection] = useState(false);
   const [heroReady, setHeroReady] = useState(false);
   const [heroVisible, setHeroVisible] = useState(true);
@@ -98,7 +98,6 @@ const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = fals
         playClick();
         onToggle();
       }}
-      onMouseEnter={playHover}
       style={{
         pointerEvents: shouldHide ? 'none' : 'auto',
       }}

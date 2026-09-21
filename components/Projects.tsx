@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ScrollReveal from './ScrollReveal';
 import { PROJECTS } from '../constants';
 import { TechIcon } from './Icons';
-import { useAudio } from '../hooks/useAudio';
 // @ts-ignore
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
 
@@ -51,10 +50,8 @@ const projectAccents: Record<string, { border: string; glow: string; text: strin
 
 const Projects: React.FC = () => {
   const scrollStackRef = React.useRef<any>(null);
-  const { playClick } = useAudio();
 
   const handleJumpToCard = (index: number) => {
-    playClick();
     scrollStackRef.current?.scrollToCard(index);
   };
 
@@ -188,7 +185,6 @@ const Projects: React.FC = () => {
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={playClick}
                             className="inline-flex items-center gap-2 px-6 sm:px-7 py-3.5 rounded-none text-xs sm:text-sm font-semibold tracking-wide text-primary transition-all duration-300 hover:scale-[1.03] shadow-lg"
                             style={{
                               backgroundColor: accent.stroke,
@@ -207,7 +203,6 @@ const Projects: React.FC = () => {
                             href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
-                            onClick={playClick}
                             className="inline-flex items-center gap-2.5 px-5 sm:px-6 py-3.5 rounded-none text-xs sm:text-sm font-medium text-theme-text bg-surface/80 border border-theme-border hover:border-accent/40 hover:bg-surface transition-all duration-300"
                           >
                             <TechIcon name="github" className="w-4 h-4" />

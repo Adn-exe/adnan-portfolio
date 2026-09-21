@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useDragControls } from 'framer-motion';
+import { useAudio } from '../hooks/useAudio';
 
 const ThemeToggle: React.FC = () => {
     const [isLight, setIsLight] = useState(false);
@@ -7,6 +8,7 @@ const ThemeToggle: React.FC = () => {
     const [isHovered, setIsHovered] = useState(false);
     const [isStretched, setIsStretched] = useState(false);
     const dragControls = useDragControls();
+    const { playSwoop } = useAudio();
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('portfolio-theme');
@@ -27,6 +29,7 @@ const ThemeToggle: React.FC = () => {
 
     const toggleTheme = (e?: React.MouseEvent) => {
         const newStatus = !isLight;
+        playSwoop(newStatus ? 'expand' : 'contract');
 
         // Determine center coordinate of the bulb
         let x = window.innerWidth - 70;

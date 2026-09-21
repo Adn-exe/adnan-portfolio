@@ -148,7 +148,7 @@ interface HistoryItem {
 const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
   const [input, setInput] = useState('');
   const [isMobile, setIsMobile] = useState(false);
-  const { playHover, playClick, playHover: playTypeSound } = useAudio();
+  const { playClick } = useAudio();
   const [history, setHistory] = useState<HistoryItem[]>([
     { type: 'output', content: <pre className="text-accent leading-none font-bold text-[8px] md:text-[10px] mb-4 opacity-80">{ASCII_ART}</pre> },
     { type: 'system', content: 'SYSTEM BOOT SEQUENCE COMPLETE...' },
@@ -246,7 +246,6 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
           }
           return newHistory;
         });
-        playTypeSound();
         index++;
       } else {
         clearInterval(interval);
