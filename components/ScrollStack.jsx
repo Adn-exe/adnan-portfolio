@@ -7,6 +7,17 @@ export const ScrollStackItem = ({ children, itemClassName = '', style = {} }) =>
   </div>
 );
 
+// Helper to compute stable document-relative offset top
+const getElementDocumentTop = (element) => {
+  let top = 0;
+  let curr = element;
+  while (curr) {
+    top += curr.offsetTop || 0;
+    curr = curr.offsetParent;
+  }
+  return top;
+};
+
 const ScrollStack = forwardRef(({
   children,
   className = '',
@@ -24,12 +35,7 @@ const ScrollStack = forwardRef(({
   const animationFrameRef = useRef(null);
   const stackCompletedRef = useRef(false);
   const activeIndexRef = useRef(0);
-
-  const calculateProgress = useCallback((scrollTop, start, end) => {
-    if (scrollTop <= start) return 0;
-    if (scrollTop >= end) return 1;
-    return (scrollTop - start) / (end - start);
-  }, []);
+  const isInitializedRef = useRef(false);
 
   const parsePercentage = useCallback((value, containerHeight) => {
     if (typeof value === 'string' && value.includes('%')) {
@@ -44,17 +50,13 @@ const ScrollStack = forwardRef(({
     if (!scroller) return;
 
     const cards = Array.from(scroller.querySelectorAll('.scroll-stack-card'));
+    if (!cards.length) return;
     cardsRef.current = cards;
 
-    // Cache current transforms so we can reset and accurately measure static layout
-    const cachedTransforms = cards.map(c => c.style.transform);
-    cards.forEach(c => {
-      c.style.transform = 'none';
-    });
-
-    const scrollerRect = scroller.getBoundingClientRect();
+    // Use stable document-relative offset, falling back to rect + scroll
+    const docTop = getElementDocumentTop(scroller);
     const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-    const scrollerTop = scrollerRect.top + scrollTop;
+    const scrollerTop = docTop > 0 ? docTop : (scroller.getBoundingClientRect().top + scrollTop);
     const containerHeight = window.innerHeight;
     const stackPositionPx = parsePercentage(stackPosition, containerHeight);
 
@@ -71,16 +73,11 @@ const ScrollStack = forwardRef(({
         pinStart
       };
     });
-
-    // Restore cached transforms
-    cards.forEach((c, idx) => {
-      c.style.transform = cachedTransforms[idx] || '';
-    });
   }, [itemStackDistance, stackPosition, parsePercentage]);
 
   const updateTransforms = useCallback(() => {
     const metrics = cardMetricsRef.current;
-    if (!metrics.length) return;
+    if (!metrics || !metrics.length) return;
 
     const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
     const containerHeight = window.innerHeight;
@@ -122,7 +119,7 @@ const ScrollStack = forwardRef(({
         translateY = 0;
       }
 
-      // Pure positional pinning — no scale, no brightness reduction
+      // Pure positional pinning — smooth subpixel transform
       card.style.transform = `translate3d(0, ${Math.round(translateY * 10) / 10}px, 0)`;
       card.style.filter = '';
     });
@@ -158,8 +155,11 @@ const ScrollStack = forwardRef(({
   useImperativeHandle(ref, () => ({
     scrollToCard,
     getActiveIndex: () => activeIndexRef.current,
-    measureCards
-  }), [scrollToCard, measureCards]);
+    measureCards: () => {
+      measureCards();
+      updateTransforms();
+    }
+  }), [scrollToCard, measureCards, updateTransforms]);
 
   useLayoutEffect(() => {
     const scroller = scrollerRef.current;
@@ -169,13 +169,17 @@ const ScrollStack = forwardRef(({
     cardsRef.current = cards;
 
     cards.forEach((card, i) => {
-      // z-index ensures cards stacked later in DOM layer strictly on top of earlier cards
       card.style.zIndex = `${i + 10}`;
       card.style.willChange = 'transform';
       card.style.transformOrigin = 'top center';
       card.style.backfaceVisibility = 'hidden';
-      card.style.transform = 'translate3d(0, 0, 0)';
+      // Only set initial translate on first mount if not already set
+      if (!isInitializedRef.current) {
+        card.style.transform = 'translate3d(0, 0, 0)';
+      }
     });
+
+    isInitializedRef.current = true;
 
     measureCards();
     updateTransforms();
@@ -189,7 +193,7 @@ const ScrollStack = forwardRef(({
 
     const onResize = () => {
       measureCards();
-      onScroll();
+      updateTransforms();
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -213,9 +217,20 @@ const ScrollStack = forwardRef(({
       updateTransforms();
     }, 600);
 
+    // Watch for theme changes (class toggle on <html>) - smoothly update transforms without resetting metrics
+    const themeObserver = new MutationObserver(() => {
+      updateTransforms();
+      requestAnimationFrame(updateTransforms);
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      themeObserver.disconnect();
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
@@ -225,10 +240,8 @@ const ScrollStack = forwardRef(({
       if (lenis && typeof lenis.off === 'function') {
         lenis.off('scroll', onScroll);
       }
-      cardMetricsRef.current = [];
-      cardsRef.current = [];
     };
-  }, [measureCards, updateTransforms, children]);
+  }, [measureCards, updateTransforms]);
 
   return (
     <div className={`scroll-stack-scroller ${className}`.trim()} ref={scrollerRef}>
