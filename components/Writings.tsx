@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
 // @ts-ignore
 import FlowingMenu from './FlowingMenu';
+import { useAudio } from '../hooks/useAudio';
 
 const WRITING_ITEMS = [
   {
@@ -32,6 +33,7 @@ const WRITING_ITEMS = [
 
 const Writings: React.FC = () => {
   const [isLight, setIsLight] = useState(false);
+  const { playHover, playClick } = useAudio();
 
   useEffect(() => {
     const updateTheme = () => {
@@ -89,6 +91,31 @@ const Writings: React.FC = () => {
 
         {/* Bottom dividing line */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-theme-border to-transparent" />
+      </div>
+
+      {/* Bottom CTA to Eniax Space */}
+      <div className="mt-12 md:mt-16 flex flex-col items-center justify-center text-center px-6 relative z-10">
+        <ScrollReveal animation="fade-up">
+          <a
+            href="https://eniax-space.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={playClick}
+            onMouseEnter={playHover}
+            className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-none text-xs sm:text-sm font-semibold tracking-wider uppercase font-mono border border-accent/40 text-accent hover:bg-accent hover:text-primary transition-all duration-300 shadow-[0_0_25px_rgba(0,209,255,0.15)] [.light_&]:shadow-[0_0_20px_rgba(217,119,6,0.15)] hover:scale-[1.02] active:scale-95 group"
+            title="Visit Eniax Space"
+          >
+            <span>Eniax Space</span>
+            <svg
+              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        </ScrollReveal>
       </div>
     </section>
   );
