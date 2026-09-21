@@ -248,6 +248,19 @@
       font-family: 'Lora', Georgia, serif;
     }
 
+    /* Circular View Transition for Theme Wave */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+    ::view-transition-old(root) {
+      z-index: 1;
+    }
+    ::view-transition-new(root) {
+      z-index: 9999;
+    }
+
     /* Enforce custom cursor across entire site and disable default browser hand/pointer cursors on desktop */
     @media (pointer: fine) {
       *, *::before, *::after {

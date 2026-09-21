@@ -23,16 +23,68 @@ const ThemeToggle: React.FC = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    const toggleTheme = () => {
+    const bulbRef = React.useRef<HTMLDivElement>(null);
+
+    const toggleTheme = (e?: React.MouseEvent) => {
         const newStatus = !isLight;
-        setIsLight(newStatus);
-        if (newStatus) {
-            document.documentElement.classList.add('light');
-            localStorage.setItem('portfolio-theme', 'light');
-        } else {
-            document.documentElement.classList.remove('light');
-            localStorage.setItem('portfolio-theme', 'dark');
+
+        // Determine center coordinate of the bulb
+        let x = window.innerWidth - 70;
+        let y = 80;
+        if (bulbRef.current) {
+            const rect = bulbRef.current.getBoundingClientRect();
+            x = rect.left + rect.width / 2;
+            y = rect.top + rect.height / 2;
+        } else if (e) {
+            x = e.clientX;
+            y = e.clientY;
         }
+
+        // Farthest corner distance from the bulb to cover entire viewport
+        const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+        );
+
+        const updateDOMTheme = () => {
+            setIsLight(newStatus);
+            if (newStatus) {
+                document.documentElement.classList.add('light');
+                localStorage.setItem('portfolio-theme', 'light');
+            } else {
+                document.documentElement.classList.remove('light');
+                localStorage.setItem('portfolio-theme', 'dark');
+            }
+        };
+
+        // Fallback for browsers without View Transitions API or if user prefers reduced motion
+        const doc = document as any;
+        if (!doc.startViewTransition || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+            updateDOMTheme();
+            return;
+        }
+
+        const transition = doc.startViewTransition(() => {
+            updateDOMTheme();
+        });
+
+        transition.ready.then(() => {
+            const clipPath = [
+                `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`,
+                `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`
+            ];
+
+            document.documentElement.animate(
+                {
+                    clipPath
+                },
+                {
+                    duration: 650,
+                    easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                    pseudoElement: '::view-transition-new(root)'
+                }
+            );
+        });
     };
 
     const wireLength = isMobile ? (isLight ? 55 : 40) : (isLight ? 90 : 65);
@@ -49,6 +101,7 @@ const ThemeToggle: React.FC = () => {
 
             {/* Interactive Bulb Container */}
             <motion.div
+                ref={bulbRef}
                 drag="y"
                 dragConstraints={{ top: 0, bottom: isMobile ? 18 : 24 }}
                 dragElastic={0.08}
@@ -66,7 +119,7 @@ const ThemeToggle: React.FC = () => {
                         toggleTheme();
                     }
                 }}
-                onClick={toggleTheme}
+                onClick={(e) => toggleTheme(e)}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => {
                     setIsHovered(false);
