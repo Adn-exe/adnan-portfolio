@@ -27,9 +27,10 @@ const Hero: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Dispatch custom event when text animation completes so TerminalFab can listen
+  // Dispatch custom event when text animation completes so TerminalFab, ThemeToggle, and StaggeredMenu can listen
   useEffect(() => {
     if (textReady) {
+      (window as any).__heroTextReady = true;
       window.dispatchEvent(new CustomEvent('heroTextReady'));
     }
   }, [textReady]);

@@ -112,7 +112,7 @@ const Projects: React.FC = () => {
                   {/* Card Header Info Row: stays visible as top tab when stacked */}
                   <div className="flex items-center justify-between border-b border-theme-border pb-3.5 mb-5 relative z-10 min-h-[44px]">
                     {/* Left: Project Number & Title */}
-                    <div className="flex items-center gap-3 md:gap-4">
+                    <div className="flex items-center gap-3 md:gap-4 flex-wrap">
                       <button
                         onClick={() => handleJumpToCard(idx)}
                         className="text-2xl sm:text-3xl font-display font-black tracking-tight cursor-pointer hover:scale-105 active:scale-95 transition-transform flex items-center gap-2.5 focus:outline-none"
@@ -128,6 +128,29 @@ const Projects: React.FC = () => {
                       <span className="text-xs font-mono font-semibold uppercase tracking-wider text-theme-secondary">
                         {project.role}
                       </span>
+                      {project.badges && project.badges.length > 0 && (
+                        <div className="flex items-center gap-1.5">
+                          {project.badges.map((badge) => (
+                            <span
+                              key={badge}
+                              className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-none inline-flex items-center gap-1.5 ${
+                                badge.toLowerCase().includes('paid')
+                                  ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+                                  : 'bg-accent/15 border border-accent/40 text-accent shadow-[0_0_10px_rgba(0,209,255,0.2)]'
+                              }`}
+                            >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  badge.toLowerCase().includes('paid')
+                                    ? 'bg-emerald-400 animate-pulse'
+                                    : 'bg-accent animate-pulse'
+                                }`}
+                              />
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     {/* Right: Date & Tech Badges */}
@@ -136,14 +159,17 @@ const Projects: React.FC = () => {
                         {accent.date}
                       </span>
                       <div className="hidden sm:flex items-center gap-1.5">
-                        {project.tags.slice(0, 3).map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[11px] font-mono px-2.5 py-0.5 rounded-none bg-primary/40 border border-theme-border text-theme-secondary"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                        {project.tags
+                          .filter((tag) => !['Paid Project', 'Freelancer'].includes(tag))
+                          .slice(0, 3)
+                          .map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[11px] font-mono px-2.5 py-0.5 rounded-none bg-primary/40 border border-theme-border text-theme-secondary"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                       </div>
                     </div>
                   </div>

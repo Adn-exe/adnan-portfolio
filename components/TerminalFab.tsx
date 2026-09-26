@@ -11,7 +11,7 @@ interface TerminalFabProps {
 const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = false }) => {
   const { playClick } = useAudio();
   const [inProjectsSection, setInProjectsSection] = useState(false);
-  const [heroReady, setHeroReady] = useState(false);
+  const [heroReady, setHeroReady] = useState(() => (typeof window !== 'undefined' ? !!(window as any).__heroTextReady : false));
   const [heroVisible, setHeroVisible] = useState(true);
 
   // Listen for heroTextReady custom event from Hero.tsx

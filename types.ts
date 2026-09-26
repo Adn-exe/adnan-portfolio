@@ -11,6 +11,7 @@ export interface Project {
   github?: string;
   role: string;
   status?: string;
+  badges?: string[];
 }
 
 export interface Skill {

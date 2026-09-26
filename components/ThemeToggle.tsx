@@ -10,8 +10,15 @@ const ThemeToggle: React.FC = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [isStretched, setIsStretched] = useState(false);
+    const [heroReady, setHeroReady] = useState(() => (typeof window !== 'undefined' ? !!(window as any).__heroTextReady : false));
     const dragControls = useDragControls();
     const { playSwoop } = useAudio();
+
+    useEffect(() => {
+        const onReady = () => setHeroReady(true);
+        window.addEventListener('heroTextReady', onReady);
+        return () => window.removeEventListener('heroTextReady', onReady);
+    }, []);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -121,7 +128,22 @@ const ThemeToggle: React.FC = () => {
     const wireLength = isMobile ? (isLight ? 55 : 40) : (isLight ? 90 : 65);
 
     return (
-        <div className="fixed top-0 right-5 md:right-14 z-[200] flex flex-col items-center select-none">
+        <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{
+                opacity: heroReady ? 1 : 0,
+                y: heroReady ? 0 : -30,
+            }}
+            transition={{
+                duration: 0.6,
+                ease: [0.22, 1, 0.36, 1],
+                delay: heroReady ? 0.1 : 0,
+            }}
+            style={{
+                pointerEvents: heroReady ? 'auto' : 'none',
+            }}
+            className="fixed top-0 right-5 md:right-14 z-[200] flex flex-col items-center select-none"
+        >
             {/* Hanging Wire */}
             <motion.div
                 className="w-[2px] bg-gradient-to-b from-slate-400 via-slate-500 to-amber-400/60 origin-top shadow-sm"
@@ -270,7 +292,7 @@ const ThemeToggle: React.FC = () => {
 
 
             </motion.div>
-        </div>
+        </motion.div>
     );
 };
 

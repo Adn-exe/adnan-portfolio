@@ -4,7 +4,6 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
-import Experience from './components/Experience';
 import Skills from './components/Skills';
 import Writings from './components/Writings';
 import Loader from './components/Loader';
@@ -143,9 +142,6 @@ const App: React.FC = () => {
           <About />
 
           <Projects />
-
-          {/* Experience Section */}
-          <Experience />
 
           <Skills />
 

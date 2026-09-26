@@ -13,7 +13,8 @@ export const PROJECTS: Project[] = [
     ],
     description: 'An AI-powered grocery shopping assistant that compares real-time prices and offers across stores.',
     image: '/projectImages/smartHandel.webp',
-    tags: ['React', 'TypeScript', 'Node.js', 'Express', 'Gemini API', 'Leaflet', 'PWA'],
+    tags: ['Paid Project', 'Freelancer', 'React', 'TypeScript', 'Node.js', 'Express', 'Gemini API', 'Leaflet', 'PWA'],
+    badges: ['Paid Project', 'Freelancer'],
     link: '',
     github: 'https://github.com/Adn-exe/smarthandel-mvp',
     role: 'Full Stack Dev'

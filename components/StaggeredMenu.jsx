@@ -22,7 +22,14 @@ export const StaggeredMenu = ({
   onItemClick
 }) => {
   const [open, setOpen] = useState(false);
+  const [heroReady, setHeroReady] = useState(() => (typeof window !== 'undefined' ? !!window.__heroTextReady : false));
   const openRef = useRef(false);
+
+  useEffect(() => {
+    const onReady = () => setHeroReady(true);
+    window.addEventListener('heroTextReady', onReady);
+    return () => window.removeEventListener('heroTextReady', onReady);
+  }, []);
   const panelRef = useRef(null);
   const preLayersRef = useRef(null);
   const preLayerElsRef = useRef([]);
@@ -424,7 +431,13 @@ export const StaggeredMenu = ({
       <header className="staggered-menu-header" aria-label="Main navigation header">
         <button
           ref={toggleBtnRef}
-          className="sm-toggle group"
+          className="sm-toggle group transition-all duration-500 ease-out"
+          style={{
+            opacity: heroReady ? 1 : 0,
+            transform: heroReady ? 'scale(1)' : 'scale(0.8)',
+            pointerEvents: heroReady ? 'auto' : 'none',
+            transitionDelay: heroReady ? '100ms' : '0ms',
+          }}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           aria-controls="staggered-menu-panel"
