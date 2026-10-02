@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useDragControls } from 'framer-motion';
+import { flushSync } from 'react-dom';
 import { useAudio } from '../hooks/useAudio';
+import { getThemeTransitionClipPaths, TransitionVariant } from './ui/animated-theme-toggler';
 
-const ThemeToggle: React.FC = () => {
+interface ThemeToggleProps {
+    variant?: TransitionVariant;
+    duration?: number;
+}
+
+const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'circle', duration = 650 }) => {
     const [isLight, setIsLight] = useState(() => {
         if (typeof window === 'undefined') return false;
         return localStorage.getItem('portfolio-theme') === 'light' || document.documentElement.classList.contains('light');
@@ -13,6 +20,24 @@ const ThemeToggle: React.FC = () => {
     const [heroReady, setHeroReady] = useState(() => (typeof window !== 'undefined' ? !!(window as any).__heroTextReady : false));
     const dragControls = useDragControls();
     const { playSwoop } = useAudio();
+    const bulbRef = useRef<HTMLDivElement>(null);
+    const activeAnimRef = useRef<Animation | null>(null);
+
+    const cancelAnim = useCallback(() => {
+        activeAnimRef.current?.cancel();
+        activeAnimRef.current = null;
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            cancelAnim();
+            const root = document.documentElement;
+            if (root.dataset.magicuiThemeVt !== 'active') return;
+            delete root.dataset.magicuiThemeVt;
+            root.style.removeProperty('--magicui-theme-toggle-vt-duration');
+            root.style.removeProperty('--magicui-theme-vt-clip-from');
+        };
+    }, [cancelAnim]);
 
     useEffect(() => {
         const onReady = () => setHeroReady(true);
@@ -29,14 +54,18 @@ const ThemeToggle: React.FC = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    const bulbRef = React.useRef<HTMLDivElement>(null);
-
     const toggleTheme = (e?: React.MouseEvent) => {
+        const root = document.documentElement;
+        if (root.dataset.magicuiThemeVt === 'active') return;
+
         const newStatus = !isLight;
         playSwoop(newStatus ? 'expand' : 'contract');
 
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
         // Determine center coordinate of the bulb
-        let x = window.innerWidth - 70;
+        let x = viewportWidth - 70;
         let y = 80;
         if (bulbRef.current) {
             const rect = bulbRef.current.getBoundingClientRect();
@@ -48,12 +77,12 @@ const ThemeToggle: React.FC = () => {
         }
 
         // Farthest corner distance from the bulb to cover entire viewport
-        const endRadius = Math.hypot(
-            Math.max(x, window.innerWidth - x),
-            Math.max(y, window.innerHeight - y)
+        const maxRadius = Math.hypot(
+            Math.max(x, viewportWidth - x),
+            Math.max(y, viewportHeight - y)
         );
 
-        const updateDOMTheme = () => {
+        const applyTheme = () => {
             setIsLight(newStatus);
             if (newStatus) {
                 document.documentElement.classList.add('light');
@@ -64,80 +93,72 @@ const ThemeToggle: React.FC = () => {
             }
         };
 
-        // Fallback for browsers without View Transitions API or if user prefers reduced motion
         const doc = document as any;
-        if (!doc.startViewTransition || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-            updateDOMTheme();
+        if (typeof doc.startViewTransition !== 'function' || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+            applyTheme();
             return;
         }
 
-        // Set CSS custom properties on root before taking snapshot so pseudo-elements are instantly clipped
-        document.documentElement.style.setProperty('--bulb-x', `${Math.round(x)}px`);
-        document.documentElement.style.setProperty('--bulb-y', `${Math.round(y)}px`);
-        document.documentElement.style.setProperty('--end-radius', `${Math.ceil(endRadius)}px`);
-        document.documentElement.dataset.themeTransition = newStatus ? 'expand' : 'contract';
+        const clipPath = getThemeTransitionClipPaths(
+            variant,
+            x,
+            y,
+            maxRadius,
+            viewportWidth,
+            viewportHeight
+        );
+
+        root.dataset.magicuiThemeVt = 'active';
+        root.style.setProperty('--magicui-theme-toggle-vt-duration', `${duration}ms`);
+        root.style.setProperty('--magicui-theme-vt-clip-from', clipPath[0]);
+
+        const cleanup = () => {
+            delete root.dataset.magicuiThemeVt;
+            root.style.removeProperty('--magicui-theme-toggle-vt-duration');
+            root.style.removeProperty('--magicui-theme-vt-clip-from');
+            cancelAnim();
+        };
 
         const transition = doc.startViewTransition(() => {
-            updateDOMTheme();
+            flushSync(applyTheme);
         });
 
-        transition.ready.then(() => {
-            if (newStatus) {
-                // Expanding light outward from bulb across entire screen (smooth, cinematic pace)
-                document.documentElement.animate(
+        if (typeof transition?.finished?.finally === 'function') {
+            transition.finished.finally(cleanup).catch(() => {});
+        } else {
+            cleanup();
+        }
+
+        const ready = transition?.ready;
+        if (ready && typeof ready.then === 'function') {
+            ready.then(() => {
+                const anim = document.documentElement.animate(
+                    { clipPath },
                     {
-                        clipPath: [
-                            `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`,
-                            `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`
-                        ]
-                    },
-                    {
-                        duration: 1100,
-                        easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                        duration,
+                        easing: variant === 'star' ? 'linear' : 'cubic-bezier(0.22, 1, 0.36, 1)',
                         fill: 'forwards',
                         pseudoElement: '::view-transition-new(root)'
                     }
                 );
-            } else {
-                // Contracting light backwards into the bulb coordinates
-                document.documentElement.animate(
-                    {
-                        clipPath: [
-                            `circle(${Math.ceil(endRadius)}px at ${Math.round(x)}px ${Math.round(y)}px)`,
-                            `circle(0px at ${Math.round(x)}px ${Math.round(y)}px)`
-                        ]
-                    },
-                    {
-                        duration: 850,
-                        easing: 'cubic-bezier(0.32, 0, 0.24, 1)',
-                        fill: 'forwards',
-                        pseudoElement: '::view-transition-old(root)'
-                    }
-                );
-            }
-        });
-
-        transition.finished.finally(() => {
-            delete document.documentElement.dataset.themeTransition;
-            document.documentElement.style.removeProperty('--bulb-x');
-            document.documentElement.style.removeProperty('--bulb-y');
-            document.documentElement.style.removeProperty('--end-radius');
-        });
+                activeAnimRef.current = anim;
+            }).catch(() => {});
+        }
     };
 
     const wireLength = isMobile ? (isLight ? 55 : 40) : (isLight ? 90 : 65);
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: -30 }}
+            initial={{ opacity: 0, y: -45 }}
             animate={{
                 opacity: heroReady ? 1 : 0,
-                y: heroReady ? 0 : -30,
+                y: heroReady ? 0 : -45,
             }}
             transition={{
-                duration: 0.6,
-                ease: [0.22, 1, 0.36, 1],
-                delay: heroReady ? 0.1 : 0,
+                duration: 0.95,
+                ease: [0.16, 1, 0.3, 1],
+                delay: heroReady ? 0.68 : 0,
             }}
             style={{
                 pointerEvents: heroReady ? 'auto' : 'none',

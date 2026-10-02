@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { SKILLS } from '../constants';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
 import RadarChart from './RadarChart';
 import { Skill } from '../types';
+// @ts-ignore
+import TechText from './TechText';
 
 type CategoryFilter = 'Languages' | 'Frameworks' | 'Tools' | 'Databases' | 'Soft Skills';
 
@@ -30,6 +32,21 @@ export const Skills: React.FC = () => {
   const [selectedSkill, setSelectedSkill] = useState<Skill>(() => defaultEndSkills[0]);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('Languages');
   const [draggedSkill, setDraggedSkill] = useState<Skill | null>(null);
+  const [isLight, setIsLight] = useState(() =>
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light'));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    setIsLight(document.documentElement.classList.contains('light'));
+    return () => observer.disconnect();
+  }, []);
 
   // Filter categories matching the resume breakdown
   const categories: CategoryItem[] = [
@@ -100,18 +117,42 @@ export const Skills: React.FC = () => {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-[130px] pointer-events-none" />
 
       <div className="container mx-auto max-w-7xl relative z-10">
-        {/* Section Header (Clean original layout) */}
-        <div className="w-full mb-12 sm:mb-16 px-2 sm:px-4">
+        {/* Section Header */}
+        <div className="w-full mb-10 sm:mb-14 px-2 sm:px-4">
           <ScrollReveal animation="fade-right">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center gap-4 mb-2 sm:mb-3">
               <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-none" />
               <span className="text-accent font-medium text-sm tracking-widest uppercase">
                 Skills
               </span>
             </div>
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-display font-black text-theme-text tracking-tighter leading-none">
-              Technical <span className="text-gradient">Arsenal</span>
-            </h2>
+
+            {/* Semantic heading for SEO & accessibility */}
+            <h2 className="sr-only">Technical Arsenal</h2>
+
+            {/* Interactive TechText Header */}
+            <div className="w-full h-20 sm:h-28 md:h-36 lg:h-44 relative -ml-1 sm:-ml-2 max-w-5xl">
+              <TechText
+                text="Technical Arsenal"
+                fontFamily="'Space Grotesk', sans-serif"
+                fontWeight={800}
+                fontSize={120}
+                letterSpacing={-0.03}
+                color={isLight ? '#1F1A14' : '#F8FAFC'}
+                accentColor={isLight ? '#D97706' : '#00D1FF'}
+                align="left"
+                reveal="letter"
+                dashLength={4}
+                dashGap={2}
+                strokeWidth={1.8}
+                specks={14}
+                selection={true}
+                labels={true}
+                draggable={true}
+                sweep={true}
+                speed={0.8}
+              />
+            </div>
           </ScrollReveal>
         </div>
 

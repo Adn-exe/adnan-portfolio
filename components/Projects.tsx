@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 import { PROJECTS } from '../constants';
 import { TechIcon } from './Icons';
 // @ts-ignore
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
+import { DiaTextReveal } from './ui/dia-text-reveal';
 
 const projectAccents: Record<string, { border: string; glow: string; text: string; bg: string; stroke: string; date: string }> = {
   '1': {
@@ -49,7 +50,18 @@ const projectAccents: Record<string, { border: string; glow: string; text: strin
 };
 
 const Projects: React.FC = () => {
-  const scrollStackRef = React.useRef<any>(null);
+  const scrollStackRef = useRef<any>(null);
+  const [isLight, setIsLight] = useState(() =>
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const handleJumpToCard = (index: number) => {
     scrollStackRef.current?.scrollToCard(index);
@@ -70,8 +82,40 @@ const Projects: React.FC = () => {
                 Featured Work
               </span>
             </div>
-            <h2 className="text-5xl md:text-8xl font-display font-black text-theme-text tracking-tighter leading-none">
-              Featured <span className="text-gradient">Creations</span>
+            <h2 className="text-5xl md:text-8xl font-display font-black tracking-tighter leading-none flex flex-wrap gap-x-3 sm:gap-x-5 md:gap-x-6 items-baseline">
+              <DiaTextReveal
+                text="Featured"
+                className="font-display font-black tracking-tighter leading-none inline-block text-theme-text"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={isLight ? '#1F1A14' : '#F8FAFC'}
+                duration={1.8}
+                startOnView={true}
+                once={false}
+                scrollDownOnly={true}
+              />
+              <DiaTextReveal
+                text="Creations"
+                className="font-display font-black tracking-tighter leading-none inline-block text-gradient"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={
+                  isLight
+                    ? 'linear-gradient(90deg, #B45309, #D97706, #B45309)'
+                    : 'linear-gradient(90deg, #00D1FF, #ffffff, #00D1FF)'
+                }
+                duration={1.8}
+                delay={0.12}
+                startOnView={true}
+                once={false}
+                scrollDownOnly={true}
+              />
             </h2>
           </ScrollReveal>
         </div>

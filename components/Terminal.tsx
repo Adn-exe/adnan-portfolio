@@ -550,9 +550,9 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
             dragControls={dragControls}
             dragListener={!isMobile}
             dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-            className="fixed bottom-0 left-0 right-0 md:bottom-28 md:left-8 md:right-auto z-[100] w-full md:w-[600px] h-[80dvh] md:h-[500px] bg-zinc-950/95 backdrop-blur-3xl border border-white/10 rounded-t-2xl md:rounded-2xl overflow-hidden shadow-[0_30px_100px_rgba(0,0,0,0.6)] flex flex-col perspective-[1000px] ring-1 ring-white/5"
+            className="fixed bottom-0 left-0 right-0 md:bottom-28 md:left-8 md:right-auto z-[100] w-full md:w-[620px] h-[82dvh] md:h-[520px] bg-surface/95 [.light_&]:bg-[#FAF7F2]/95 backdrop-blur-2xl border border-theme-border rounded-t-2xl md:rounded-2xl overflow-hidden shadow-[0_25px_80px_rgba(0,0,0,0.5)] flex flex-col ring-1 ring-white/10 [.light_&]:ring-black/5"
           >
-            {/* CRT Overlay Effect */}
+            {/* Subtle Overlay Effect */}
             <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden rounded-2xl opacity-[0.03]">
               <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
               <div className="absolute inset-0 animate-scanline bg-gradient-to-b from-transparent via-white/5 to-transparent h-20 w-full" />
@@ -561,31 +561,26 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
             {/* Terminal Header */}
             <div 
               onPointerDown={(e) => dragControls.start(e)}
-              className="flex items-center justify-between px-6 py-4 bg-white/[0.04] border-b border-white/5 cursor-grab active:cursor-grabbing select-none"
+              className="flex items-center justify-between px-5 py-3.5 bg-white/[0.04] [.light_&]:bg-black/[0.03] border-b border-theme-border cursor-grab active:cursor-grabbing select-none"
             >
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-3 h-3 rounded-full bg-[#FF5F56]/80 hover:bg-[#FF5F56] transition-colors shadow-[0_0_8px_rgba(255,95,86,0.2)] focus:outline-none"
+                  className="w-3 h-3 rounded-full bg-[#FF5F56] hover:brightness-110 active:scale-95 transition-all shadow-[0_0_8px_rgba(255,95,86,0.35)] focus:outline-none"
                   aria-label="Close Terminal"
                 />
-                <div className="w-3 h-3 rounded-full bg-[#FFBD2E]/80 hover:bg-[#FFBD2E] transition-colors shadow-[0_0_8px_rgba(255,189,46,0.2)]" />
-                <div className="w-3 h-3 rounded-full bg-[#27C93F]/80 hover:bg-[#27C93F] transition-colors shadow-[0_0_8px_rgba(39,201,63,0.2)]" />
+                <div className="w-3 h-3 rounded-full bg-[#FFBD2E] hover:brightness-110 transition-all shadow-[0_0_8px_rgba(255,189,46,0.35)]" />
+                <div className="w-3 h-3 rounded-full bg-[#27C93F] hover:brightness-110 transition-all shadow-[0_0_8px_rgba(39,201,63,0.35)]" />
               </div>
-              <div className="flex items-center gap-2.5">
-                <div className="flex items-center justify-center w-5 h-5 rounded bg-accent/10 border border-accent/30 text-accent shadow-[0_0_10px_rgba(0,209,255,0.2)]">
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 17l6-6-6-6M12 19h8" />
-                  </svg>
-                </div>
-                <span className="text-[10px] font-mono text-white/60 uppercase tracking-[0.35em] font-black">ADNAN_OS_TERMINAL v1.0.4</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono font-medium tracking-tight text-theme-secondary/80">bash — adnan@portfolio:~ (zsh)</span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-white/20 hover:text-white transition-all p-1 hover:rotate-90 duration-300 focus:outline-none"
+                className="text-theme-secondary/40 hover:text-theme-text transition-colors p-1 hover:rotate-90 duration-200 focus:outline-none"
                 aria-label="Close Terminal"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -595,24 +590,24 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
             <div
               ref={scrollRef}
               data-lenis-prevent
-              className="flex-1 p-8 font-mono text-[13px] overflow-y-auto custom-scrollbar space-y-4 selection:bg-accent/40 selection:text-white scroll-smooth"
+              className="flex-1 p-6 md:p-7 font-mono text-[13px] overflow-y-auto custom-scrollbar space-y-3.5 selection:bg-accent/40 selection:text-white scroll-smooth"
               onClick={() => inputRef.current?.focus()}
             >
-              <div className="flex flex-col gap-1 mb-8">
-                <div className="text-accent font-bold opacity-40 text-[9px] tracking-[0.3em] uppercase">Kernel initialization sequence... [OK]</div>
-                <div className="text-white/30 text-[9px] tracking-widest uppercase">Secure node: adnan-mainframe-01</div>
-                <div className="h-[1px] w-16 bg-gradient-to-r from-accent/40 to-transparent mt-3" />
+              <div className="flex flex-col gap-1 mb-6">
+                <div className="text-accent font-bold opacity-60 text-[9px] tracking-[0.25em] uppercase">Kernel sequence ready [OK]</div>
+                <div className="text-theme-secondary/50 text-[9px] tracking-widest uppercase">Secure node: adnan-mainframe-01</div>
+                <div className="h-[1px] w-14 bg-gradient-to-r from-accent/50 to-transparent mt-2" />
               </div>
 
               {history.map((item, i) => (
-                <div key={i} className={item.type === 'input' ? 'text-white' : item.type === 'system' ? 'text-accent/40 text-[10px] tracking-widest italic uppercase' : 'text-theme-secondary'}>
+                <div key={i} className={item.type === 'input' ? 'text-theme-text font-medium' : item.type === 'system' ? 'text-accent/60 text-[10px] tracking-widest italic uppercase' : 'text-theme-secondary'}>
                   {item.type === 'input' ? (
-                    <span className="flex items-center gap-4">
-                      <span className="text-accent font-black drop-shadow-[0_0_5px_rgba(0,209,255,0.5)]">❯</span>
-                      <span className="opacity-95 font-bold tracking-tight">{item.content}</span>
+                    <span className="flex items-center gap-3">
+                      <span className="text-accent font-black drop-shadow-[0_0_5px_rgba(0,209,255,0.4)]">❯</span>
+                      <span className="opacity-95 tracking-tight">{item.content}</span>
                     </span>
                   ) : (
-                    <div className={item.type === 'system' ? 'py-1' : 'pl-7 border-l-2 border-white/5 ml-2 py-1.5 hover:border-accent/20 transition-colors'}>
+                    <div className={item.type === 'system' ? 'py-1' : 'pl-6 border-l-2 border-theme-border/60 ml-2 py-1 hover:border-accent/30 transition-colors'}>
                       {item.typing ? (
                         <span className="text-accent leading-relaxed">{item.content}<span className="inline-block w-2 h-4 bg-accent ml-1 animate-pulse align-middle" /></span>
                       ) : (
@@ -623,8 +618,8 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
                 </div>
               ))}
 
-              <form onSubmit={handleCommand} className="flex gap-4 items-center group relative pb-4">
-                <span className="text-accent font-black group-focus-within:animate-pulse drop-shadow-[0_0_5px_rgba(0,209,255,0.5)]">❯</span>
+              <form onSubmit={handleCommand} className="flex gap-3 items-center group relative pb-3">
+                <span className="text-accent font-black group-focus-within:animate-pulse drop-shadow-[0_0_5px_rgba(0,209,255,0.4)]">❯</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -632,7 +627,7 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={isTyping}
-                  className="flex-1 bg-transparent border-none outline-none text-white focus:ring-0 p-0 placeholder:text-white/5 disabled:opacity-50 font-bold"
+                  className="flex-1 bg-transparent border-none outline-none text-theme-text focus:ring-0 p-0 placeholder:text-theme-secondary/20 disabled:opacity-50 font-bold"
                   placeholder={isTyping ? 'SYSTEM BUSY...' : 'ENTER COMMAND...'}
                   autoComplete="off"
                   spellCheck="false"
@@ -641,12 +636,12 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
             </div>
 
             {/* Terminal Footer */}
-            <div className="px-8 py-3 bg-white/[0.03] border-t border-white/5 flex justify-between items-center select-none">
-              <div className="flex gap-6">
-                <div className="text-[9px] text-white/20 font-mono tracking-widest uppercase">UTF-8</div>
-                <div className="text-[9px] text-white/20 font-mono tracking-widest uppercase">ZSH-ADNAN</div>
+            <div className="px-6 py-2.5 bg-white/[0.02] [.light_&]:bg-black/[0.02] border-t border-theme-border flex justify-between items-center select-none text-[10px] text-theme-secondary/50 font-mono">
+              <div className="flex gap-4 tracking-wider">
+                <span>UTF-8</span>
+                <span>ZSH</span>
               </div>
-              <div className="text-[10px] text-accent/50 font-black tracking-[0.2em] uppercase italic drop-shadow-[0_0_3px_rgba(0,209,255,0.2)]">Command Center v1.0.4</div>
+              <div className="text-accent/60 font-semibold tracking-wider uppercase">Command Center v1.0.4</div>
             </div>
           </motion.div>
         )}
@@ -654,17 +649,17 @@ const Terminal: React.FC<TerminalProps> = ({ isOpen, setIsOpen }) => {
 
       <style dangerouslySetInnerHTML={{ __html: `
         .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
+          width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.01);
+          background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0, 209, 255, 0.1);
+          background: rgba(125, 125, 125, 0.2);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(0, 209, 255, 0.3);
+          background: rgba(0, 209, 255, 0.4);
         }
         @keyframes scanline {
           0% { transform: translateY(-100%); }

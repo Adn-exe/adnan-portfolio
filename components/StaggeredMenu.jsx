@@ -431,12 +431,13 @@ export const StaggeredMenu = ({
       <header className="staggered-menu-header" aria-label="Main navigation header">
         <button
           ref={toggleBtnRef}
-          className="sm-toggle group transition-all duration-500 ease-out"
+          className="sm-toggle group"
           style={{
             opacity: heroReady ? 1 : 0,
-            transform: heroReady ? 'scale(1)' : 'scale(0.8)',
+            transform: heroReady ? 'translateY(0) scale(1)' : 'translateY(-12px) scale(0.85)',
             pointerEvents: heroReady ? 'auto' : 'none',
-            transitionDelay: heroReady ? '100ms' : '0ms',
+            transition: 'opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)',
+            transitionDelay: heroReady ? '550ms' : '0ms',
           }}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}

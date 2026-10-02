@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
 // @ts-ignore
 import FlowingMenu from './FlowingMenu';
+import { LinkPreview } from './ui/link-preview';
+import { DiaTextReveal } from './ui/dia-text-reveal';
 
 const WRITING_ITEMS = [
   {
@@ -66,8 +68,40 @@ const Writings: React.FC = () => {
               Hobby
             </span>
           </div>
-          <h2 className="text-5xl md:text-7xl font-display font-black text-theme-text tracking-tighter leading-tight text-center md:text-left">
-            My <span className="text-gradient">Writings</span>
+          <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter leading-tight text-center md:text-left flex flex-wrap gap-x-2.5 sm:gap-x-4 md:gap-x-5 items-baseline justify-center md:justify-start">
+            <DiaTextReveal
+              text="My"
+              className="font-display font-black tracking-tighter leading-tight inline-block text-theme-text"
+              colors={
+                isLight
+                  ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                  : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+              }
+              textColor={isLight ? '#1F1A14' : '#F8FAFC'}
+              duration={1.8}
+              startOnView={true}
+              once={false}
+              scrollDownOnly={true}
+            />
+            <DiaTextReveal
+              text="Writings"
+              className="font-display font-black tracking-tighter leading-tight inline-block text-gradient"
+              colors={
+                isLight
+                  ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                  : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+              }
+              textColor={
+                isLight
+                  ? 'linear-gradient(90deg, #B45309, #D97706, #B45309)'
+                  : 'linear-gradient(90deg, #00D1FF, #ffffff, #00D1FF)'
+              }
+              duration={1.8}
+              delay={0.12}
+              startOnView={true}
+              once={false}
+              scrollDownOnly={true}
+            />
           </h2>
         </ScrollReveal>
       </div>
@@ -96,12 +130,15 @@ const Writings: React.FC = () => {
       {/* Bottom CTA to Eniax Space */}
       <div className="mt-12 md:mt-16 flex flex-col items-center justify-center text-center px-6 relative z-10">
         <ScrollReveal animation="fade-up">
-          <a
-            href="https://eniax-space.vercel.app/"
+          <LinkPreview
+            url="https://eniax-space.vercel.app/"
+            width={280}
+            height={160}
+            quality={60}
+            waitForTimeout={4000}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-none text-xs sm:text-sm font-mono tracking-widest font-semibold uppercase transition-all duration-300 border border-accent/40 bg-accent/5 hover:bg-accent/15 text-accent hover:border-accent hover:shadow-[0_0_25px_rgba(0,209,255,0.25)] [.light_&]:hover:shadow-[0_0_20px_rgba(217,119,6,0.3)] hover:scale-[1.02] active:scale-[0.98] group"
-            title="Visit Eniax Space"
           >
             <span>Eniax Space</span>
             <svg
@@ -112,7 +149,7 @@ const Writings: React.FC = () => {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
-          </a>
+          </LinkPreview>
         </ScrollReveal>
       </div>
     </section>

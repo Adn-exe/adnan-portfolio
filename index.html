@@ -249,34 +249,26 @@
     }
 
     /* Disable property transitions during theme switch so snapshots are pristine and instant */
-    html[data-theme-transition],
-    html[data-theme-transition] *,
-    html[data-theme-transition] *::before,
-    html[data-theme-transition] *::after {
+    html[data-magicui-theme-vt="active"],
+    html[data-magicui-theme-vt="active"] *,
+    html[data-magicui-theme-vt="active"] *::before,
+    html[data-magicui-theme-vt="active"] *::after {
       transition: none !important;
     }
 
-    /* Circular View Transition for Theme Wave */
+    /* Magic UI View Transition */
     ::view-transition-old(root),
     ::view-transition-new(root) {
       animation: none;
       mix-blend-mode: normal;
     }
-    /* Dark -> Light: Incoming Light layer on top expanding outward (initially clipped to 0px to prevent flash) */
-    html[data-theme-transition="expand"]::view-transition-old(root) {
-      z-index: 1;
+
+    html[data-magicui-theme-vt="active"]::view-transition-group(root) {
+      animation-duration: var(--magicui-theme-toggle-vt-duration, 650ms);
     }
-    html[data-theme-transition="expand"]::view-transition-new(root) {
-      z-index: 9999;
-      clip-path: circle(0px at var(--bulb-x, 90%) var(--bulb-y, 80px));
-    }
-    /* Light -> Dark: Outgoing Light layer on top contracting inward */
-    html[data-theme-transition="contract"]::view-transition-old(root) {
-      z-index: 9999;
-      clip-path: circle(var(--end-radius, 2500px) at var(--bulb-x, 90%) var(--bulb-y, 80px));
-    }
-    html[data-theme-transition="contract"]::view-transition-new(root) {
-      z-index: 1;
+
+    html[data-magicui-theme-vt="active"]::view-transition-new(root) {
+      clip-path: var(--magicui-theme-vt-clip-from, circle(0% at 50% 50%));
     }
 
     /* Enforce custom cursor across entire site and disable default browser hand/pointer cursors on desktop */

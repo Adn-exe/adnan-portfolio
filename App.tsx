@@ -8,7 +8,7 @@ import Skills from './components/Skills';
 import Writings from './components/Writings';
 import Loader from './components/Loader';
 import SmoothScroll from './components/SmoothScroll';
-import CustomCursor from './components/CustomCursor';
+import { SmoothCursor } from './components/ui/smooth-cursor';
 import ScrollVelocityText from './components/ScrollVelocityText';
 import ScrollReveal from './components/ScrollReveal';
 import Contact from './components/Contact';
@@ -83,7 +83,7 @@ const App: React.FC = () => {
           style={{ scaleX }}
         />
 
-        <CustomCursor />
+        <SmoothCursor />
 
         <ThemeToggle />
 

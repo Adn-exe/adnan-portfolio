@@ -29,6 +29,7 @@ export interface StrokeTextProps {
   reverse?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  delay?: number;
   onComplete?: () => void;
 }
 
@@ -51,6 +52,7 @@ const StrokeText: React.FC<StrokeTextProps> = ({
   reverse = false,
   className = '',
   style = {},
+  delay = 0,
   onComplete
 }) => {
   const rootRef = useRef<HTMLSpanElement>(null);
@@ -165,19 +167,19 @@ const StrokeText: React.FC<StrokeTextProps> = ({
         defaults: { overwrite: 'auto' }
       });
 
-      tl.to(strokes, { strokeDashoffset: 0, duration: drawDuration, ease, stagger: staggerConfig as any }, 0);
+      tl.to(strokes, { strokeDashoffset: 0, duration: drawDuration, ease, stagger: staggerConfig as any }, delay);
 
       if (useWipe && wipe) {
         tl.to(
           wipe,
           { attr: { width: box.width }, duration: fillDuration, ease: 'power2.inOut' },
-          drawDuration + fillDelay
+          delay + drawDuration + fillDelay
         );
       } else if (fillEnabled) {
         tl.to(
           fills,
           { opacity: 1, duration: fillDuration, ease: 'power2.out', stagger: staggerConfig as any },
-          drawDuration + fillDelay
+          delay + drawDuration + fillDelay
         );
       }
 
@@ -220,7 +222,7 @@ const StrokeText: React.FC<StrokeTextProps> = ({
       timeline?.kill();
       gsap.killTweensOf(targets);
     };
-  }, [box, dash, drawDuration, fillDelay, stagger, ease, trigger, fillMode, reverse]);
+  }, [box, dash, drawDuration, fillDelay, stagger, ease, trigger, fillMode, reverse, delay]);
 
   const viewBox = box ? `${box.x} ${box.y} ${box.width} ${box.height}` : `0 ${-numericFontSize} 600 ${numericFontSize * 1.3}`;
   const fillStyle = fillGradient && fillGradient.length > 0 ? `url(#${wipeId}-gradient)` : fillColor;

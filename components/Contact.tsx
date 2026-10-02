@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
 import { useAudio } from '../hooks/useAudio';
+import { InteractiveHoverButton } from './ui/interactive-hover-button';
 
 const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -121,47 +122,19 @@ const Contact: React.FC = () => {
                                 </div>
 
                                 <div className="pt-2">
-                                    <button
+                                    <InteractiveHoverButton
                                         type="submit"
+                                        text="Submit Request"
+                                        hoverText="Send Message"
+                                        loading={isSubmitting}
+                                        success={status === 'success'}
+                                        successText="Message Sent!"
                                         disabled={isSubmitting || status === 'success'}
                                         onClick={() => {
                                             if (!isSubmitting && status === 'idle') playClick();
                                         }}
-                                        className="group relative w-full py-4 px-6 rounded-2xl font-sans font-semibold text-xs sm:text-sm tracking-widest uppercase overflow-hidden transition-all duration-300 flex items-center justify-center gap-3 border shadow-lg cursor-pointer disabled:cursor-not-allowed bg-accent text-primary border-accent/40 shadow-accent/15 hover:shadow-accent/30 hover:shadow-xl hover:scale-[1.01] active:scale-[0.99] [.light_&]:bg-accent [.light_&]:text-[#FAF8F2] [.light_&]:border-amber-600/30 disabled:opacity-80 disabled:hover:scale-100"
-                                    >
-                                        {/* Subtle ambient highlight */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                                        {/* Content based on status */}
-                                        {isSubmitting ? (
-                                            <div className="flex items-center gap-2.5">
-                                                <svg className="animate-spin h-4 w-4 text-primary [.light_&]:text-[#FAF8F2]" fill="none" viewBox="0 0 24 24">
-                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                                </svg>
-                                                <span className="font-medium tracking-widest text-xs">Sending Message...</span>
-                                            </div>
-                                        ) : status === 'success' ? (
-                                            <div className="flex items-center gap-2 text-primary [.light_&]:text-[#FAF8F2]">
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                                <span className="font-semibold tracking-widest text-xs">Message Sent!</span>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center gap-2.5">
-                                                <span className="font-semibold tracking-widest">Submit Request</span>
-                                                <svg
-                                                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                                </svg>
-                                            </div>
-                                        )}
-                                    </button>
+                                        className="w-full py-4 rounded-2xl font-sans text-xs sm:text-sm tracking-widest uppercase"
+                                    />
                                 </div>
                             </form>
                         </div>

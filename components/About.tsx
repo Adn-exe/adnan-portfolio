@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollTextReveal';
+import { TextChromaReveal } from './wensity/text-chroma-reveal';
+import { DiaTextReveal } from './ui/dia-text-reveal';
 
 export const About: React.FC = () => {
+  const [isLight, setIsLight] = useState(() =>
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="about" className="py-24 md:py-32 px-6 relative z-10 overflow-hidden">
       <div className="container mx-auto max-w-7xl">
@@ -10,25 +24,74 @@ export const About: React.FC = () => {
           {/* Section Title */}
           <div className="space-y-4">
             <div className="flex items-center gap-4 mb-2">
-              <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
-              <span className="text-white font-medium text-xs md:text-sm tracking-widest uppercase font-mono">About Me</span>
+              <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                whileInView={{ width: '4rem', opacity: 1 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="h-[2px] bg-gradient-to-r from-accent to-white rounded-full origin-left"
+              />
+              <TextChromaReveal
+                as="span"
+                text="About Me"
+                className="font-medium text-xs md:text-sm tracking-widest uppercase font-mono"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={isLight ? '#78350F' : '#FFFFFF'}
+                duration={1.2}
+                startOnView={true}
+                once={false}
+                inViewMargin="-50px"
+              />
             </div>
 
-            <h2 className="text-5xl sm:text-6xl md:text-8xl font-display font-black leading-[0.9] tracking-tighter">
-              <span className="text-theme-text">Who I</span> <span className="text-gradient">Am</span>
+            <h2 className="text-5xl sm:text-6xl md:text-8xl font-display font-black leading-[0.9] tracking-tighter flex flex-wrap gap-x-3 sm:gap-x-5 md:gap-x-6 items-baseline">
+              <DiaTextReveal
+                text="Who I"
+                className="font-display font-black leading-[0.9] tracking-tighter text-theme-text inline-block"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={isLight ? '#1F1A14' : '#F8FAFC'}
+                duration={1.6}
+                startOnView={true}
+                once={false}
+                scrollDownOnly={true}
+              />
+              <DiaTextReveal
+                text="Am"
+                className="font-display font-black leading-[0.9] tracking-tighter text-gradient inline-block"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={
+                  isLight
+                    ? 'linear-gradient(90deg, #B45309, #D97706, #B45309)'
+                    : 'linear-gradient(90deg, #00D1FF, #ffffff, #00D1FF)'
+                }
+                duration={1.6}
+                delay={0.12}
+                startOnView={true}
+                once={false}
+                scrollDownOnly={true}
+              />
             </h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             <div className="lg:col-span-7 space-y-8 md:space-y-10">
-              {/* Bio with React Bits ScrollReveal */}
+              {/* Bio with Word-by-Word Chroma Scroll Reveal */}
               <ScrollReveal
                 baseOpacity={0}
-                enableBlur={false}
-                baseRotation={0}
-                blurStrength={0}
                 containerClassName="my-0"
-                textClassName="font-about text-[22px] font-[450] leading-[1.4] tracking-normal"
+                textClassName="font-about text-[20px] sm:text-[22px] font-[450] leading-[1.5] tracking-normal"
                 wordAnimationStart="top bottom-=20%"
                 wordAnimationEnd="top 48%"
               >
@@ -39,7 +102,7 @@ export const About: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: false, amount: 0.3 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="flex flex-wrap gap-8 md:gap-12 pt-6 md:pt-8 border-t border-theme-border"
               >

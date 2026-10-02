@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -23,17 +23,27 @@ export interface ScrollRevealProps {
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   scrollContainerRef,
-  enableBlur = false,
   baseOpacity = 0,
   baseRotation = 0,
-  blurStrength = 0,
   containerClassName = '',
   textClassName = '',
   rotationEnd = 'bottom bottom',
   wordAnimationEnd = 'center center',
   wordAnimationStart = 'top bottom-=10%'
 }) => {
-  const containerRef = useRef<HTMLHeadingElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [isLight, setIsLight] = useState(() =>
+    typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsLight(document.documentElement.classList.contains('light'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const splitText = useMemo(() => {
     const text = typeof children === 'string' ? children : '';
@@ -57,6 +67,18 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       }
     }
 
+    // Chromatic rainbow gradients tuned for dark and light palettes
+    // 0% - 30%: solid final text color
+    // 38% - 62%: chromatic ribbon sweep
+    // 70% - 100%: transparent unrevealed
+    const baseGrad = isLight
+      ? 'linear-gradient(90deg, #1F1A14 0%, #1F1A14 30%, #D97706 38%, #F59E0B 46%, #B45309 54%, #78350F 62%, transparent 70%, transparent 100%)'
+      : 'linear-gradient(90deg, #F8FAFC 0%, #F8FAFC 30%, #00D1FF 38%, #38BDF8 46%, #818CF8 54%, #C084FC 62%, transparent 70%, transparent 100%)';
+
+    const highlightGrad = isLight
+      ? 'linear-gradient(90deg, #D97706 0%, #D97706 30%, #F59E0B 38%, #B45309 46%, #78350F 54%, #D97706 62%, transparent 70%, transparent 100%)'
+      : 'linear-gradient(90deg, #00D1FF 0%, #00D1FF 30%, #38BDF8 38%, #818CF8 46%, #C084FC 54%, #00D1FF 62%, transparent 70%, transparent 100%)';
+
     let charCursor = 0;
     return text.split(/(\s+)/).map((segment, index) => {
       const segStart = charCursor;
@@ -66,22 +88,27 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       if (segment.match(/^\s+$/)) return segment;
 
       const isHighlighted = ranges.some(([start, end]) => segStart < end && segEnd > start);
+      const grad = isHighlighted ? highlightGrad : baseGrad;
 
       const highlightClass = isHighlighted
-        ? 'text-accent [.light_&]:text-amber-600 font-semibold drop-shadow-[0_0_12px_rgba(56,189,248,0.25)] [.light_&]:drop-shadow-none'
-        : 'text-white/85 [.light_&]:text-stone-800 font-[450]';
+        ? 'font-semibold drop-shadow-[0_0_12px_rgba(0,209,255,0.3)] [.light_&]:drop-shadow-none'
+        : 'font-[450]';
 
       return (
         <span
-          className={`word mr-[0.3em] ${highlightClass}`}
+          className={`chroma-word mr-[0.3em] ${highlightClass}`}
           key={index}
-          style={{ opacity: baseOpacity }}
+          style={{
+            backgroundImage: grad,
+            backgroundPosition: '100% 50%',
+            opacity: baseOpacity,
+          }}
         >
           {segment}
         </span>
       );
     });
-  }, [children, baseOpacity]);
+  }, [children, isLight, baseOpacity]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -108,19 +135,19 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
         );
       }
 
-      const wordElements = el.querySelectorAll('.word');
+      const wordElements = el.querySelectorAll('.chroma-word');
 
       gsap.fromTo(
         wordElements,
         {
+          backgroundPosition: '100% 50%',
           opacity: baseOpacity,
-          filter: enableBlur && blurStrength > 0 ? `blur(${blurStrength}px)` : 'none'
         },
         {
-          ease: 'none',
+          ease: 'power2.out',
+          backgroundPosition: '0% 50%',
           opacity: 1,
-          filter: 'none',
-          stagger: 0.04,
+          stagger: 0.035,
           scrollTrigger: {
             trigger: el,
             scroller,
@@ -141,12 +168,12 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       clearTimeout(timer);
       ctx.revert();
     };
-  }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, wordAnimationStart, blurStrength]);
+  }, [scrollContainerRef, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, wordAnimationStart, isLight]);
 
   return (
-    <h2 ref={containerRef} className={`scroll-reveal ${containerClassName}`}>
+    <div ref={containerRef} className={`scroll-reveal ${containerClassName}`}>
       <p className={`scroll-reveal-text ${textClassName}`}>{splitText}</p>
-    </h2>
+    </div>
   );
 };
 

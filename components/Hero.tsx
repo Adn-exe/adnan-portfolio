@@ -1,11 +1,10 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import ScrollReveal from './ScrollReveal';
-import Magnetic from './Magnetic';
 import StrokeText from './StrokeText';
 import DarkVeil from './DarkVeil';
 // @ts-ignore
 import SpecularButton from './SpecularButton';
+import { DiaTextReveal } from './ui/dia-text-reveal';
 
 const Hero: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -34,6 +33,14 @@ const Hero: React.FC = () => {
       window.dispatchEvent(new CustomEvent('heroTextReady'));
     }
   }, [textReady]);
+
+  // Fallback timer: ensure textReady is triggered after StrokeText finishes (max 3.8s)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTextReady(true);
+    }, 3800);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Observe hero section visibility for scroll-based button hiding
   useEffect(() => {
@@ -101,25 +108,34 @@ const Hero: React.FC = () => {
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-primary/80 to-primary pointer-events-none z-10" />
 
       {/* Content Container */}
-      <ScrollReveal isContainer className="relative z-10 flex flex-col items-center justify-center gap-1 md:gap-2 w-full max-w-5xl">
+      <div className="relative z-10 flex flex-col items-center justify-center gap-1 md:gap-2 w-full max-w-5xl">
         {/* Greeting & Name */}
         <div className="space-y-0 w-full flex flex-col items-center">
-          <ScrollReveal
-            animation="fade-down"
-            delay={0.2}
-            distance={15}
+          <motion.div
+            initial={{ opacity: 0, y: -14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.16, 1, 0.3, 1],
+              delay: 0.2,
+            }}
           >
-            <span className="inline-block text-accent font-sans text-sm tracking-widest uppercase font-medium mb-0">
-              Hello, I'm
-            </span>
-          </ScrollReveal>
+            <DiaTextReveal
+              text="Hello, I'm"
+              className="inline-block font-sans text-sm tracking-widest uppercase font-medium mb-0"
+              colors={
+                isLight
+                  ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                  : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+              }
+              textColor={isLight ? '#D97706' : '#00D1FF'}
+              duration={1.2}
+              delay={0.2}
+              startOnView={false}
+            />
+          </motion.div>
 
-          <ScrollReveal
-            animation="zoom-in"
-            delay={0.4}
-            distance={5}
-            className="relative z-10 w-full max-w-6xl mx-auto -mt-2 md:-mt-4"
-          >
+          <div className="relative z-10 w-full max-w-6xl mx-auto -mt-2 md:-mt-4">
             <div className="w-full">
               <StrokeText
                 text="MOHAMMED ADNAN"
@@ -129,6 +145,7 @@ const Hero: React.FC = () => {
                 strokeWidth={2.2}
                 drawDuration={1.8}
                 fillDelay={0.2}
+                delay={0.85}
                 stagger={0.06}
                 ease="power2.out"
                 trigger="mount"
@@ -140,20 +157,37 @@ const Hero: React.FC = () => {
                 onComplete={handleTextComplete}
               />
             </div>
-          </ScrollReveal>
+          </div>
         </div>
 
-        {/* Tagline */}
-        <ScrollReveal
-          animation="fade-up"
-          delay={0.6}
-          distance={15}
-          className="max-w-5xl mx-auto w-full px-4 -mt-2 md:-mt-4"
+        {/* Tagline — revealed when StrokeText completes */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 16 }}
+          transition={{
+            duration: 0.85,
+            ease: [0.16, 1, 0.3, 1],
+            delay: 0.1,
+          }}
+          className="max-w-5xl mx-auto w-full px-4 -mt-2 md:-mt-4 min-h-[24px]"
         >
-          <p className="text-[#B8C7D9] [.light_&]:text-theme-secondary font-helvetica font-normal text-xs md:text-sm tracking-[0.2em] leading-relaxed">
-            I LIVE SOMEWHERE BETWEEN LOGIC AND IMAGINATION, STILL EXPLORING
-          </p>
-        </ScrollReveal>
+          {textReady && (
+            <DiaTextReveal
+              text="I LIVE SOMEWHERE BETWEEN LOGIC AND IMAGINATION, STILL EXPLORING"
+              className="font-helvetica font-normal text-xs md:text-sm tracking-[0.2em] leading-relaxed block"
+              colors={
+                isLight
+                  ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                  : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+              }
+              textColor={isLight ? '#706554' : '#B8C7D9'}
+              duration={3.5}
+              delay={0.2}
+              ease={[0.25, 0.1, 0.25, 1]}
+              startOnView={false}
+            />
+          )}
+        </motion.div>
 
         {/* Mobile Get in Touch CTA — gated by text animation + hero visibility */}
         <motion.div
@@ -163,9 +197,9 @@ const Hero: React.FC = () => {
             y: buttonsVisible ? 0 : 20,
           }}
           transition={{
-            duration: 0.6,
-            ease: [0.22, 1, 0.36, 1],
-            delay: buttonsVisible ? 0.1 : 0,
+            duration: 0.85,
+            ease: [0.16, 1, 0.3, 1],
+            delay: buttonsVisible ? 0.35 : 0,
           }}
           className="md:hidden mt-6"
           style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
@@ -193,7 +227,7 @@ const Hero: React.FC = () => {
 
         {/* Spacer */}
         <div className="h-8 md:h-16"></div>
-      </ScrollReveal>
+      </div>
 
       {/* Corner Socials - Left removed as per request */}
 
@@ -205,9 +239,9 @@ const Hero: React.FC = () => {
           x: buttonsVisible ? 0 : 30,
         }}
         transition={{
-          duration: 0.7,
-          ease: [0.22, 1, 0.36, 1],
-          delay: buttonsVisible ? 0.15 : 0,
+          duration: 0.9,
+          ease: [0.16, 1, 0.3, 1],
+          delay: buttonsVisible ? 0.4 : 0,
         }}
         className="absolute bottom-14 right-6 hidden md:block z-20"
         style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
@@ -237,9 +271,17 @@ const Hero: React.FC = () => {
 
       {/* Scroll Indicator with Glowing Line Above */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.8 }}
-        transition={{ delay: 2.5, duration: 1 }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{
+          opacity: buttonsVisible ? 0.8 : 0,
+          y: buttonsVisible ? 0 : 10,
+        }}
+        transition={{
+          duration: 1.0,
+          ease: [0.16, 1, 0.3, 1],
+          delay: buttonsVisible ? 0.6 : 0,
+        }}
+        style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 hover:opacity-100 transition-opacity cursor-pointer group"
         onClick={scrollToAbout}
       >

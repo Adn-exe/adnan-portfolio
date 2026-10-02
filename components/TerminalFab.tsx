@@ -85,14 +85,19 @@ const TerminalFab: React.FC<TerminalFabProps> = ({ isOpen, onToggle, hide = fals
 
   return (
     <motion.button
-      initial={{ scale: 0, opacity: 0 }}
+      initial={{ scale: 0.85, opacity: 0, y: 20 }}
       animate={{
-        scale: shouldHide ? 0 : 1,
+        scale: shouldHide ? 0.85 : 1,
         opacity: shouldHide ? 0 : 1,
+        y: shouldHide ? 20 : 0,
       }}
-      transition={{ duration: 0.25, ease: 'easeInOut' }}
-      whileHover={{ scale: shouldHide ? 0 : 1.06 }}
-      whileTap={{ scale: shouldHide ? 0 : 0.94 }}
+      transition={{
+        duration: shouldHide ? 0.4 : 0.85,
+        ease: [0.16, 1, 0.3, 1],
+        delay: shouldHide ? 0 : 0.80,
+      }}
+      whileHover={{ scale: shouldHide ? 0.85 : 1.06 }}
+      whileTap={{ scale: shouldHide ? 0.85 : 0.94 }}
       onClick={() => {
         if (shouldHide) return;
         playClick();
