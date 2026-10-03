@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from './ScrollTextReveal';
 import { TextChromaReveal } from './wensity/text-chroma-reveal';
 import { DiaTextReveal } from './ui/dia-text-reveal';
 
 export const About: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const [isLight, setIsLight] = useState(() =>
     typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
   );
@@ -18,7 +19,11 @@ export const About: React.FC = () => {
   }, []);
 
   return (
-    <section id="about" className="py-24 md:py-32 px-6 relative z-10 overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="about"
+      className="min-h-screen flex flex-col justify-center py-20 lg:py-0 px-6 relative z-10 overflow-hidden"
+    >
       <div className="container mx-auto max-w-7xl">
         <div className="space-y-10 md:space-y-14">
           {/* Section Title */}
@@ -89,11 +94,12 @@ export const About: React.FC = () => {
             <div className="lg:col-span-7 space-y-8 md:space-y-10">
               {/* Bio with Word-by-Word Chroma Scroll Reveal */}
               <ScrollReveal
-                baseOpacity={0}
+                triggerRef={sectionRef}
+                pin={true}
+                pinDistance={1100}
+                baseOpacity={0.2}
                 containerClassName="my-0"
                 textClassName="font-about text-[20px] sm:text-[22px] font-[450] leading-[1.5] tracking-normal"
-                wordAnimationStart="top bottom-=18%"
-                wordAnimationEnd="top 34%"
               >
                 I’m an AI/ML student passionate about understanding how intelligent systems work, with a focus on building strong foundations and turning ideas into practical solutions. I enjoy breaking down complex problems, building real-world AI projects, and exploring the intersection of AI and software. I’m always looking to learn, collaborate, and grow through meaningful hands-on work.
               </ScrollReveal>

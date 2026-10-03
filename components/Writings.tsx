@@ -138,11 +138,11 @@ const Writings: React.FC = () => {
             waitForTimeout={4000}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-none text-xs sm:text-sm font-mono tracking-widest font-semibold uppercase transition-all duration-300 border border-accent/40 bg-accent/5 hover:bg-accent/15 text-accent hover:border-accent hover:shadow-[0_0_25px_rgba(0,209,255,0.25)] [.light_&]:hover:shadow-[0_0_20px_rgba(217,119,6,0.3)] hover:scale-[1.02] active:scale-[0.98] group"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-none text-xs sm:text-sm font-mono tracking-widest font-semibold uppercase transition-all duration-300 border border-accent/40 bg-accent/5 hover:bg-accent/15 text-accent [.light_&]:text-amber-700 [.light_&]:border-amber-600/40 [.light_&]:bg-amber-600/10 [.light_&]:hover:bg-amber-600/20 hover:border-accent hover:shadow-[0_0_25px_rgba(0,209,255,0.25)] [.light_&]:hover:shadow-[0_0_20px_rgba(217,119,6,0.3)] hover:scale-[1.02] active:scale-[0.98] group"
           >
-            <span>Eniax Space</span>
+            <span className="text-accent [.light_&]:text-amber-700 font-bold">Eniax Space</span>
             <svg
-              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              className="w-4 h-4 text-accent [.light_&]:text-amber-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

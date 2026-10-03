@@ -94,12 +94,11 @@ const App: React.FC = () => {
         <Navbar />
 
         <motion.main
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{
-            duration: 1.2,
+            duration: 0.8,
             ease: [0.22, 1, 0.36, 1],
-            opacity: { duration: 0.8 }
           }}
           className="relative z-10"
         >

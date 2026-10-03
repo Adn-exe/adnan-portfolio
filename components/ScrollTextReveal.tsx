@@ -19,6 +19,9 @@ const EASTER_EGGS: Record<string, string> = {
 export interface ScrollRevealProps {
   children: React.ReactNode;
   scrollContainerRef?: React.RefObject<HTMLElement | null>;
+  triggerRef?: React.RefObject<HTMLElement | null>;
+  pin?: boolean;
+  pinDistance?: number;
   enableBlur?: boolean;
   baseOpacity?: number;
   baseRotation?: number;
@@ -34,7 +37,10 @@ export interface ScrollRevealProps {
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   scrollContainerRef,
-  baseOpacity = 0,
+  triggerRef,
+  pin = false,
+  pinDistance = 1100,
+  baseOpacity = 0.2,
   baseRotation = 0,
   containerClassName = '',
   textClassName = '',
@@ -64,14 +70,14 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     // Chromatic rainbow gradients tuned for dark and light palettes
     // 0% - 30%: solid final text color
     // 38% - 62%: chromatic ribbon sweep
-    // 70% - 100%: transparent unrevealed
+    // 70% - 100%: deeply subtle muted grey unrevealed
     const baseGrad = isLight
-      ? 'linear-gradient(90deg, #1F1A14 0%, #1F1A14 30%, #D97706 38%, #F59E0B 46%, #B45309 54%, #78350F 62%, transparent 70%, transparent 100%)'
-      : 'linear-gradient(90deg, #F8FAFC 0%, #F8FAFC 30%, #00D1FF 38%, #38BDF8 46%, #818CF8 54%, #C084FC 62%, transparent 70%, transparent 100%)';
+      ? 'linear-gradient(90deg, #1F1A14 0%, #1F1A14 30%, #D97706 38%, #F59E0B 46%, #B45309 54%, #78350F 62%, #A8A29E 70%, #A8A29E 100%)'
+      : 'linear-gradient(90deg, #F8FAFC 0%, #F8FAFC 30%, #00D1FF 38%, #38BDF8 46%, #818CF8 54%, #C084FC 62%, #64748B 70%, #64748B 100%)';
 
     const highlightGrad = isLight
-      ? 'linear-gradient(90deg, #D97706 0%, #D97706 30%, #F59E0B 38%, #B45309 46%, #78350F 54%, #D97706 62%, transparent 70%, transparent 100%)'
-      : 'linear-gradient(90deg, #00D1FF 0%, #00D1FF 30%, #38BDF8 38%, #818CF8 46%, #C084FC 54%, #00D1FF 62%, transparent 70%, transparent 100%)';
+      ? 'linear-gradient(90deg, #D97706 0%, #D97706 30%, #F59E0B 38%, #B45309 46%, #78350F 54%, #D97706 62%, #A8A29E 70%, #A8A29E 100%)'
+      : 'linear-gradient(90deg, #00D1FF 0%, #00D1FF 30%, #38BDF8 38%, #818CF8 46%, #C084FC 54%, #00D1FF 62%, #64748B 70%, #64748B 100%)';
 
     const targetPhrases = Object.keys(EASTER_EGGS);
 
@@ -176,8 +182,91 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     if (!el) return;
 
     const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
+    const triggerEl = triggerRef && triggerRef.current ? triggerRef.current : el;
 
-    const ctx = gsap.context(() => {
+    const mm = gsap.matchMedia();
+
+    // Desktop (pinned scrub reveal if pin is true)
+    mm.add('(min-width: 1024px) and (min-height: 600px)', () => {
+      const wordElements = el.querySelectorAll('.chroma-word');
+
+      if (pin) {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: triggerEl,
+            scroller,
+            start: 'top top',
+            end: `+=${pinDistance}`,
+            pin: triggerEl,
+            pinSpacing: true,
+            scrub: 0.8,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        tl.fromTo(
+          wordElements,
+          {
+            backgroundPosition: '100% 50%',
+            opacity: baseOpacity,
+          },
+          {
+            ease: 'none',
+            backgroundPosition: '0% 50%',
+            opacity: 1,
+            stagger: 0.035,
+          }
+        );
+
+        // Gentle pause buffer at the end so user reads complete text before unpinning
+        tl.to({}, { duration: 0.35 });
+      } else {
+        if (baseRotation !== 0) {
+          gsap.fromTo(
+            el,
+            { transformOrigin: '0% 50%', rotate: baseRotation },
+            {
+              ease: 'none',
+              rotate: 0,
+              scrollTrigger: {
+                trigger: el,
+                scroller,
+                start: 'top bottom',
+                end: rotationEnd,
+                scrub: true,
+              },
+            }
+          );
+        }
+
+        gsap.fromTo(
+          wordElements,
+          {
+            backgroundPosition: '100% 50%',
+            opacity: baseOpacity,
+          },
+          {
+            ease: 'power2.out',
+            backgroundPosition: '0% 50%',
+            opacity: 1,
+            stagger: 0.035,
+            scrollTrigger: {
+              trigger: el,
+              scroller,
+              start: wordAnimationStart,
+              end: wordAnimationEnd,
+              scrub: 0.5,
+            },
+          }
+        );
+      }
+    });
+
+    // Mobile / Tablet / Short Viewports: Smooth flowing scrub without pinning
+    mm.add('(max-width: 1023px), (max-height: 599px)', () => {
+      const wordElements = el.querySelectorAll('.chroma-word');
+
       if (baseRotation !== 0) {
         gsap.fromTo(
           el,
@@ -190,13 +279,11 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
               scroller,
               start: 'top bottom',
               end: rotationEnd,
-              scrub: true
-            }
+              scrub: true,
+            },
           }
         );
       }
-
-      const wordElements = el.querySelectorAll('.chroma-word');
 
       gsap.fromTo(
         wordElements,
@@ -214,22 +301,33 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
             scroller,
             start: wordAnimationStart,
             end: wordAnimationEnd,
-            scrub: 0.5
-          }
+            scrub: 0.5,
+          },
         }
       );
-    }, containerRef);
+    });
 
-    // Refresh ScrollTrigger to ensure accurate positions after DOM paint
+    // Refresh ScrollTrigger to ensure accurate metrics after paint
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 100);
+    }, 150);
 
     return () => {
       clearTimeout(timer);
-      ctx.revert();
+      mm.revert();
     };
-  }, [scrollContainerRef, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, wordAnimationStart, isLight]);
+  }, [
+    scrollContainerRef,
+    triggerRef,
+    pin,
+    pinDistance,
+    baseOpacity,
+    baseRotation,
+    rotationEnd,
+    wordAnimationEnd,
+    wordAnimationStart,
+    isLight,
+  ]);
 
   return (
     <div ref={containerRef} className={`scroll-reveal ${containerClassName}`}>
