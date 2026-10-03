@@ -92,8 +92,8 @@ export const About: React.FC = () => {
                 baseOpacity={0}
                 containerClassName="my-0"
                 textClassName="font-about text-[20px] sm:text-[22px] font-[450] leading-[1.5] tracking-normal"
-                wordAnimationStart="top bottom-=20%"
-                wordAnimationEnd="top 48%"
+                wordAnimationStart="top bottom-=18%"
+                wordAnimationEnd="top 34%"
               >
                 I’m an AI/ML student passionate about understanding how intelligent systems work, with a focus on building strong foundations and turning ideas into practical solutions. I enjoy breaking down complex problems, building real-world AI projects, and exploring the intersection of AI and software. I’m always looking to learn, collaborate, and grow through meaningful hands-on work.
               </ScrollReveal>

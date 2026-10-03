@@ -45,7 +45,7 @@ const App: React.FC = () => {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'r' || e.key === 'R')) {
         try {
           sessionStorage.removeItem('portfolio_has_loaded');
-        } catch {}
+        } catch { }
       }
     };
 
@@ -66,7 +66,7 @@ const App: React.FC = () => {
         onComplete={() => {
           try {
             sessionStorage.setItem('portfolio_has_loaded', 'true');
-          } catch {}
+          } catch { }
           setIsLoading(false);
           window.scrollTo(0, 0);
         }}
@@ -93,11 +93,11 @@ const App: React.FC = () => {
         </Suspense>
         <Navbar />
 
-        <motion.main 
+        <motion.main
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ 
-            duration: 1.2, 
+          transition={{
+            duration: 1.2,
             ease: [0.22, 1, 0.36, 1],
             opacity: { duration: 0.8 }
           }}
@@ -117,7 +117,7 @@ const App: React.FC = () => {
                 {[
                   { val: '5+', label: 'Projects Built' },
                   { val: 'AI/ML', label: 'Core Focus' },
-                  { val: 'Creator', label: 'Mindset' },
+                  { val: 'Alchemist', label: 'Mindset' },
                   { val: 'Open', label: 'To Collaborate' }
                 ].map((s, i) => (
                   <ScrollReveal

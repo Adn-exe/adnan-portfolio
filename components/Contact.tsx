@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
 import { useAudio } from '../hooks/useAudio';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
+import { BorderBeam } from './ui/border-beam';
 
 const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const { playClick } = useAudio();
+    const [isLight, setIsLight] = useState(() =>
+        typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
+    );
+
+    useEffect(() => {
+        const updateTheme = () => {
+            setIsLight(document.documentElement.classList.contains('light'));
+        };
+        updateTheme();
+        const observer = new MutationObserver(updateTheme);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        return () => observer.disconnect();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,7 +94,22 @@ const Contact: React.FC = () => {
 
                     {/* Right Column: Form */}
                     <ScrollReveal delay={0.2}>
-                        <div className="relative p-8 md:p-10 rounded-3xl bg-surface border border-theme-border backdrop-blur-md shadow-2xl">
+                        <div className="relative p-8 md:p-10 rounded-3xl bg-surface border border-theme-border backdrop-blur-md shadow-2xl overflow-hidden">
+                            <BorderBeam
+                                size={260}
+                                duration={10}
+                                colorFrom={isLight ? "#D97706" : "#00D1FF"}
+                                colorTo={isLight ? "#F59E0B" : "#A855F7"}
+                                borderWidth={1.5}
+                            />
+                            <BorderBeam
+                                size={260}
+                                duration={10}
+                                delay={5}
+                                colorFrom={isLight ? "#B45309" : "#38BDF8"}
+                                colorTo={isLight ? "#D97706" : "#C084FC"}
+                                borderWidth={1.5}
+                            />
                             <form onSubmit={handleSubmit} className="relative space-y-6">
                                 <div className="space-y-2">
                                     <label htmlFor="name" className="text-xs font-mono uppercase tracking-widest text-theme-secondary ml-1">Name</label>

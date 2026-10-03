@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal';
 import { PROJECTS } from '../constants';
 import { TechIcon } from './Icons';
+import { useAudio } from '../hooks/useAudio';
 // @ts-ignore
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import { DiaTextReveal } from './ui/dia-text-reveal';
+import { ViewProjectButton, SourceCodeButton } from './ui/project-button';
 
 const projectAccents: Record<string, { border: string; glow: string; text: string; bg: string; stroke: string; date: string }> = {
   '1': {
@@ -51,6 +53,7 @@ const projectAccents: Record<string, { border: string; glow: string; text: strin
 
 const Projects: React.FC = () => {
   const scrollStackRef = useRef<any>(null);
+  const { playClick } = useAudio();
   const [isLight, setIsLight] = useState(() =>
     typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
   );
@@ -248,36 +251,25 @@ const Projects: React.FC = () => {
                         )}
                       </div>
 
-                      {/* Action Buttons: only View Project and/or Source Code */}
-                      <div className="flex flex-wrap items-center gap-4 pt-4">
+                      {/* Action Buttons: View Project and/or Source Code */}
+                      <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 pt-4">
                         {project.link && (
-                          <a
+                          <ViewProjectButton
                             href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-6 sm:px-7 py-3.5 rounded-none text-xs sm:text-sm font-semibold tracking-wide text-primary transition-all duration-300 hover:scale-[1.03] shadow-lg"
-                            style={{
-                              backgroundColor: accent.stroke,
-                              boxShadow: `0 0 25px ${accent.glow}`
-                            }}
-                          >
-                            <span>View Project</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
+                            accentStroke={accent.stroke}
+                            accentGlow={accent.glow}
+                            isLight={isLight}
+                            onClick={playClick}
+                          />
                         )}
 
                         {project.github && (
-                          <a
+                          <SourceCodeButton
                             href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2.5 px-5 sm:px-6 py-3.5 rounded-none text-xs sm:text-sm font-medium text-theme-text bg-surface/80 border border-theme-border hover:border-accent/40 hover:bg-surface transition-all duration-300"
-                          >
-                            <TechIcon name="github" className="w-4 h-4" />
-                            <span>Source Code</span>
-                          </a>
+                            accentStroke={accent.stroke}
+                            isLight={isLight}
+                            onClick={playClick}
+                          />
                         )}
                       </div>
                     </div>

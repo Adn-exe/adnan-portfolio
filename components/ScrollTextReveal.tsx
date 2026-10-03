@@ -6,6 +6,16 @@ import './ScrollReveal.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
+import { Tooltip } from './ui/tooltip-card';
+
+const EASTER_EGGS: Record<string, string> = {
+  'AI/ML student': 'Professional question-asker. Currently teaching computers to guess, and teaching myself to be okay when they guess wrong.',
+  'intelligent systems': 'Machines that look smart in demos and humble in production. I build the first kind and survive the second.',
+  'practical solutions': 'Code that works on the first try. Allegedly. Please don\'t check the commit history.',
+  'real-world AI projects': 'Where big ideas meet bad Wi-Fi, messy data, and one very long night of \'why is this broken now?\'',
+  'intersection of AI and software': 'Where clean design meets clever models, and nobody has to know how many coffees it took.',
+};
+
 export interface ScrollRevealProps {
   children: React.ReactNode;
   scrollContainerRef?: React.RefObject<HTMLElement | null>;
@@ -18,6 +28,7 @@ export interface ScrollRevealProps {
   rotationEnd?: string;
   wordAnimationEnd?: string;
   wordAnimationStart?: string;
+  enableEasterEggs?: boolean;
 }
 
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
@@ -29,7 +40,8 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   textClassName = '',
   rotationEnd = 'bottom bottom',
   wordAnimationEnd = 'center center',
-  wordAnimationStart = 'top bottom-=10%'
+  wordAnimationStart = 'top bottom-=10%',
+  enableEasterEggs = true,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -49,24 +61,6 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     const text = typeof children === 'string' ? children : '';
     if (!text) return null;
 
-    const targetPhrases = [
-      'AI/ML student',
-      'intelligent systems',
-      'practical solutions',
-      'real-world AI projects',
-      'intersection of AI and software',
-    ];
-
-    // Find [start, end] character ranges for each target phrase
-    const ranges: [number, number][] = [];
-    for (const phrase of targetPhrases) {
-      let startIndex = 0;
-      while ((startIndex = text.indexOf(phrase, startIndex)) !== -1) {
-        ranges.push([startIndex, startIndex + phrase.length]);
-        startIndex += phrase.length;
-      }
-    }
-
     // Chromatic rainbow gradients tuned for dark and light palettes
     // 0% - 30%: solid final text color
     // 38% - 62%: chromatic ribbon sweep
@@ -79,36 +73,103 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       ? 'linear-gradient(90deg, #D97706 0%, #D97706 30%, #F59E0B 38%, #B45309 46%, #78350F 54%, #D97706 62%, transparent 70%, transparent 100%)'
       : 'linear-gradient(90deg, #00D1FF 0%, #00D1FF 30%, #38BDF8 38%, #818CF8 46%, #C084FC 54%, #00D1FF 62%, transparent 70%, transparent 100%)';
 
-    let charCursor = 0;
-    return text.split(/(\s+)/).map((segment, index) => {
-      const segStart = charCursor;
-      const segEnd = charCursor + segment.length;
-      charCursor = segEnd;
+    const targetPhrases = Object.keys(EASTER_EGGS);
 
-      if (segment.match(/^\s+$/)) return segment;
+    // Find all occurrences of target phrases with character ranges
+    interface PhraseMatch {
+      phrase: string;
+      startIndex: number;
+      endIndex: number;
+    }
 
-      const isHighlighted = ranges.some(([start, end]) => segStart < end && segEnd > start);
+    const matches: PhraseMatch[] = [];
+    if (enableEasterEggs) {
+      for (const phrase of targetPhrases) {
+        let startIndex = 0;
+        while ((startIndex = text.indexOf(phrase, startIndex)) !== -1) {
+          let endIndex = startIndex + phrase.length;
+          // Absorb immediately adjacent trailing punctuation (. or ,) so words stay whole for GSAP
+          if (text[endIndex] === '.' || text[endIndex] === ',') {
+            endIndex += 1;
+          }
+          matches.push({ phrase, startIndex, endIndex });
+          startIndex = endIndex;
+        }
+      }
+      matches.sort((a, b) => a.startIndex - b.startIndex);
+    }
+
+    // Slice text into alternating non-matched and matched segments
+    const elements: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let globalKeyCounter = 0;
+
+    const renderWords = (content: string, isHighlighted: boolean) => {
       const grad = isHighlighted ? highlightGrad : baseGrad;
-
       const highlightClass = isHighlighted
         ? 'font-semibold drop-shadow-[0_0_12px_rgba(0,209,255,0.3)] [.light_&]:drop-shadow-none'
         : 'font-[450]';
 
-      return (
-        <span
-          className={`chroma-word mr-[0.3em] ${highlightClass}`}
-          key={index}
-          style={{
-            backgroundImage: grad,
-            backgroundPosition: '100% 50%',
-            opacity: baseOpacity,
-          }}
+      return content.split(/(\s+)/).map((segment) => {
+        if (segment.match(/^\s+$/)) {
+          return segment;
+        }
+        globalKeyCounter += 1;
+        return (
+          <span
+            className={`chroma-word mr-[0.3em] ${highlightClass}`}
+            key={`word-${globalKeyCounter}`}
+            style={{
+              backgroundImage: grad,
+              backgroundPosition: '100% 50%',
+              opacity: baseOpacity,
+            }}
+          >
+            {segment}
+          </span>
+        );
+      });
+    };
+
+    matches.forEach((match, matchIdx) => {
+      if (match.startIndex > lastIndex) {
+        const plainText = text.slice(lastIndex, match.startIndex);
+        elements.push(
+          <React.Fragment key={`plain-${matchIdx}`}>
+            {renderWords(plainText, false)}
+          </React.Fragment>
+        );
+      }
+
+      const phraseText = text.slice(match.startIndex, match.endIndex);
+      const egg = EASTER_EGGS[match.phrase];
+
+      elements.push(
+        <Tooltip
+          key={`egg-${match.phrase}-${matchIdx}`}
+          as="span"
+          containerClassName="relative inline-block align-baseline cursor-pointer"
+          tooltipClassName="z-50"
+          content={egg}
         >
-          {segment}
-        </span>
+          {renderWords(phraseText, true)}
+        </Tooltip>
       );
+
+      lastIndex = match.endIndex;
     });
-  }, [children, isLight, baseOpacity]);
+
+    if (lastIndex < text.length) {
+      const remainingText = text.slice(lastIndex);
+      elements.push(
+        <React.Fragment key="plain-tail">
+          {renderWords(remainingText, false)}
+        </React.Fragment>
+      );
+    }
+
+    return elements;
+  }, [children, isLight, baseOpacity, enableEasterEggs]);
 
   useEffect(() => {
     const el = containerRef.current;
