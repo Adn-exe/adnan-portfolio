@@ -167,9 +167,6 @@ const Projects: React.FC = () => {
                         aria-label={`Jump to Project ${projectNumber}`}
                       >
                         <span style={{ color: accent.stroke }}>{projectNumber}</span>
-                        <span className="text-sm md:text-base font-display font-bold text-theme-text opacity-90 hidden sm:inline">
-                          {project.title}
-                        </span>
                       </button>
                       <div className="h-4 w-px bg-theme-border" />
                       <span className="text-xs font-mono font-semibold uppercase tracking-wider text-theme-secondary">

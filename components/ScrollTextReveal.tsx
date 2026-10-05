@@ -155,7 +155,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
           key={`egg-${match.phrase}-${matchIdx}`}
           as="span"
           containerClassName="relative inline-block align-baseline cursor-pointer"
-          tooltipClassName="z-50"
+          tooltipClassName="z-50 min-w-[18rem] sm:min-w-[22rem] max-w-[28rem] sm:max-w-[36rem]"
           content={egg}
         >
           {renderWords(phraseText, true)}

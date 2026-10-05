@@ -43,7 +43,7 @@ export const Tooltip = ({
     const viewportHeight = window.innerHeight;
 
     // Get tooltip dimensions
-    const tooltipWidth = tooltip.offsetWidth || 260;
+    const tooltipWidth = tooltip.offsetWidth || 340;
     const tooltipHeight = tooltip.scrollHeight || 120;
 
     // Calculate absolute position relative to viewport
@@ -170,7 +170,7 @@ export const Tooltip = ({
               damping: 24,
             }}
             className={cn(
-              "pointer-events-none absolute z-50 min-w-[15rem] max-w-[22rem] overflow-hidden rounded-xl border border-neutral-800 bg-[#0d0d0d] shadow-2xl text-neutral-200 [.light_&]:bg-white [.light_&]:border-neutral-200 [.light_&]:text-neutral-900 [.light_&]:shadow-xl",
+              "pointer-events-none absolute z-50 min-w-[16rem] max-w-[28rem] sm:max-w-[34rem] overflow-hidden rounded-xl border border-white/20 bg-[#0a0d14] shadow-[0_20px_50px_rgba(0,0,0,0.95)] text-neutral-200 [.light_&]:bg-[#FAF8F5] [.light_&]:border-stone-300 [.light_&]:text-neutral-900 [.light_&]:shadow-[0_16px_36px_rgba(0,0,0,0.18)]",
               tooltipClassName
             )}
             style={{

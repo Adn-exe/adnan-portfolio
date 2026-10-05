@@ -33,7 +33,7 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Three.js', 'Qiskit', 'Supabase', 'Zustand'],
     link: 'https://qubic-academy.vercel.app/',
     github: 'https://github.com/Adn-exe/QubicAcademy/',
-    role: 'Lead Architect'
+    role: 'Developer'
   },
   {
     id: '3',
@@ -49,7 +49,7 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'TypeScript', 'Tailwind CSS', 'Recharts'],
     link: 'https://vizaris.vercel.app',
     github: 'https://github.com/Adn-exe/Vizaris',
-    role: 'Lead Architect'
+    role: 'Developer'
   },
   {
     id: '4',
@@ -65,7 +65,7 @@ export const PROJECTS: Project[] = [
     tags: ['Next.js', 'FastAPI', 'Python', 'OpenCV', 'Gemini Vision'],
     link: '',
     github: 'https://github.com/Adn-exe/Rakshak',
-    role: 'Lead AI Engineer'
+    role: 'AI Developer'
   },
   {
     id: '5',

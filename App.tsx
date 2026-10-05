@@ -16,6 +16,7 @@ import ThemeToggle from './components/ThemeToggle';
 import TerminalFab from './components/TerminalFab';
 import Footer from './components/Footer';
 import SectionDivider from './components/SectionDivider';
+import { Tooltip } from './components/ui/tooltip-card';
 
 // Lazy-load Terminal so its ~30KB bundle and easter eggs are deferred until clicked
 const Terminal = React.lazy(() => import('./components/Terminal'));
@@ -110,27 +111,33 @@ const App: React.FC = () => {
           <ScrollVelocityText />
 
           {/* Statistics Section */}
-          <section className="py-32 border-y border-white/5 bg-surface/5 overflow-hidden relative z-20">
+          <section className="py-32 border-y border-white/5 bg-surface/5 relative z-20">
             <div className="container mx-auto px-6">
               <ScrollReveal isContainer className="grid grid-cols-2 md:grid-cols-4 gap-12">
                 {[
-                  { val: '5+', label: 'Projects Built' },
-                  { val: 'AI/ML', label: 'Core Focus' },
-                  { val: 'Alchemist', label: 'Mindset' },
-                  { val: 'Open', label: 'To Collaborate' }
+                  { val: '5+', label: 'Projects Built', msg: 'Five experiments survived.' },
+                  { val: 'AI/ML', label: 'Core Focus', msg: 'The homunculus is learning.' },
+                  { val: 'Alchemist', label: 'Mindset', msg: 'Equivalent exchange.' },
+                  { val: 'Open', label: 'To Collaborate', msg: 'The circle is not closed.' }
                 ].map((s, i) => (
                   <ScrollReveal
                     key={i}
-                    className="text-center group"
+                    className="text-center group flex flex-col items-center justify-center"
                     animation="fade-up"
                     distance={20}
                   >
-                    <div className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-theme-text mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
-                      {s.val}
-                    </div>
-                    <div className="text-[11px] uppercase tracking-[0.3em] text-accent font-semibold group-hover:text-white transition-colors">
-                      {s.label}
-                    </div>
+                    <Tooltip
+                      content={s.msg}
+                      containerClassName="cursor-pointer"
+                      tooltipClassName="z-50"
+                    >
+                      <div className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-theme-text mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
+                        {s.val}
+                      </div>
+                      <div className="text-[11px] uppercase tracking-[0.3em] text-accent font-semibold group-hover:text-white [.light_&]:group-hover:text-stone-900 transition-colors">
+                        {s.label}
+                      </div>
+                    </Tooltip>
                   </ScrollReveal>
                 ))}
               </ScrollReveal>
