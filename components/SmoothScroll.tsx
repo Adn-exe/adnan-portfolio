@@ -41,8 +41,8 @@ const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
         };
 
         gsap.ticker.add(updateRaf);
-        // Restore GSAP lagSmoothing so dropped frames are smoothed gracefully instead of hitching
-        gsap.ticker.lagSmoothing(500, 33);
+        // Disable GSAP lagSmoothing to prevent time dilation jumps/jerks when Lenis decelerates or stops
+        gsap.ticker.lagSmoothing(0);
 
         return () => {
             gsap.ticker.remove(updateRaf);

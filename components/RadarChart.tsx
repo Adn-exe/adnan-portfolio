@@ -551,6 +551,26 @@ export const RadarChart: React.FC<RadarChartProps> = ({
                 onDragStart={(e) => {
                   e.dataTransfer.setData('text/plain', currentSkill.name);
                   e.dataTransfer.effectAllowed = 'copyMove';
+
+                  try {
+                    const target = e.currentTarget;
+                    const clone = target.cloneNode(true) as HTMLElement;
+                    clone.style.position = 'fixed';
+                    clone.style.top = '-9999px';
+                    clone.style.left = '-9999px';
+                    clone.style.width = `${target.offsetWidth}px`;
+                    clone.style.height = `${target.offsetHeight}px`;
+                    clone.style.opacity = '0.9';
+                    clone.style.pointerEvents = 'none';
+                    clone.style.transform = 'none';
+                    document.body.appendChild(clone);
+                    e.dataTransfer.setDragImage(clone, target.offsetWidth / 2, target.offsetHeight / 2);
+                    setTimeout(() => {
+                      if (clone.parentNode) {
+                        document.body.removeChild(clone);
+                      }
+                    }, 0);
+                  } catch (err) {}
                 }}
                 initial={{ opacity: 0, scale: 0.85, y: 6 }}
                 animate={{

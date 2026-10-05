@@ -36,6 +36,38 @@ const noise = (...values) => {
 
 const signed = value => (value > 0 ? `+${value}` : value < 0 ? `−${-value}` : '0');
 
+const parseGradient = input => {
+  if (!input) return null;
+  if (Array.isArray(input)) {
+    if (input.length === 0) return null;
+    return input.map((stop, i) => {
+      if (typeof stop === 'string') {
+        return {
+          offset: input.length > 1 ? i / (input.length - 1) : 0,
+          color: stop
+        };
+      }
+      return stop;
+    });
+  }
+  if (typeof input === 'string') {
+    const match = input.match(/linear-gradient\((?:[^,]+,)?(.*)\)/);
+    const content = match ? match[1] : input;
+    const parts = content.split(/,(?![^(]*\))/).map(p => p.trim()).filter(Boolean);
+    if (parts.length > 0) {
+      return parts.map((part, i) => {
+        const tokens = part.trim().split(/\s+/);
+        const color = tokens[0];
+        let offset = tokens[1]
+          ? parseFloat(tokens[1]) / (tokens[1].endsWith('%') ? 100 : 1)
+          : (parts.length > 1 ? i / (parts.length - 1) : 0);
+        return { offset: Math.min(1, Math.max(0, offset)), color };
+      });
+    }
+  }
+  return null;
+};
+
 const TechText = ({
   text = 'React Bits',
   fontFamily = '',
@@ -44,6 +76,8 @@ const TechText = ({
   letterSpacing = -0.05,
   color = '#ffffff',
   accentColor = '#ffffff',
+  gradient = null,
+  gradientWords = null,
   reach = 200,
   softness = 0.7,
   dashLength = 4,
@@ -75,6 +109,8 @@ const TechText = ({
       letterSpacing,
       color,
       accentColor,
+      gradient,
+      gradientWords,
       reach,
       softness,
       dashLength,
@@ -151,11 +187,25 @@ const TechText = ({
       if (!c) return { image, left, top };
       c.setTransform(dpr, 0, 0, dpr, -left * dpr, -top * dpr);
       setFont(c, s, view.size);
+
+      let fillStyle = s.color;
+      let strokeStyle = s.color;
+
+      if (glyph.grad?.isGrad && glyph.grad?.stops) {
+        const { startX, endX, stops } = glyph.grad;
+        const grad = c.createLinearGradient(startX, 0, Math.max(startX + 1, endX), 0);
+        for (const stop of stops) {
+          grad.addColorStop(stop.offset, stop.color);
+        }
+        fillStyle = grad;
+        strokeStyle = grad;
+      }
+
       if (stroke) {
         c.lineJoin = 'round';
         c.lineWidth = s.strokeWidth * 2;
         c.lineCap = 'butt';
-        c.strokeStyle = s.color;
+        c.strokeStyle = strokeStyle;
         if (s.lineStyle !== 'solid') c.setLineDash([Math.max(1, s.dashLength), Math.max(1, s.dashGap)]);
         c.strokeText(glyph.char, glyph.x, view.baseline);
         c.setLineDash([]);
@@ -164,13 +214,15 @@ const TechText = ({
         c.fillText(glyph.char, glyph.x, view.baseline);
         c.globalCompositeOperation = 'source-over';
       } else {
-        c.fillStyle = s.color;
+        c.fillStyle = fillStyle;
         c.fillText(glyph.char, glyph.x, view.baseline);
       }
       return { image, left, top };
     };
 
     const ensureLayout = s => {
+      const gradKey = s.gradient ? JSON.stringify(s.gradient) : '';
+      const gradWordsKey = s.gradientWords ? JSON.stringify(s.gradientWords) : '';
       const key = [
         s.text,
         family(s),
@@ -178,6 +230,8 @@ const TechText = ({
         s.fontSize,
         s.letterSpacing,
         s.color,
+        gradKey,
+        gradWordsKey,
         s.dashLength,
         s.dashGap,
         s.strokeWidth,
@@ -198,18 +252,21 @@ const TechText = ({
       const probe = scratchCtx;
       setFont(probe, s, s.fontSize);
       let m = probe.measureText(s.text);
+
+      const leftPad = s.align === 'left' ? 28 : 8;
+      const rightPad = 28;
       const fit = Math.min(
         1,
-        (width * 0.95) / Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1),
+        Math.max(0, (width - leftPad - rightPad) * 0.98) / Math.max(m.actualBoundingBoxLeft + m.actualBoundingBoxRight, 1),
         (height * 0.72) / Math.max(m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, 1)
       );
-      const size = s.fontSize * fit;
+      const size = Math.max(12, s.fontSize * fit);
       setFont(probe, s, size);
       m = probe.measureText(s.text);
       const inkWidth = m.actualBoundingBoxLeft + m.actualBoundingBoxRight;
       const inkHeight = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
       const x = s.align === 'left'
-        ? m.actualBoundingBoxLeft + 2
+        ? m.actualBoundingBoxLeft + leftPad
         : (width - inkWidth) / 2 + m.actualBoundingBoxLeft;
       const baseline = (height - inkHeight) / 2 + m.actualBoundingBoxAscent;
       const next = {
@@ -222,34 +279,90 @@ const TechText = ({
       };
       word = next;
 
+      const words = [];
+      const wordRegex = /\S+/g;
+      let match;
+      while ((match = wordRegex.exec(s.text)) !== null) {
+        words.push({
+          word: match[0],
+          start: match.index,
+          end: match.index + match[0].length,
+          box: { x1: Infinity, y1: Infinity, x2: -Infinity, y2: -Infinity }
+        });
+      }
+
       const chars = Array.from(s.text);
-      const previous = glyphs;
-      glyphs = [];
+      const baseGlyphs = [];
       let prefix = '';
       chars.forEach((char, i) => {
         prefix += char;
         const own = probe.measureText(char);
         const gx = x + probe.measureText(prefix).width - own.width;
         if (!char.trim()) return;
-        const base = {
+        const wordInfo = words.find(w => i >= w.start && i < w.end);
+        const box = {
+          x1: gx - own.actualBoundingBoxLeft,
+          y1: baseline - own.actualBoundingBoxAscent,
+          x2: gx + own.actualBoundingBoxRight,
+          y2: baseline + own.actualBoundingBoxDescent
+        };
+        if (wordInfo) {
+          wordInfo.box.x1 = Math.min(wordInfo.box.x1, box.x1);
+          wordInfo.box.y1 = Math.min(wordInfo.box.y1, box.y1);
+          wordInfo.box.x2 = Math.max(wordInfo.box.x2, box.x2);
+          wordInfo.box.y2 = Math.max(wordInfo.box.y2, box.y2);
+        }
+        baseGlyphs.push({
           char,
           x: gx,
-          box: {
-            x1: gx - own.actualBoundingBoxLeft,
-            y1: baseline - own.actualBoundingBoxAscent,
-            x2: gx + own.actualBoundingBoxRight,
-            y2: baseline + own.actualBoundingBoxDescent
+          box,
+          index: i,
+          wordInfo
+        });
+      });
+
+      const gradStops = parseGradient(s.gradient);
+
+      const previous = glyphs;
+      glyphs = [];
+      baseGlyphs.forEach(base => {
+        let isGrad = false;
+        let startX = next.left;
+        let endX = next.right;
+
+        if (gradStops) {
+          if (s.gradientWords) {
+            const targetWords = Array.isArray(s.gradientWords) ? s.gradientWords : [s.gradientWords];
+            if (base.wordInfo && targetWords.some(tw => tw.toLowerCase() === base.wordInfo.word.toLowerCase())) {
+              isGrad = true;
+              startX = base.wordInfo.box.x1;
+              endX = base.wordInfo.box.x2;
+            }
+          } else {
+            isGrad = true;
+            startX = next.left;
+            endX = next.right;
+          }
+        }
+
+        const glyphWithGrad = {
+          ...base,
+          grad: {
+            isGrad,
+            startX,
+            endX,
+            stops: gradStops
           }
         };
+
         const kept = previous[glyphs.length];
         glyphs.push({
-          ...base,
-          offset: kept?.char === char ? kept.offset : { x: 0, y: 0 },
+          ...glyphWithGrad,
+          offset: kept?.char === base.char ? kept.offset : { x: 0, y: 0 },
           velocity: { x: 0, y: 0 },
           outline: 0,
-          index: i,
-          fill: sprite(s, next, base, false),
-          dashes: sprite(s, next, base, true)
+          fill: sprite(s, next, glyphWithGrad, false),
+          dashes: sprite(s, next, glyphWithGrad, true)
         });
       });
       dragging = -1;

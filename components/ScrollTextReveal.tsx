@@ -199,8 +199,9 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
             end: `+=${pinDistance}`,
             pin: triggerEl,
             pinSpacing: true,
-            scrub: 0.8,
-            anticipatePin: 1,
+            scrub: 0.3,
+            anticipatePin: 0,
+            fastScrollEnd: true,
             invalidateOnRefresh: true,
           },
         });

@@ -131,7 +131,7 @@ export const Skills: React.FC = () => {
             <h2 className="sr-only">Technical Arsenal</h2>
 
             {/* Interactive TechText Header */}
-            <div className="w-full h-20 sm:h-28 md:h-36 lg:h-44 relative -ml-1 sm:-ml-2 max-w-5xl">
+            <div className="w-full h-20 sm:h-28 md:h-36 lg:h-44 relative max-w-5xl">
               <TechText
                 text="Technical Arsenal"
                 fontFamily="'Space Grotesk', sans-serif"
@@ -140,6 +140,12 @@ export const Skills: React.FC = () => {
                 letterSpacing={-0.03}
                 color={isLight ? '#1F1A14' : '#F8FAFC'}
                 accentColor={isLight ? '#D97706' : '#00D1FF'}
+                gradient={
+                  isLight
+                    ? ['#B45309', '#D97706', '#B45309']
+                    : ['#00D1FF', '#ffffff', '#00D1FF']
+                }
+                gradientWords={['Arsenal']}
                 align="left"
                 reveal="letter"
                 dashLength={4}
@@ -207,7 +213,7 @@ export const Skills: React.FC = () => {
             </div>
 
             {/* 2. INTERACTIVE CHIPS GRID (Stationary height, content-start) */}
-            <div className={`grid gap-2.5 flex-1 content-start overflow-y-auto pr-1 scrollbar-hide ${activeCategory === 'Soft Skills' ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'}`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 flex-1 content-start overflow-y-auto pr-1 pb-3">
               {filteredSkills.map((skill) => {
                 const isSelected = selectedSkill.name === skill.name;
                 const isMountedOnEnd = endSkills.some((es) => es.name === skill.name);
@@ -221,7 +227,33 @@ export const Skills: React.FC = () => {
                     onDragStart={(e) => {
                       e.dataTransfer.setData('text/plain', skill.name);
                       e.dataTransfer.effectAllowed = 'copyMove';
-                      setDraggedSkill(skill);
+
+                      // Explicitly isolate this single cell for the drag ghost image
+                      // to prevent Chromium/WebKit from capturing the entire parent grid
+                      try {
+                        const target = e.currentTarget;
+                        const clone = target.cloneNode(true) as HTMLElement;
+                        clone.style.position = 'fixed';
+                        clone.style.top = '-9999px';
+                        clone.style.left = '-9999px';
+                        clone.style.width = `${target.offsetWidth}px`;
+                        clone.style.height = `${target.offsetHeight}px`;
+                        clone.style.opacity = '0.9';
+                        clone.style.pointerEvents = 'none';
+                        clone.style.transform = 'none';
+                        document.body.appendChild(clone);
+                        e.dataTransfer.setDragImage(clone, target.offsetWidth / 2, target.offsetHeight / 2);
+                        setTimeout(() => {
+                          if (clone.parentNode) {
+                            document.body.removeChild(clone);
+                          }
+                        }, 0);
+                      } catch (err) {}
+
+                      // Defer state update so the element doesn't mutate during synchronous dragstart snapshot
+                      setTimeout(() => {
+                        setDraggedSkill(skill);
+                      }, 0);
                     }}
                     onDragEnd={() => {
                       setDraggedSkill(null);
