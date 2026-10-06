@@ -4,7 +4,7 @@ import { TechIcon } from './Icons';
 import ScrollReveal from './ScrollReveal';
 import { useAudio } from '../hooks/useAudio';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
-import { BorderBeam } from './ui/border-beam';
+import { MagicCard } from './ui/magic-card';
 
 const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -94,22 +94,16 @@ const Contact: React.FC = () => {
 
                     {/* Right Column: Form */}
                     <ScrollReveal delay={0.2}>
-                        <div className="relative p-8 md:p-10 rounded-3xl bg-surface border border-theme-border backdrop-blur-md shadow-2xl overflow-hidden">
-                            <BorderBeam
-                                size={260}
-                                duration={10}
-                                colorFrom={isLight ? "#D97706" : "#00D1FF"}
-                                colorTo={isLight ? "#F59E0B" : "#A855F7"}
-                                borderWidth={1.5}
-                            />
-                            <BorderBeam
-                                size={260}
-                                duration={10}
-                                delay={5}
-                                colorFrom={isLight ? "#B45309" : "#38BDF8"}
-                                colorTo={isLight ? "#D97706" : "#C084FC"}
-                                borderWidth={1.5}
-                            />
+                        <MagicCard
+                            gradientSize={240}
+                            gradientFrom="rgba(0, 209, 255, 0.75)"
+                            gradientTo="rgba(30, 64, 175, 0.35)"
+                            gradientColor={isLight ? "rgba(37, 99, 235, 0.03)" : "rgba(0, 209, 255, 0.04)"}
+                            gradientOpacity={0.3}
+                            backGlow={true}
+                            backGlowOpacity={0.25}
+                            className="p-8 md:p-10 rounded-3xl bg-surface shadow-2xl backdrop-blur-md"
+                        >
                             <form onSubmit={handleSubmit} className="relative space-y-6">
                                 <div className="space-y-2">
                                     <label htmlFor="name" className="text-xs font-mono uppercase tracking-widest text-theme-secondary ml-1">Name</label>
@@ -166,7 +160,7 @@ const Contact: React.FC = () => {
                                     />
                                 </div>
                             </form>
-                        </div>
+                        </MagicCard>
                     </ScrollReveal>
 
                 </div>

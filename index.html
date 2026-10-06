@@ -53,9 +53,11 @@
             accent: 'var(--accent)',
             'accent-purple': '#A855F7',
             surface: 'var(--bg-surface)',
+            background: 'var(--color-background, var(--bg-surface))',
             'theme-text': 'var(--text-primary)',
             'theme-secondary': 'var(--text-secondary)',
             'theme-border': 'var(--border-color)',
+            border: 'var(--color-border, var(--border-color))',
           },
         },
         animation: {
@@ -151,9 +153,11 @@
     :root {
       --bg-primary: #000000;
       --bg-surface: #121212;
+      --color-background: var(--bg-surface);
       --text-primary: #F8FAFC;
       --text-secondary: #94A3B8;
       --border-color: rgba(255, 255, 255, 0.05);
+      --color-border: var(--border-color);
       --navbar-bg: rgba(0, 5, 10, 0.9);
       --card-bg: rgba(255, 255, 255, 0.05);
       --accent: #00D1FF;
@@ -163,9 +167,11 @@
     .light {
       --bg-primary: #FAF8F2; /* Luxurious Warm White / Ivory */
       --bg-surface: #F3EEE3; /* Warm Champagne Gold Tint */
+      --color-background: var(--bg-surface);
       --text-primary: #1F1A14; /* Deep Warm Charcoal */
       --text-secondary: #706554; /* Warm Slate Gold */
       --border-color: rgba(180, 130, 20, 0.15); /* Soft Gold Border */
+      --color-border: var(--border-color);
       --navbar-bg: rgba(250, 248, 242, 0.92);
       --card-bg: rgba(243, 238, 227, 0.7);
       --accent: #D97706; /* Rich Champagne Amber Gold Accent */
