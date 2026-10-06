@@ -27,8 +27,8 @@ export const About: React.FC = () => {
       <div className="container mx-auto max-w-7xl">
         <div className="space-y-10 md:space-y-14">
           {/* Section Title */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 mb-2">
+          <div className="space-y-2">
+            <div className="flex items-center gap-4 mb-1">
               <motion.div
                 initial={{ width: 0, opacity: 0 }}
                 whileInView={{ width: '4rem', opacity: 1 }}
@@ -90,69 +90,65 @@ export const About: React.FC = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            <div className="lg:col-span-7 space-y-8 md:space-y-10">
-              {/* Bio with Word-by-Word Chroma Scroll Reveal */}
-              <ScrollReveal
-                triggerRef={sectionRef}
-                pin={true}
-                pinDistance={1100}
-                baseOpacity={0.2}
-                containerClassName="my-0"
-                textClassName="font-about text-[20px] sm:text-[22px] font-[450] leading-[1.5] tracking-normal"
-              >
-                I’m an AI/ML student passionate about understanding how intelligent systems work, with a focus on building strong foundations and turning ideas into practical solutions. I enjoy breaking down complex problems, building real-world AI projects, and exploring the intersection of AI and software. I’m always looking to learn, collaborate, and grow through meaningful hands-on work.
-              </ScrollReveal>
-
-              {/* Metadata Chips */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex flex-wrap gap-8 md:gap-12 pt-6 md:pt-8 border-t border-theme-border"
-              >
-                {[
-                  { label: 'Focus', val: 'AI & Machine Learning', icon: true, isAccent: false },
-                  { label: 'Status', val: 'Learning & Building', icon: false, isAccent: true },
-                  { label: 'Location', val: 'Open to Remote', icon: false, isAccent: false }
-                ].map((item, i) => (
-                  <div key={i} className="flex flex-col gap-2">
-                    <span className="text-[10px] font-mono font-medium text-theme-secondary uppercase tracking-widest">{item.label}</span>
-                    <span className={`text-sm font-display font-bold ${item.isAccent ? 'text-accent [.light_&]:text-amber-600' : 'text-theme-text [.light_&]:text-amber-700'} flex items-center gap-3`}>
-                      {item.icon && <div className="w-2 h-2 rounded-full bg-accent [.light_&]:bg-amber-500 shadow-[0_0_8px_var(--accent)]"></div>}
-                      {item.val}
-                    </span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Freestanding Profile Photo - Mode-Specific Images */}
-            <div className="lg:col-span-5 flex items-center justify-center -mt-6 sm:-mt-10 lg:-mt-16 xl:-mt-20">
-              <div className="relative w-full max-w-[300px] sm:max-w-[350px] md:max-w-[390px] lg:max-w-[430px] aspect-[3/2] flex items-center justify-center">
-                {/* Dark Mode Photo */}
-                <img
-                  src="/aboutmeDark.webp"
-                  alt="Mohammed Adnan"
-                  width={1536}
-                  height={1024}
-                  className="absolute inset-0 w-full h-full object-contain select-none mix-blend-screen transition-opacity duration-300 opacity-100 [.light_&]:opacity-0 pointer-events-none"
-                  loading="eager"
-                  decoding="sync"
-                />
-                {/* Light Mode Photo */}
-                <img
-                  src="/aboutmeLight.webp"
-                  alt="Mohammed Adnan"
-                  width={1536}
-                  height={1024}
-                  className="absolute inset-0 w-full h-full object-contain select-none mix-blend-multiply transition-opacity duration-300 opacity-0 [.light_&]:opacity-100 pointer-events-none"
-                  loading="eager"
-                  decoding="sync"
-                />
-              </div>
-            </div>
+          {/* Editorial Canvas: Wide Lead Typography + Lower Split Grid */}
+          <div className="relative w-full">
+            <ScrollReveal
+              triggerRef={sectionRef}
+              pin={true}
+              pinDistance={1350}
+              baseOpacity={0.2}
+              containerClassName="my-0"
+              textClassName="font-marcellus text-[19px] sm:text-[21px] md:text-[22px] font-normal leading-[1.42] tracking-tight"
+              leadText="I'm an AI/ML student who can't leave a model alone until I understand why it works, and why it sometimes doesn't. I like opening the black box, tracing stubborn loss curves, rewriting pipelines, and figuring out what the data was trying to tell me."
+              bodyText="Most of what I know came from building things, breaking them, and building them better. I'm happiest where machine learning meets real software, turning ideas from notebooks into tools people can actually use. Outside of tech, I write, listen to music, and get curious about the strange ways people and machines behave."
+              rightContent={
+                <div className="relative w-full max-w-[340px] sm:max-w-[400px] md:max-w-[460px] lg:max-w-[500px] xl:max-w-[540px] aspect-[3/2] flex items-center justify-center">
+                  {/* Dark Mode Photo */}
+                  <img
+                    src="/aboutmeDark.webp"
+                    alt="Mohammed Adnan"
+                    width={1536}
+                    height={1024}
+                    className="absolute inset-0 w-full h-full object-contain select-none mix-blend-screen transition-opacity duration-300 opacity-100 [.light_&]:opacity-0 pointer-events-none drop-shadow-[0_10px_35px_rgba(0,209,255,0.08)]"
+                    loading="eager"
+                    decoding="sync"
+                  />
+                  {/* Light Mode Photo */}
+                  <img
+                    src="/aboutmeLight.webp"
+                    alt="Mohammed Adnan"
+                    width={1536}
+                    height={1024}
+                    className="absolute inset-0 w-full h-full object-contain select-none mix-blend-multiply transition-opacity duration-300 opacity-0 [.light_&]:opacity-100 pointer-events-none"
+                    loading="eager"
+                    decoding="sync"
+                  />
+                </div>
+              }
+              footerContent={
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="flex flex-wrap gap-8 md:gap-12 pt-8 md:pt-10 border-t border-theme-border"
+                >
+                  {[
+                    { label: 'Domain', val: 'Applied AI & Software', icon: true, isAccent: false },
+                    { label: 'Status', val: 'Learning & Building', icon: false, isAccent: true },
+                    { label: 'Location', val: 'Open to Remote', icon: false, isAccent: false }
+                  ].map((item, i) => (
+                    <div key={i} className="flex flex-col gap-2">
+                      <span className="text-[10px] font-mono font-medium text-theme-secondary uppercase tracking-widest">{item.label}</span>
+                      <span className={`text-sm font-display font-bold ${item.isAccent ? 'text-accent [.light_&]:text-amber-600' : 'text-theme-text [.light_&]:text-amber-700'} flex items-center gap-3`}>
+                        {item.icon && <div className="w-2 h-2 rounded-full bg-accent [.light_&]:bg-amber-500 shadow-[0_0_8px_var(--accent)]"></div>}
+                        {item.val}
+                      </span>
+                    </div>
+                  ))}
+                </motion.div>
+              }
+            />
           </div>
         </div>
       </div>

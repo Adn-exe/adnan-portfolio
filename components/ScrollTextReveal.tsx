@@ -10,14 +10,20 @@ import { Tooltip } from './ui/tooltip-card';
 
 const EASTER_EGGS: Record<string, string> = {
   'AI/ML student': 'Professional question-asker. Currently teaching computers to guess, and teaching myself to be okay when they guess wrong.',
-  'intelligent systems': 'Machines that look smart in demos and humble in production. I build the first kind and survive the second.',
-  'practical solutions': 'Code that works on the first try. Allegedly. Please don\'t check the commit history.',
-  'real-world AI projects': 'Where big ideas meet bad Wi-Fi, messy data, and one very long night of \'why is this broken now?\'',
-  'intersection of AI and software': 'Where clean design meets clever models, and nobody has to know how many coffees it took.',
+  'black box': 'Peeking under the hood of neural nets to see what linear algebra and matrix magic are actually up to.',
+  'loss curves': 'Staring at stubborn gradients, wondering if it\'s the learning rate or just a personal vendetta against convergence.',
+  'happiest': 'Happiest is a relative term. Usually means caffeine levels are critical, 40 browser tabs are open, and the loss curve finally stopped throwing an existential crisis.',
+  'write': 'Essays, reflections, and deep dives. Putting thoughts into words before they evaporate into the background noise.',
+  'music': 'The unofficial co-pilot to every late-night coding session. Ambient, lo-fi, and soundtracks keeping the flow state locked.',
+  'people and machines behave': 'Both run on feedback loops, unpredictable inputs, and the occasional mysterious crash.',
 };
 
 export interface ScrollRevealProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  leadText?: string;
+  bodyText?: string;
+  rightContent?: React.ReactNode;
+  footerContent?: React.ReactNode;
   scrollContainerRef?: React.RefObject<HTMLElement | null>;
   triggerRef?: React.RefObject<HTMLElement | null>;
   pin?: boolean;
@@ -32,10 +38,147 @@ export interface ScrollRevealProps {
   wordAnimationEnd?: string;
   wordAnimationStart?: string;
   enableEasterEggs?: boolean;
+  floatContent?: React.ReactNode;
 }
+
+const buildChromaTokens = (
+  text: string,
+  isLight: boolean,
+  baseOpacity: number,
+  enableEasterEggs: boolean,
+  keyPrefix = 'w'
+) => {
+  if (!text) return null;
+
+  const baseGrad = isLight
+    ? 'linear-gradient(90deg, #1F1A14 0%, #1F1A14 30%, #D97706 38%, #F59E0B 46%, #B45309 54%, #78350F 62%, #A8A29E 70%, #A8A29E 100%)'
+    : 'linear-gradient(90deg, #F8FAFC 0%, #F8FAFC 30%, #00D1FF 38%, #38BDF8 46%, #818CF8 54%, #C084FC 62%, #64748B 70%, #64748B 100%)';
+
+  const highlightGrad = isLight
+    ? 'linear-gradient(90deg, #D97706 0%, #D97706 30%, #F59E0B 38%, #B45309 46%, #78350F 54%, #D97706 62%, #A8A29E 70%, #A8A29E 100%)'
+    : 'linear-gradient(90deg, #00D1FF 0%, #00D1FF 30%, #38BDF8 38%, #818CF8 46%, #C084FC 54%, #00D1FF 62%, #64748B 70%, #64748B 100%)';
+
+  const targetPhrases = Object.keys(EASTER_EGGS);
+
+  interface PhraseMatch {
+    phrase: string;
+    startIndex: number;
+    endIndex: number;
+  }
+
+  const matches: PhraseMatch[] = [];
+  if (enableEasterEggs) {
+    for (const phrase of targetPhrases) {
+      let startIndex = 0;
+      while ((startIndex = text.indexOf(phrase, startIndex)) !== -1) {
+        let endIndex = startIndex + phrase.length;
+
+        const charBefore = startIndex > 0 ? text[startIndex - 1] : ' ';
+        const charAfter = endIndex < text.length ? text[endIndex] : ' ';
+        const isBoundaryBefore = /[\s.,!?;:'"()[\]{}]/.test(charBefore);
+        const isBoundaryAfter = /[\s.,!?;:'"()[\]{}]/.test(charAfter);
+
+        if (!isBoundaryBefore || !isBoundaryAfter) {
+          startIndex += 1;
+          continue;
+        }
+
+        if (text[endIndex] === '.' || text[endIndex] === ',') {
+          endIndex += 1;
+        }
+        matches.push({ phrase, startIndex, endIndex });
+        startIndex = endIndex;
+      }
+    }
+    matches.sort((a, b) => a.startIndex - b.startIndex);
+  }
+
+  const nonOverlappingMatches: PhraseMatch[] = [];
+  let currentEnd = 0;
+  for (const m of matches) {
+    if (m.startIndex >= currentEnd) {
+      nonOverlappingMatches.push(m);
+      currentEnd = m.endIndex;
+    }
+  }
+
+  const elements: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let counter = 0;
+
+  const renderWords = (content: string, isHighlighted: boolean) => {
+    const grad = isHighlighted ? highlightGrad : baseGrad;
+    const highlightClass = isHighlighted
+      ? 'font-semibold drop-shadow-[0_0_12px_rgba(0,209,255,0.3)] [.light_&]:drop-shadow-none'
+      : 'font-[450]';
+
+    return content.split(/(\s+)/).map((segment) => {
+      if (segment.match(/^\s+$/)) {
+        return segment;
+      }
+      counter += 1;
+      return (
+        <span
+          className={`chroma-word mr-[0.3em] ${highlightClass}`}
+          key={`${keyPrefix}-${counter}`}
+          style={{
+            backgroundImage: grad,
+            backgroundPosition: '100% 50%',
+            opacity: baseOpacity,
+          }}
+        >
+          {segment}
+        </span>
+      );
+    });
+  };
+
+  nonOverlappingMatches.forEach((match, matchIdx) => {
+    if (match.startIndex > lastIndex) {
+      const plainText = text.slice(lastIndex, match.startIndex);
+      elements.push(
+        <React.Fragment key={`${keyPrefix}-plain-${matchIdx}`}>
+          {renderWords(plainText, false)}
+        </React.Fragment>
+      );
+    }
+
+    const phraseText = text.slice(match.startIndex, match.endIndex);
+    const egg = EASTER_EGGS[match.phrase];
+
+    elements.push(
+      <Tooltip
+        key={`${keyPrefix}-egg-${match.phrase}-${matchIdx}`}
+        as="span"
+        containerClassName="relative inline-block align-baseline cursor-pointer"
+        tooltipClassName="z-50 min-w-[18rem] sm:min-w-[22rem] max-w-[28rem] sm:max-w-[36rem]"
+        content={egg}
+      >
+        {renderWords(phraseText, true)}
+      </Tooltip>
+    );
+
+    lastIndex = match.endIndex;
+  });
+
+  if (lastIndex < text.length) {
+    const remainingText = text.slice(lastIndex);
+    elements.push(
+      <React.Fragment key={`${keyPrefix}-plain-tail`}>
+        {renderWords(remainingText, false)}
+      </React.Fragment>
+    );
+  }
+
+  return elements;
+};
 
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
+  leadText,
+  bodyText,
+  rightContent,
+  footerContent,
   scrollContainerRef,
   triggerRef,
   pin = false,
@@ -48,6 +191,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   wordAnimationEnd = 'center center',
   wordAnimationStart = 'top bottom-=10%',
   enableEasterEggs = true,
+  floatContent,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -63,119 +207,21 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     return () => observer.disconnect();
   }, []);
 
+  const leadTokens = useMemo(() => {
+    if (!leadText) return null;
+    return buildChromaTokens(leadText, isLight, baseOpacity, enableEasterEggs, 'lead');
+  }, [leadText, isLight, baseOpacity, enableEasterEggs]);
+
+  const bodyTokens = useMemo(() => {
+    if (!bodyText) return null;
+    return buildChromaTokens(bodyText, isLight, baseOpacity, enableEasterEggs, 'body');
+  }, [bodyText, isLight, baseOpacity, enableEasterEggs]);
+
   const splitText = useMemo(() => {
+    if (leadText || bodyText) return null;
     const text = typeof children === 'string' ? children : '';
-    if (!text) return null;
-
-    // Chromatic rainbow gradients tuned for dark and light palettes
-    // 0% - 30%: solid final text color
-    // 38% - 62%: chromatic ribbon sweep
-    // 70% - 100%: deeply subtle muted grey unrevealed
-    const baseGrad = isLight
-      ? 'linear-gradient(90deg, #1F1A14 0%, #1F1A14 30%, #D97706 38%, #F59E0B 46%, #B45309 54%, #78350F 62%, #A8A29E 70%, #A8A29E 100%)'
-      : 'linear-gradient(90deg, #F8FAFC 0%, #F8FAFC 30%, #00D1FF 38%, #38BDF8 46%, #818CF8 54%, #C084FC 62%, #64748B 70%, #64748B 100%)';
-
-    const highlightGrad = isLight
-      ? 'linear-gradient(90deg, #D97706 0%, #D97706 30%, #F59E0B 38%, #B45309 46%, #78350F 54%, #D97706 62%, #A8A29E 70%, #A8A29E 100%)'
-      : 'linear-gradient(90deg, #00D1FF 0%, #00D1FF 30%, #38BDF8 38%, #818CF8 46%, #C084FC 54%, #00D1FF 62%, #64748B 70%, #64748B 100%)';
-
-    const targetPhrases = Object.keys(EASTER_EGGS);
-
-    // Find all occurrences of target phrases with character ranges
-    interface PhraseMatch {
-      phrase: string;
-      startIndex: number;
-      endIndex: number;
-    }
-
-    const matches: PhraseMatch[] = [];
-    if (enableEasterEggs) {
-      for (const phrase of targetPhrases) {
-        let startIndex = 0;
-        while ((startIndex = text.indexOf(phrase, startIndex)) !== -1) {
-          let endIndex = startIndex + phrase.length;
-          // Absorb immediately adjacent trailing punctuation (. or ,) so words stay whole for GSAP
-          if (text[endIndex] === '.' || text[endIndex] === ',') {
-            endIndex += 1;
-          }
-          matches.push({ phrase, startIndex, endIndex });
-          startIndex = endIndex;
-        }
-      }
-      matches.sort((a, b) => a.startIndex - b.startIndex);
-    }
-
-    // Slice text into alternating non-matched and matched segments
-    const elements: React.ReactNode[] = [];
-    let lastIndex = 0;
-    let globalKeyCounter = 0;
-
-    const renderWords = (content: string, isHighlighted: boolean) => {
-      const grad = isHighlighted ? highlightGrad : baseGrad;
-      const highlightClass = isHighlighted
-        ? 'font-semibold drop-shadow-[0_0_12px_rgba(0,209,255,0.3)] [.light_&]:drop-shadow-none'
-        : 'font-[450]';
-
-      return content.split(/(\s+)/).map((segment) => {
-        if (segment.match(/^\s+$/)) {
-          return segment;
-        }
-        globalKeyCounter += 1;
-        return (
-          <span
-            className={`chroma-word mr-[0.3em] ${highlightClass}`}
-            key={`word-${globalKeyCounter}`}
-            style={{
-              backgroundImage: grad,
-              backgroundPosition: '100% 50%',
-              opacity: baseOpacity,
-            }}
-          >
-            {segment}
-          </span>
-        );
-      });
-    };
-
-    matches.forEach((match, matchIdx) => {
-      if (match.startIndex > lastIndex) {
-        const plainText = text.slice(lastIndex, match.startIndex);
-        elements.push(
-          <React.Fragment key={`plain-${matchIdx}`}>
-            {renderWords(plainText, false)}
-          </React.Fragment>
-        );
-      }
-
-      const phraseText = text.slice(match.startIndex, match.endIndex);
-      const egg = EASTER_EGGS[match.phrase];
-
-      elements.push(
-        <Tooltip
-          key={`egg-${match.phrase}-${matchIdx}`}
-          as="span"
-          containerClassName="relative inline-block align-baseline cursor-pointer"
-          tooltipClassName="z-50 min-w-[18rem] sm:min-w-[22rem] max-w-[28rem] sm:max-w-[36rem]"
-          content={egg}
-        >
-          {renderWords(phraseText, true)}
-        </Tooltip>
-      );
-
-      lastIndex = match.endIndex;
-    });
-
-    if (lastIndex < text.length) {
-      const remainingText = text.slice(lastIndex);
-      elements.push(
-        <React.Fragment key="plain-tail">
-          {renderWords(remainingText, false)}
-        </React.Fragment>
-      );
-    }
-
-    return elements;
-  }, [children, isLight, baseOpacity, enableEasterEggs]);
+    return buildChromaTokens(text, isLight, baseOpacity, enableEasterEggs, 'single');
+  }, [children, leadText, bodyText, isLight, baseOpacity, enableEasterEggs]);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -330,9 +376,43 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     isLight,
   ]);
 
+  if (leadText && bodyTokens) {
+    return (
+      <div ref={containerRef} className={`scroll-reveal ${containerClassName} space-y-8 md:space-y-10`}>
+        {/* Full-width Lead Text: first 2-3 lines spread across full screen */}
+        <p
+          className={`scroll-reveal-text ${textClassName} max-w-full`}
+          style={{ fontFamily: "'Marcellus', serif", lineHeight: 1.42 }}
+        >
+          {leadTokens}
+        </p>
+
+        {/* Lower Grid: Body text on left, photo on right, chips below */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 space-y-8 md:space-y-10">
+            <p
+              className={`scroll-reveal-text ${textClassName}`}
+              style={{ fontFamily: "'Marcellus', serif", lineHeight: 1.42 }}
+            >
+              {bodyTokens}
+            </p>
+            {footerContent}
+          </div>
+
+          {rightContent && (
+            <div className="lg:col-span-5 flex items-center justify-center -mt-6 sm:-mt-10 lg:-mt-14">
+              {rightContent}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div ref={containerRef} className={`scroll-reveal ${containerClassName}`}>
-      <p className={`scroll-reveal-text ${textClassName}`}>{splitText}</p>
+      {floatContent}
+      <p className={`scroll-reveal-text ${textClassName}`} style={{ fontFamily: "'Marcellus', serif", lineHeight: 1.38 }}>{splitText}</p>
     </div>
   );
 };

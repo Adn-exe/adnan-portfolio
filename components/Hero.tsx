@@ -11,7 +11,10 @@ const Hero: React.FC = () => {
   const [isLight, setIsLight] = useState(() =>
     typeof document !== 'undefined' ? document.documentElement.classList.contains('light') : false
   );
-  const [textReady, setTextReady] = useState(false);
+  const [isTextCompleted, setIsTextCompleted] = useState(false);
+  const [isTaglineReady, setIsTaglineReady] = useState(false);
+  const [isAtmosphereReady, setIsAtmosphereReady] = useState(false);
+  const [isControlsReady, setIsControlsReady] = useState(false);
   const [heroVisible, setHeroVisible] = useState(true);
 
   useEffect(() => {
@@ -26,21 +29,41 @@ const Hero: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Dispatch custom event when text animation completes so TerminalFab, ThemeToggle, and StaggeredMenu can listen
-  useEffect(() => {
-    if (textReady) {
-      (window as any).__heroTextReady = true;
-      window.dispatchEvent(new CustomEvent('heroTextReady'));
-    }
-  }, [textReady]);
-
-  // Fallback timer: ensure textReady is triggered after StrokeText finishes (max 3.8s)
+  // Fallback timer: ensure text animation sequence kicks off if StrokeText takes longer than 3.8s
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTextReady(true);
+      setIsTextCompleted(true);
     }, 3800);
     return () => clearTimeout(timer);
   }, []);
+
+  // Choreographed multi-phase entrance sequence once StrokeText completes
+  useEffect(() => {
+    if (!isTextCompleted) return;
+
+    // Phase 2 -> 3: Tagline reveals after 450ms resting beat
+    const taglineTimer = setTimeout(() => {
+      setIsTaglineReady(true);
+    }, 450);
+
+    // Phase 4: DarkVeil atmospheric bloom begins at 750ms
+    const atmosphereTimer = setTimeout(() => {
+      setIsAtmosphereReady(true);
+    }, 750);
+
+    // Phase 5: UI Controls & System Nav ready at 1100ms
+    const controlsTimer = setTimeout(() => {
+      setIsControlsReady(true);
+      (window as any).__heroTextReady = true;
+      window.dispatchEvent(new CustomEvent('heroTextReady'));
+    }, 1100);
+
+    return () => {
+      clearTimeout(taglineTimer);
+      clearTimeout(atmosphereTimer);
+      clearTimeout(controlsTimer);
+    };
+  }, [isTextCompleted]);
 
   // Observe hero section visibility for scroll-based button hiding
   useEffect(() => {
@@ -58,7 +81,7 @@ const Hero: React.FC = () => {
   }, []);
 
   const handleTextComplete = useCallback(() => {
-    setTextReady(true);
+    setIsTextCompleted(true);
   }, []);
 
   const scrollToContact = (e?: React.MouseEvent) => {
@@ -82,22 +105,30 @@ const Hero: React.FC = () => {
     }
   };
 
-  const buttonsVisible = textReady && heroVisible;
+  const buttonsVisible = isControlsReady && heroVisible;
 
   return (
     <section id="hero" ref={heroRef} className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden select-none bg-primary">
 
-      {/* React Bits DarkVeil Ambient Background with Feathered Bottom Edge */}
-      <div className="absolute inset-0 pointer-events-none opacity-60 [.light_&]:opacity-35 transition-opacity duration-700 [mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)]">
+      {/* React Bits DarkVeil Ambient Background with Feathered Bottom Edge — silky gradual bloom */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isAtmosphereReady ? (isLight ? 0.18 : 0.32) : 0 }}
+        transition={{
+          duration: 2.6,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_60%,transparent_100%)]"
+      >
         <DarkVeil
           hueShift={0}
-          speed={0.8}
-          warpAmount={0.3}
-          noiseIntensity={0.01}
+          speed={0.6}
+          warpAmount={0.25}
+          noiseIntensity={0.005}
           scanlineIntensity={0}
           lightMode={isLight}
         />
-      </div>
+      </motion.div>
 
       {/* Dynamic Background Overlay */}
       <motion.div
@@ -160,18 +191,17 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        {/* Tagline — revealed when StrokeText completes */}
+        {/* Tagline — revealed gracefully after the resting beat */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: textReady ? 1 : 0, y: textReady ? 0 : 16 }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: isTaglineReady ? 1 : 0, y: isTaglineReady ? 0 : 14 }}
           transition={{
             duration: 0.85,
             ease: [0.16, 1, 0.3, 1],
-            delay: 0.1,
           }}
           className="max-w-5xl mx-auto w-full px-4 -mt-2 md:-mt-4 min-h-[24px]"
         >
-          {textReady && (
+          {isTaglineReady && (
             <DiaTextReveal
               text="I LIVE SOMEWHERE BETWEEN LOGIC AND IMAGINATION, STILL EXPLORING"
               className="font-helvetica font-normal text-xs md:text-sm tracking-[0.2em] leading-relaxed block"
@@ -182,7 +212,7 @@ const Hero: React.FC = () => {
               }
               textColor={isLight ? '#706554' : '#B8C7D9'}
               duration={3.5}
-              delay={0.2}
+              delay={0.1}
               ease={[0.25, 0.1, 0.25, 1]}
               startOnView={false}
             />
@@ -191,15 +221,15 @@ const Hero: React.FC = () => {
 
         {/* Mobile Get in Touch CTA — gated by text animation + hero visibility */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{
             opacity: buttonsVisible ? 1 : 0,
-            y: buttonsVisible ? 0 : 20,
+            y: buttonsVisible ? 0 : 16,
           }}
           transition={{
             duration: 0.85,
             ease: [0.16, 1, 0.3, 1],
-            delay: buttonsVisible ? 0.35 : 0,
+            delay: buttonsVisible ? 0.2 : 0,
           }}
           className="md:hidden mt-6"
           style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
@@ -233,15 +263,15 @@ const Hero: React.FC = () => {
 
       {/* Premium CTA - Right — gated by text animation + hero visibility */}
       <motion.div
-        initial={{ opacity: 0, x: 30 }}
+        initial={{ opacity: 0, x: 25 }}
         animate={{
           opacity: buttonsVisible ? 1 : 0,
-          x: buttonsVisible ? 0 : 30,
+          x: buttonsVisible ? 0 : 25,
         }}
         transition={{
-          duration: 0.9,
+          duration: 0.85,
           ease: [0.16, 1, 0.3, 1],
-          delay: buttonsVisible ? 0.4 : 0,
+          delay: buttonsVisible ? 0.25 : 0,
         }}
         className="absolute bottom-14 right-6 hidden md:block z-20"
         style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
@@ -271,15 +301,15 @@ const Hero: React.FC = () => {
 
       {/* Scroll Indicator with Glowing Line Above */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{
           opacity: buttonsVisible ? 0.8 : 0,
-          y: buttonsVisible ? 0 : 10,
+          y: buttonsVisible ? 0 : 12,
         }}
         transition={{
-          duration: 1.0,
+          duration: 0.95,
           ease: [0.16, 1, 0.3, 1],
-          delay: buttonsVisible ? 0.6 : 0,
+          delay: buttonsVisible ? 0.5 : 0,
         }}
         style={{ pointerEvents: buttonsVisible ? 'auto' : 'none' }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 hover:opacity-100 transition-opacity cursor-pointer group"

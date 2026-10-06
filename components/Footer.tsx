@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
+import PulseHeart from './PulseHeart';
 
 const Footer: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,29 @@ const Footer: React.FC = () => {
       className="pt-16 pb-0 border-t border-theme-border bg-primary relative z-30 overflow-hidden w-full"
     >
       {/* Upper content constrained inside container */}
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 relative">
+        {/* Top-Right Heart Icon */}
+        <motion.div
+          style={{ y: finalContentY, opacity: finalContentOpacity }}
+          className="absolute -top-10 right-6 sm:right-8 z-20 flex items-center justify-center"
+        >
+          <PulseHeart
+            showCount={false}
+            free={true}
+            size={22}
+            likedColor="#00D1FF"
+            idleColor="var(--text-secondary)"
+            label="Like portfolio"
+            className="hover:scale-110 transition-transform"
+            defaultLiked={typeof window !== 'undefined' ? localStorage.getItem('portfolio_liked') === 'true' : false}
+            onChange={(liked) => {
+              try {
+                localStorage.setItem('portfolio_liked', String(liked));
+              } catch (e) {}
+            }}
+          />
+        </motion.div>
+
         <motion.div
           style={{ y: finalContentY, opacity: finalContentOpacity }}
           className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-8"
