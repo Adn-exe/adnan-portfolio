@@ -180,7 +180,8 @@ export const Tooltip = ({
           >
             <div
               ref={contentRef}
-              className="px-4 py-3 text-[13px] font-normal leading-relaxed text-neutral-200 [.light_&]:text-neutral-800"
+              className="px-4 py-3 font-montserrat text-[13px] font-normal tracking-normal leading-relaxed text-neutral-200 [.light_&]:text-neutral-800"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
             >
               {content}
             </div>
