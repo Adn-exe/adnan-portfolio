@@ -13,7 +13,7 @@ const EASTER_EGGS: Record<string, string> = {
   'black box': 'Peeking under the hood of neural nets to see what linear algebra and matrix magic are actually up to.',
   'loss curves': 'Staring at stubborn gradients, wondering if it\'s the learning rate or just a personal vendetta against convergence.',
   'happiest': 'Happiest is a relative term. Usually means caffeine levels are critical, 40 browser tabs are open, and the loss curve finally stopped throwing an existential crisis.',
-  'write': 'Essays, reflections, and deep dives. Putting thoughts into words before they evaporate into the background noise.',
+  'write': 'Blogs, stories, and musings. Penning my thoughts before they drift into the ether.',
   'music': 'The unofficial co-pilot to every late-night coding session. Ambient, lo-fi, and soundtracks keeping the flow state locked.',
   'people and machines behave': 'Both run on feedback loops, unpredictable inputs, and the occasional mysterious crash.',
 };
