@@ -3,7 +3,7 @@
   --ph-corner: 32px;
   --ph-pill: #232326;
   --ph-idle: #8b8b93;
-  --ph-liked: #00D1FF;
+  --ph-liked: var(--accent, #00D1FF);
   --ph-text: #f5f5f5;
   --ph-roll: 350ms;
   --ph-stroke: 2.2px;

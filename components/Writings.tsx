@@ -4,6 +4,7 @@ import ScrollReveal from './ScrollReveal';
 import FlowingMenu from './FlowingMenu';
 import { LinkPreview } from './ui/link-preview';
 import { DiaTextReveal } from './ui/dia-text-reveal';
+import { Tooltip } from './ui/tooltip-card';
 
 const WRITING_ITEMS = [
   {
@@ -68,41 +69,69 @@ const Writings: React.FC = () => {
               Hobby
             </span>
           </div>
-          <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter leading-tight text-center md:text-left flex flex-wrap gap-x-2.5 sm:gap-x-4 md:gap-x-5 items-baseline justify-center md:justify-start">
-            <DiaTextReveal
-              text="My"
-              className="font-display font-black tracking-tighter leading-tight inline-block text-theme-text"
-              colors={
-                isLight
-                  ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
-                  : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
-              }
-              textColor={isLight ? '#1F1A14' : '#F8FAFC'}
-              duration={1.8}
-              startOnView={true}
-              once={false}
-              scrollDownOnly={true}
-            />
-            <DiaTextReveal
-              text="Writings"
-              className="font-display font-black tracking-tighter leading-tight inline-block text-gradient"
-              colors={
-                isLight
-                  ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
-                  : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
-              }
-              textColor={
-                isLight
-                  ? 'linear-gradient(90deg, #B45309, #D97706, #B45309)'
-                  : 'linear-gradient(90deg, #00D1FF, #ffffff, #00D1FF)'
-              }
-              duration={1.8}
-              delay={0.12}
-              startOnView={true}
-              once={false}
-              scrollDownOnly={true}
-            />
-          </h2>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between items-center gap-4">
+            <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter leading-tight text-center md:text-left flex flex-wrap gap-x-2.5 sm:gap-x-4 md:gap-x-5 items-baseline justify-center md:justify-start">
+              <DiaTextReveal
+                text="My"
+                className="font-display font-black tracking-tighter leading-tight inline-block text-theme-text"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={isLight ? '#1F1A14' : '#F8FAFC'}
+                duration={1.8}
+                startOnView={true}
+                once={false}
+                scrollDownOnly={true}
+              />
+              <DiaTextReveal
+                text="Writings"
+                className="font-display font-black tracking-tighter leading-tight inline-block text-gradient"
+                colors={
+                  isLight
+                    ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                    : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                }
+                textColor={
+                  isLight
+                    ? 'linear-gradient(90deg, #B45309, #D97706, #B45309)'
+                    : 'linear-gradient(90deg, #00D1FF, #ffffff, #00D1FF)'
+                }
+                duration={1.8}
+                delay={0.12}
+                startOnView={true}
+                once={false}
+                scrollDownOnly={true}
+              />
+            </h2>
+
+            {/* Cat resting at the right-most side with Easter Egg tooltip */}
+            <div className="flex items-end justify-center sm:justify-end shrink-0 pb-1 sm:pb-2">
+              <Tooltip
+                as="div"
+                containerClassName="cursor-pointer group/cat relative inline-flex"
+                tooltipClassName="z-50 min-w-[15rem] sm:min-w-[17rem] max-w-[20rem]"
+                content={
+                  <span className="block leading-relaxed">
+                    The human has many thoughts.
+                    <br />
+                    I have one: where’s my food?
+                  </span>
+                }
+              >
+                <img
+                  src="/cat.png"
+                  alt="Cat"
+                  className={`h-9 sm:h-11 md:h-14 w-auto object-contain transition-all duration-300 select-none group-hover/cat:scale-105 active:scale-95 ${isLight
+                      ? 'opacity-85 brightness-95 filter-none drop-shadow-sm'
+                      : 'invert opacity-90 brightness-110 drop-shadow-[0_0_15px_rgba(0,209,255,0.25)]'
+                    }`}
+                  loading="lazy"
+                />
+              </Tooltip>
+            </div>
+          </div>
         </ScrollReveal>
       </div>
 

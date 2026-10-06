@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
             showCount={false}
             free={true}
             size={22}
-            likedColor="#00D1FF"
+            likedColor="var(--accent)"
             idleColor="var(--text-secondary)"
             label="Like portfolio"
             className="hover:scale-110 transition-transform"
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
             onChange={(liked) => {
               try {
                 localStorage.setItem('portfolio_liked', String(liked));
-              } catch (e) {}
+              } catch (e) { }
             }}
           />
         </motion.div>
@@ -90,29 +90,38 @@ const Footer: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Copyright Row */}
+        {/* Copyright Row - Aligned to Right */}
         <motion.div
           style={{ y: finalContentY, opacity: finalContentOpacity }}
-          className="pt-6 border-t border-theme-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-theme-secondary/70 tracking-wider"
+          className="pt-6 border-t border-theme-border flex justify-end items-center text-xs font-mono text-theme-secondary/70 tracking-wider"
         >
-          <div>
+          <div className="text-right">
             © 2026. All Rights Reserved.
           </div>
         </motion.div>
       </div>
 
-      {/* Full Bleed Oversized Display Text "ADNAN" with Smooth Scroll Reveal */}
+      {/* Full Bleed Oversized Display Text "ADNAN" with Spider Lily Accent */}
       <motion.div
         style={{
           y: finalBrandY,
           opacity: finalBrandOpacity,
           scale: finalBrandScale
         }}
-        className="pt-4 overflow-hidden h-[14vw] sm:h-[15.5vw] md:h-[16.5vw] flex justify-center items-start pointer-events-none select-none mt-2 w-full px-0 origin-bottom"
+        className="pt-1.5 sm:pt-2 overflow-hidden h-[14.5vw] sm:h-[15vw] md:h-[16vw] flex justify-center items-start pointer-events-none select-none mt-2 w-full px-2 sm:px-6 origin-bottom relative"
       >
-        <h1 className="text-[22vw] sm:text-[24vw] md:text-[25vw] leading-[0.75] font-display font-black tracking-tighter uppercase whitespace-nowrap text-center text-transparent bg-clip-text bg-gradient-to-b from-theme-text via-theme-text/35 to-theme-text/5 drop-shadow-sm w-full block">
-          ADNAN
-        </h1>
+        <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-5 max-w-full -translate-x-3 sm:-translate-x-5 md:-translate-x-7">
+          <img
+            src="/spider-lily.png"
+            alt="Spider Lily"
+            className="h-[15.5vw] sm:h-[17vw] md:h-[18.5vw] w-auto max-w-[14vw] sm:max-w-[15vw] object-contain drop-shadow-[0_0_25px_rgba(0,209,255,0.45)] [.light_&]:drop-shadow-[0_0_18px_rgba(0,180,220,0.3)] select-none pointer-events-none shrink-0"
+            loading="lazy"
+          />
+
+          <h1 className="text-[17vw] sm:text-[19vw] md:text-[21vw] leading-[0.75] font-display font-black tracking-tighter uppercase whitespace-nowrap text-center text-transparent bg-clip-text bg-gradient-to-b from-theme-text via-theme-text/35 to-theme-text/5 drop-shadow-sm block">
+            ADNAN
+          </h1>
+        </div>
       </motion.div>
     </footer>
   );
