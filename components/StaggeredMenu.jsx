@@ -1,6 +1,7 @@
 import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import './StaggeredMenu.css';
+import { MorphingMenuToggle } from './ui/morphing-menu-toggle';
 
 export const StaggeredMenu = ({
   position = 'left',
@@ -9,17 +10,17 @@ export const StaggeredMenu = ({
   socialItems = [],
   displaySocials = true,
   displayItemNumbering = true,
-  className,
-  logoUrl = '/image.png',
+  className = '',
+  logoUrl = '/adlogo.svg',
   menuButtonColor = 'var(--text-primary)',
   openMenuButtonColor = 'var(--accent)',
   accentColor = 'var(--accent)',
   changeMenuColorOnOpen = true,
   isFixed = true,
   closeOnClickAway = true,
-  onMenuOpen,
-  onMenuClose,
-  onItemClick
+  onMenuOpen = () => {},
+  onMenuClose = () => {},
+  onItemClick = () => {}
 }) => {
   const [open, setOpen] = useState(false);
   const [heroReady, setHeroReady] = useState(() => (typeof window !== 'undefined' ? !!window.__heroTextReady : false));
@@ -245,9 +246,9 @@ export const StaggeredMenu = ({
     if (!icon) return;
     spinTweenRef.current?.kill();
     if (opening) {
-      spinTweenRef.current = gsap.to(icon, { rotate: 225, duration: 0.8, ease: 'power4.out', overwrite: 'auto' });
+      spinTweenRef.current = gsap.to(icon, { scale: 1.05, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
     } else {
-      spinTweenRef.current = gsap.to(icon, { rotate: 0, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
+      spinTweenRef.current = gsap.to(icon, { scale: 1, duration: 0.35, ease: 'power3.inOut', overwrite: 'auto' });
     }
   }, []);
 
@@ -448,10 +449,10 @@ export const StaggeredMenu = ({
           type="button"
         >
           <div ref={iconRef} className="sm-logo-icon-container relative flex items-center justify-center">
-            <img
-              src={logoUrl || '/image.png'}
-              alt="Portfolio Logo"
-              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 object-contain filter drop-shadow-[0_0_12px_rgba(0,209,255,0.4)] [.light_&]:drop-shadow-[0_0_12px_rgba(217,119,6,0.4)] [.light_&]:brightness-0 [.light_&]:invert-0 group-hover:scale-110 transition-all duration-300 select-none"
+            <MorphingMenuToggle
+              logoUrl={logoUrl || '/adlogo.svg'}
+              isOpen={open}
+              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12"
             />
           </div>
         </button>
