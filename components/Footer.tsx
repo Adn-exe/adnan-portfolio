@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
           <Tooltip
             side="top"
             align="center"
-            content={isLiked ? "wherever you are, take care." : "human interaction detected"}
+            content={isLiked ? "wherever you are, take care." : "emotional support component"}
             containerClassName="flex items-center justify-center"
             tooltipClassName="min-w-fit whitespace-nowrap z-50 text-xs font-mono"
           >
