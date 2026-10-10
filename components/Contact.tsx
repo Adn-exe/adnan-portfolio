@@ -5,6 +5,7 @@ import ScrollReveal from './ScrollReveal';
 import { useAudio } from '../hooks/useAudio';
 import { InteractiveHoverButton } from './ui/interactive-hover-button';
 import { MagicCard } from './ui/magic-card';
+import { DiaTextReveal } from './ui/dia-text-reveal';
 
 const Contact: React.FC = () => {
     const [formState, setFormState] = useState({ name: '', email: '', message: '' });
@@ -45,26 +46,48 @@ const Contact: React.FC = () => {
     ];
 
     return (
-        <section id="contact" className="py-32 px-6 relative z-20 overflow-hidden bg-gradient-to-b from-primary via-primary to-[#022b40] [.light_&]:from-[#FAF8F2] [.light_&]:via-[#FAF8F2] [.light_&]:to-[#FDF1D0] transition-colors duration-500">
+        <section id="contact" className="pt-20 pb-28 md:pt-24 md:pb-32 px-6 relative z-20 overflow-hidden bg-gradient-to-b from-primary via-primary to-[#022b40] [.light_&]:from-[#FAF8F2] [.light_&]:via-[#FAF8F2] [.light_&]:to-[#FDF1D0] transition-colors duration-500">
             <div className="container mx-auto max-w-6xl relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+                {/* Section Header */}
+                <div className="w-full mb-4 sm:mb-6">
+                    <ScrollReveal animation="fade-right">
+                        <div className="flex items-center gap-4 mb-2.5 sm:mb-3">
+                            <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full" />
+                            <span className="text-accent font-medium text-sm tracking-widest uppercase">
+                                Let's Connect
+                            </span>
+                        </div>
+                        <h2 className="text-5xl sm:text-6xl md:text-8xl font-display font-black tracking-tighter leading-tight flex flex-wrap gap-x-2 items-baseline">
+                            <DiaTextReveal
+                                text="Contact"
+                                className="font-display font-black tracking-tighter leading-tight inline-block text-theme-text"
+                                colors={
+                                    isLight
+                                        ? ['#D97706', '#F59E0B', '#B45309', '#78350F']
+                                        : ['#00D1FF', '#38BDF8', '#818CF8', '#C084FC']
+                                }
+                                textColor={isLight ? '#1F1A14' : '#F8FAFC'}
+                                duration={1.8}
+                                startOnView={true}
+                                once={false}
+                                scrollDownOnly={true}
+                            />
+                            <span className="text-gradient font-display font-black">.</span>
+                        </h2>
+                    </ScrollReveal>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
 
                     {/* Left Column: Info */}
-                    <div className="flex flex-col justify-center space-y-8">
+                    <div className="flex flex-col space-y-6 pt-1 sm:pt-2">
                         <ScrollReveal>
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-4 mb-2">
-                                    <div className="w-16 h-[2px] bg-gradient-to-r from-accent to-white rounded-full"></div>
-                                    <span className="text-accent font-medium text-sm tracking-widest uppercase font-mono">Contact</span>
-                                </div>
-                                <span className="inline-block text-accent font-mono text-[10px] tracking-[0.2em] uppercase bg-accent/10 px-3.5 py-1 rounded-full border border-accent/30 font-bold">
-                                    Get In Touch
-                                </span>
-                                <h2 className="text-3xl md:text-5xl font-display font-bold text-theme-text tracking-tight leading-tight">
+                            <div className="space-y-3">
+                                <h3 className="text-2xl md:text-4xl font-display font-bold text-theme-text tracking-tight leading-tight">
                                     Let's build something <br />
                                     <span className="text-gradient">extraordinary.</span>
-                                </h2>
-                                <p className="text-theme-secondary text-sm leading-relaxed max-w-sm">
+                                </h3>
+                                <p className="font-google-sans text-theme-secondary text-sm sm:text-[15px] leading-relaxed max-w-sm">
                                     Have an idea? Say Hi!
                                 </p>
                             </div>
@@ -93,7 +116,7 @@ const Contact: React.FC = () => {
                     </div>
 
                     {/* Right Column: Form */}
-                    <ScrollReveal delay={0.2}>
+                    <ScrollReveal delay={0.2} className="lg:-mt-32 xl:-mt-40 w-full">
                         <MagicCard
                             gradientSize={240}
                             gradientFrom="rgba(0, 209, 255, 0.75)"
