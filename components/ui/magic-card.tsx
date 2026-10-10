@@ -6,7 +6,7 @@ import {
   useMotionTemplate,
   useMotionValue,
   useSpring,
-} from "motion/react";
+} from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
@@ -185,7 +185,7 @@ export function MagicCard(props: MagicCardProps) {
 
   return (
     <div
-      className="group relative"
+      className="group/card relative"
       onPointerMove={handlePointerMove}
       onPointerLeave={() => reset("leave")}
       onPointerEnter={() => reset("enter")}
@@ -194,7 +194,7 @@ export function MagicCard(props: MagicCardProps) {
       {backGlow && (
         <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-2 -z-10 rounded-3xl opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+          className="pointer-events-none absolute -inset-2 -z-10 rounded-3xl opacity-0 blur-2xl transition-opacity duration-500 group-hover/card:opacity-100"
           style={{
             background: useMotionTemplate`
               radial-gradient(${gradientSize * 1.15}px circle at ${mouseX}px ${mouseY}px,
@@ -235,7 +235,7 @@ export function MagicCard(props: MagicCardProps) {
         {mode === "gradient" && (
           <motion.div
             suppressHydrationWarning
-            className="pointer-events-none absolute inset-px z-20 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className="pointer-events-none absolute inset-px z-20 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover/card:opacity-100"
             style={{
               borderRadius: "inherit",
               background: useMotionTemplate`

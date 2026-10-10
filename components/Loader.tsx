@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import LoaderLogo from './LoaderLogo';
 
 interface Particle {
   id: number;
@@ -15,7 +16,7 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [isFinishing, setIsFinishing] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [statusText, setStatusText] = useState("INITIALIZING SYSTEM");
+  const [statusText, setStatusText] = useState("ACTING BUSY");
 
   useEffect(() => {
     const duration = 2000;
@@ -35,14 +36,14 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
       });
     }, interval);
 
-    // Cycle status text
+    // Cycle status text (niche sarcastic dev humor, max 2 words each)
     const statusInterval = setInterval(() => {
       setStatusText(prev => {
-        if (prev === "INITIALIZING SYSTEM") return "LOADING ASSETS";
-        if (prev === "LOADING ASSETS") return "OPTIMIZING";
-        return "READY";
+        if (prev === "ACTING BUSY") return "FIGHTING PIXELS";
+        if (prev === "FIGHTING PIXELS") return "BLAMING CACHE";
+        return "SHIP IT";
       });
-    }, 600);
+    }, 450);
 
     const handleMouseMove = (e: MouseEvent) => {
       setMousePos({
@@ -98,14 +99,14 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
       <div className="relative z-10 flex flex-col items-center">
         {/* Enhanced Central Element */}
         <div
-          className="relative transition-transform duration-700 ease-out flex items-center justify-center w-80 h-80"
+          className="relative transition-transform duration-700 ease-out flex items-center justify-center w-72 h-72 sm:w-80 sm:h-80"
           style={{ transform: `perspective(1000px) rotateX(${mousePos.y * -0.3}deg) rotateY(${mousePos.x * 0.3}deg)` }}
         >
-          {/* Scanning Sentinel Rings */}
+          {/* Circling Sentinel Arcs */}
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute rounded-full border border-accent/20"
+              className="absolute rounded-full border border-accent/25"
               style={{
                 width: `${100 - i * 15}%`,
                 height: `${100 - i * 15}%`,
@@ -119,70 +120,48 @@ const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
                 scale: [1, 1.02, 1],
               }}
               transition={{
-                rotate: { duration: 3 + i, repeat: Infinity, ease: "linear" },
-                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                rotate: { duration: 3.5 + i * 1.2, repeat: Infinity, ease: "linear" },
+                scale: { duration: 2.2, repeat: Infinity, ease: "easeInOut" }
               }}
             />
           ))}
 
-          {/* Logo Reveal with Intelligent Glow */}
-          <div className="relative group">
-            <motion.div
-              className="absolute inset-[-40px] blur-3xl bg-accent/20 rounded-full"
-              animate={{
-                opacity: [0.2, 0.5, 0.2],
-                scale: [0.9, 1.1, 0.9]
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              animate={{
-                scale: [1, 1.05, 1],
-                filter: [`drop-shadow(0 0 15px var(--accent))`, `drop-shadow(0 0 30px var(--accent))`, `drop-shadow(0 0 15px var(--accent))`]
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <img
-                src="/image.png"
-                alt="Portfolio Logo"
-                className="w-24 h-24 object-contain relative z-10 transition-transform duration-500 group-hover:scale-110 select-none [.light_&]:brightness-0"
-              />
-            </motion.div>
-          </div>
+          {/* Quantum Matrix Logo with Progressive Stroke Tracing */}
+          <LoaderLogo progress={progress} isFinishing={isFinishing} />
         </div>
 
         {/* Minimal Progress HUD */}
-        <div className="mt-12 flex flex-col items-center">
+        <div className="mt-8 sm:mt-10 flex flex-col items-center">
           {/* Animated Status Text */}
-          <div className="h-6 mb-4 overflow-hidden">
+          <div className="h-6 mb-3 overflow-hidden flex items-center justify-center">
             <motion.span
               key={statusText}
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
-              className="text-accent font-mono text-[10px] tracking-[0.6em] uppercase block"
+              className="text-accent font-mono text-[11px] sm:text-xs tracking-[0.55em] uppercase block font-medium"
             >
               {statusText}
             </motion.span>
           </div>
 
-          <div className="flex items-baseline gap-3 mb-8">
-            <span className="text-7xl font-display font-black text-theme-text tabular-nums italic tracking-tighter">
+          <div className="flex items-baseline gap-2.5 mb-6">
+            <span className="text-6xl sm:text-7xl font-display font-black text-theme-text tabular-nums italic tracking-tighter leading-none select-none">
               {Math.round(progress)}
             </span>
-            <span className="text-accent text-[10px] font-mono font-bold opacity-60 leading-none">%</span>
+            <span className="text-accent text-xs sm:text-sm font-mono font-bold opacity-75 leading-none select-none">%</span>
           </div>
 
           {/* Shimmering High-Precision Progress Bar */}
-          <div className="w-64 h-[3px] bg-theme-text/10 relative rounded-full overflow-hidden">
+          <div className="w-60 sm:w-72 h-[3px] bg-theme-text/10 relative rounded-full overflow-hidden">
             <motion.div
-              className="absolute inset-y-0 left-0 bg-accent shadow-[0_0_20px_var(--accent)]"
+              className="absolute inset-y-0 left-0 bg-accent shadow-[0_0_8px_var(--accent)] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ ease: "linear" }}
             />
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
               animate={{ x: ['-100%', '100%'] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
               style={{ width: `${progress}%` }}

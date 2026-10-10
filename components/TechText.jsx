@@ -93,7 +93,7 @@ const TechText = ({
   speed = 1,
   align = 'center',
   className = '',
-  style
+  style = {}
 }) => {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);

@@ -152,6 +152,7 @@ const Navbar: React.FC = () => {
         accentColor={isLight ? '#D97706' : '#00D1FF'}
         colors={isLight ? ['#B45309', '#D97706'] : ['#0284C7', '#00D1FF']}
         isFixed={true}
+        logoUrl="/adlogo.svg"
       />
 
       <ResumeModal isOpen={isResumeModalOpen} onClose={() => setIsResumeModalOpen(false)} />

@@ -29,13 +29,77 @@ const Hero: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Fallback timer: ensure text animation sequence kicks off if StrokeText takes longer than 3.8s
+  // Safety fallback timer: ensure text animation sequence kicks off if StrokeText takes longer than 6.5s
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsTextCompleted(true);
-    }, 3800);
+    }, 6500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Prevent any user scrolling until "MOHAMMED ADNAN" stroke & color fill is fully completed
+  // Note: We intentionally avoid setting overflow: hidden on html/body so the scrollbar track never disappears or jerks
+  useEffect(() => {
+    if (isTextCompleted) {
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        lenis.start();
+      }
+      return;
+    }
+
+    // Lock page scroll at top
+    window.scrollTo(0, 0);
+
+    const lenis = (window as any).__lenis;
+    if (lenis) {
+      lenis.stop();
+      lenis.scrollTo(0, { immediate: true });
+    }
+
+    const preventDefault = (e: Event) => {
+      e.preventDefault();
+    };
+
+    const preventScrollKeys = (e: KeyboardEvent) => {
+      const keys = ['Space', 'PageUp', 'PageDown', 'End', 'Home', 'ArrowUp', 'ArrowDown'];
+      if (keys.includes(e.code) || keys.includes(e.key) || e.keyCode === 32) {
+        e.preventDefault();
+      }
+    };
+
+    const handleScroll = () => {
+      if (window.scrollY !== 0) {
+        window.scrollTo(0, 0);
+      }
+    };
+
+    window.addEventListener('wheel', preventDefault, { passive: false });
+    window.addEventListener('touchmove', preventDefault, { passive: false });
+    window.addEventListener('keydown', preventScrollKeys);
+    window.addEventListener('scroll', handleScroll, { passive: false });
+
+    // Keep checking if Lenis initializes slightly after Hero mounts
+    const checkLenis = setInterval(() => {
+      const l = (window as any).__lenis;
+      if (l) {
+        l.stop();
+        l.scrollTo(0, { immediate: true });
+      }
+    }, 50);
+
+    return () => {
+      clearInterval(checkLenis);
+      window.removeEventListener('wheel', preventDefault);
+      window.removeEventListener('touchmove', preventDefault);
+      window.removeEventListener('keydown', preventScrollKeys);
+      window.removeEventListener('scroll', handleScroll);
+      const l = (window as any).__lenis;
+      if (l) {
+        l.start();
+      }
+    };
+  }, [isTextCompleted]);
 
   // Choreographed multi-phase entrance sequence once StrokeText completes
   useEffect(() => {

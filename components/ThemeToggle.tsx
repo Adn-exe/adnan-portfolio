@@ -100,7 +100,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = 'circle', duration 
         }
 
         const clipPath = getThemeTransitionClipPaths(
-            variant,
+            (variant || 'circle') as TransitionVariant,
             x,
             y,
             maxRadius,

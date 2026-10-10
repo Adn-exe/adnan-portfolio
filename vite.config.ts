@@ -28,6 +28,7 @@ export default defineConfig(({ mode }) => {
               'vendor-motion': ['framer-motion'],
               'vendor-gsap': ['gsap', '@gsap/react', 'lenis'],
               'vendor-ogl': ['ogl'],
+              'vendor-icons': ['lucide-react', '@hugeicons/core-free-icons'],
             }
           }
         }

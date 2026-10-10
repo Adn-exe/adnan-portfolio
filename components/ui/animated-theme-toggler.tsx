@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { flushSync } from "react-dom"
 
@@ -16,6 +16,7 @@ export type TransitionVariant =
   | "star"
 
 export interface AnimatedThemeTogglerProps extends React.ComponentPropsWithoutRef<"button"> {
+  className?: string
   duration?: number
   variant?: TransitionVariant
   /** When true, the transition expands from the viewport center instead of the button center. */
