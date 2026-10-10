@@ -129,7 +129,8 @@ const App: React.FC = () => {
                     <Tooltip
                       content={s.msg}
                       containerClassName="cursor-pointer"
-                      tooltipClassName="z-50"
+                      tooltipClassName="z-50 min-w-[220px] sm:min-w-[240px] whitespace-nowrap"
+                      contentClassName="px-6 py-3 tracking-wide"
                     >
                       <div className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-theme-text mb-2 tracking-tighter tabular-nums group-hover:text-accent transition-colors duration-500 drop-shadow-[0_0_10px_rgba(0,209,255,0.3)]">
                         {s.val}

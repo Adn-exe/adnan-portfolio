@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Adnan's Portfolio</title>
-  <link rel="icon" type="image/png" href="/image.png" />
-  <link rel="apple-touch-icon" href="/image.png" />
+  <link rel="icon" type="image/svg+xml" href="/adlogo.svg" />
+  <link rel="apple-touch-icon" href="/adlogo.svg" />
   <link rel="preload" as="image" href="/aboutmeDark.webp" type="image/webp" fetchpriority="high" />
   <link rel="preload" as="image" href="/aboutmeLight.webp" type="image/webp" fetchpriority="high" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -49,6 +49,8 @@
             montserrat: ['Montserrat', 'sans-serif'],
             martel: ['"Martel Sans"', 'sans-serif'],
             lora: ['Lora', 'serif'],
+            sora: ['Sora', 'sans-serif'],
+            'google-sans': ['"Google Sans"', '"Google Sans Text"', 'sans-serif'],
           },
           colors: {
             primary: 'var(--bg-primary)',
@@ -135,21 +137,17 @@
     }
   </script>
   <style>
-    ::-webkit-scrollbar {
-      width: 5px;
+    html,
+    body {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
-    ::-webkit-scrollbar-track {
-      background: #000000;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(to bottom, #00D1FF, #FFFFFF);
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #F8FAFC;
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     :root {
@@ -254,6 +252,9 @@
     }
     .font-lora {
       font-family: 'Lora', Georgia, serif;
+    }
+    .font-google-sans {
+      font-family: 'Google Sans', 'Google Sans Text', sans-serif;
     }
 
     /* Disable property transitions during theme switch so snapshots are pristine and instant */
