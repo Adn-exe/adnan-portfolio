@@ -8,12 +8,6 @@ import { Tooltip } from './ui/tooltip-card';
 
 const WRITING_ITEMS = [
   {
-    link: 'https://eniax-space.vercel.app/read/the-pace-of-the-heart',
-    text: 'Pace of the Heart',
-    genre: 'Blog',
-    image: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=800&auto=format&fit=crop'
-  },
-  {
     link: 'https://eniax-space.vercel.app/read/sense-of-call',
     text: 'Sense of Call',
     genre: 'Story',
@@ -30,6 +24,12 @@ const WRITING_ITEMS = [
     text: '3rd Passion',
     genre: 'Essay',
     image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=800&auto=format&fit=crop'
+  },
+  {
+    link: 'https://eniax-space.vercel.app/read/the-pace-of-the-heart',
+    text: 'Pace of the Heart',
+    genre: 'Blog',
+    image: 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=800&auto=format&fit=crop'
   }
 ];
 
